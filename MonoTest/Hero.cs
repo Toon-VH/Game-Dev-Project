@@ -37,9 +37,15 @@ namespace MonoTest
             this.WalkLeft = new Animation();
             this.WalkRight = new Animation();
             this.Idle = new Animation();
-            this.WalkLeft.GetFramesFromTextureProperties(718, texture.Width, 70, 15, 3);
+
+            /*this.WalkLeft.GetFramesFromTextureProperties(718, texture.Width, 70, 15, 3);
             this.WalkRight.GetFramesFromTextureProperties(77, texture.Width, 70, 15, 3);
-            this.Idle.GetFramesFromTextureProperties(10, texture.Width, 70, 15, 0);
+            this.Idle.GetFramesFromTextureProperties(10, texture.Width, 70, 15, 0);*/
+
+            this.Idle.GetFramesFromTextureProperties(0, texture.Width, 36, 8, 0);
+            this.WalkLeft.GetFramesFromTextureProperties(36, texture.Width, 36, 8, 0);
+            this.WalkRight.GetFramesFromTextureProperties(36, texture.Width, 36, 8, 0);
+
 
         }
 
@@ -48,15 +54,17 @@ namespace MonoTest
             switch (Direction)
             {
                 case Direction.Left:
-                    spriteBatch.Draw(texture, Position, WalkLeft.CurrentFrame.SourceRectangle, Color.White);
+                    spriteBatch.Draw(texture, Position, WalkLeft.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0f);
                     Debug.WriteLine("Left");
                     break;
                 case Direction.Right:
-                    spriteBatch.Draw(texture, Position, WalkRight.CurrentFrame.SourceRectangle, Color.White);
+                    spriteBatch.Draw(texture, Position, WalkRight.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0f);
+
                     Debug.WriteLine("Right");
                     break;
                 case Direction.Idle:
-                    spriteBatch.Draw(texture, Position, Idle.CurrentFrame.SourceRectangle, Color.White);
+                    spriteBatch.Draw(texture, Position, Idle.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0f);
+
                     Debug.WriteLine("Idle");
                     break;
             }
