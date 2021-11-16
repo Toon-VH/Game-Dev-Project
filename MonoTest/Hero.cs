@@ -13,8 +13,7 @@ namespace MonoTest
     {
 
         private Texture2D texture;
-        private Animation WalkLeft;
-        private Animation WalkRight;
+        private Animation Walk;
         private Animation Idle;
 
         public Vector2 Position { get; set; }
@@ -34,8 +33,7 @@ namespace MonoTest
             this.texture = texture;
             this.InputReader = inputReader;
             this.movementManager = new MovementManager();
-            this.WalkLeft = new Animation();
-            this.WalkRight = new Animation();
+            this.Walk = new Animation();
             this.Idle = new Animation();
 
             /*this.WalkLeft.GetFramesFromTextureProperties(718, texture.Width, 70, 15, 3);
@@ -43,8 +41,7 @@ namespace MonoTest
             this.Idle.GetFramesFromTextureProperties(10, texture.Width, 70, 15, 0);*/
 
             this.Idle.GetFramesFromTextureProperties(0, texture.Width, 36, 8, 0);
-            this.WalkLeft.GetFramesFromTextureProperties(36, texture.Width, 36, 8, 0);
-            this.WalkRight.GetFramesFromTextureProperties(36, texture.Width, 36, 8, 0);
+            this.Walk.GetFramesFromTextureProperties(36, texture.Width, 36, 8, 0);
 
 
         }
@@ -54,11 +51,11 @@ namespace MonoTest
             switch (Direction)
             {
                 case Direction.Left:
-                    spriteBatch.Draw(texture, Position, WalkLeft.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(texture, Position, Walk.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.FlipHorizontally, 0f);
                     Debug.WriteLine("Left");
                     break;
                 case Direction.Right:
-                    spriteBatch.Draw(texture, Position, WalkRight.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(texture, Position, Walk.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0f);
 
                     Debug.WriteLine("Right");
                     break;
@@ -76,10 +73,10 @@ namespace MonoTest
             switch (Direction)
             {
                 case Direction.Left:
-                    WalkLeft.Update(gameTime);
+                    Walk.Update(gameTime);
                     break;
                 case Direction.Right:
-                    WalkRight.Update(gameTime);
+                    Walk.Update(gameTime);
                     break;
                 case Direction.Idle:
                     Idle.Update(gameTime);
