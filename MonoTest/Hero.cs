@@ -42,8 +42,6 @@ namespace MonoTest
 
             this.Idle.GetFramesFromTextureProperties(0, texture.Width, 36, 8, 0);
             this.Walk.GetFramesFromTextureProperties(36, texture.Width, 36, 8, 0);
-
-
         }
 
         public void Draw(SpriteBatch spriteBatch)

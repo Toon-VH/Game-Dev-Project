@@ -12,6 +12,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Tiles\NewFile1.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
   </ItemGroup>
   <ItemGroup>
