@@ -13,19 +13,23 @@ namespace MonoTest.Tiles
         public Color Color { get; set; }
         public Texture2D Texture { get; set; }
 
+        public Rectangle SourceRectangle { get; set; }
         //public CollideWithEvent CollideWithEvent { get; set; }
 
-        public Block(int x, int y, GraphicsDevice graphics)
+        public Block(int x, int y, Texture2D texture) //GraphicsDevice graphics)
         {
-            BoundingBox = new Rectangle(x, y, 16, 16);
+            SourceRectangle = new Rectangle(90,49,16,16);//uit tileset halen
+            BoundingBox = new Rectangle(x, y, 50, 50);
             Passable = false;
-            Color = Color.Green;
-            Texture = new Texture2D(graphics, 16, 16);
+            Color = Color.White;
+            Texture = texture;
             //CollideWithEvent = new NoEvent();
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, BoundingBox, Color);
+           
+            spriteBatch.Draw(Texture, BoundingBox,SourceRectangle, Color);
+            
         }
         //public virtual void IsCollidedWithEvent
         //(Character collider)

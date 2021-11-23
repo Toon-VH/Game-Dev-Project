@@ -8,13 +8,10 @@ namespace MonoTest.Tiles
 {
     class GrassBlock : Block
     {
-        public GrassBlock(int x, int y, GraphicsDevice graphics) : base(x, y, graphics)
+        public GrassBlock(int x, int y, Texture2D texture) : base(x, y, texture)
         {
-            BoundingBox = new Rectangle(x, y, 10, 10);
-            Passable = true;
-            //Color = Color.GreenYellow;
-            Texture = new Texture2D(graphics, 16, 16);
-            //CollideWithEvent = new SlowEvent();
+            SourceRectangle = new Rectangle(90, 32, 16, 16);
+           
         }
     }
 }

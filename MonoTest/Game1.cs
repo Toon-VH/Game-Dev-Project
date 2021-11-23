@@ -69,10 +69,15 @@ namespace MonoTest
             _spriteBatch.Begin();
             // TODO: Add your drawing code here
             background.Draw(_spriteBatch);
-            blocks.ForEach((block) => {
-                Console.WriteLine(block);
-                block.Draw(_spriteBatch);
-            });
+
+            foreach (Block item in blocks)
+            {
+                item.Draw(_spriteBatch);
+            }
+            //blocks.ForEach((block) => {
+            //    Console.WriteLine(block);
+            //    block.Draw(_spriteBatch);
+            //});
             hero.Draw(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
@@ -80,8 +85,9 @@ namespace MonoTest
 
         private void CreateBlocks()
         {
-
-            blocks.Add(BlockFactory.CreateBlock("normal", 122, 25, GraphicsDevice));
+            
+            blocks.Add(BlockFactory.CreateBlock("normal", 90, 100,_tiles));
+            blocks.Add(BlockFactory.CreateBlock("grass", 90,50, _tiles));
 
             /*for (int l = 0; l < gameboard.GetLength(0); l++)
             {
