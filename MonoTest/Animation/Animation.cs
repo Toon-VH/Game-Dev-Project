@@ -40,13 +40,14 @@ namespace MonoTest
 
         }
 
-        public void GetFramesFromTextureProperties(int Ystartposition, int width, int heightSprite, int numberOfWidthSprites, int emptyFrames)
+        public void GetFramesFromTextureProperties(int width, int height, int numberOfHeightSprites, int numberOfWidthSprites, int emptyFrames,int startLine)
         {
             int widthOfFrame = width / numberOfWidthSprites;
+            int heightOfFrame = height / numberOfHeightSprites;
 
             for (int x = 0; x <= width - (widthOfFrame * (emptyFrames + 1)); x += widthOfFrame)
             {
-                frames.Add(new AnimationFrame(new Rectangle(x, Ystartposition, widthOfFrame, heightSprite)));
+                frames.Add(new AnimationFrame(new Rectangle(x, startLine * heightOfFrame, widthOfFrame, heightOfFrame)));
             }
         }
     }

@@ -6,11 +6,11 @@ using System.Text;
 
 namespace MonoTest.Tiles
 {
-    class GrassBlock : Block
+    class DirtBlock : Block
     {
-        public GrassBlock(int x, int y, Texture2D texture, int size) : base(x, y, texture,size)
+        public DirtBlock(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
         {
-            SourceRectangle = new Rectangle(107, 32, 16, 16);
+            SourceRectangle = new Rectangle(107, 49, 16, 16);
         }
     }
 }

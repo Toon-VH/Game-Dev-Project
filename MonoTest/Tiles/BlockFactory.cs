@@ -8,25 +8,23 @@ namespace MonoTest.Tiles
     class BlockFactory
     {
 
-        public static Block CreateBlock(string type, int x, int y,Texture2D texture )//GraphicsDevice graphics)
+        public static Block CreateBlock(BlockType type,int x, int y,Texture2D texture, int size)
         {
 
             Block newBlock = null;
-            type = type.ToUpper();
-            if (type == "NORMAL")
+            switch (type)
             {
-                newBlock = new Block(x, y, texture);
+                case BlockType.DIRT:
+                    newBlock = new DirtBlock(x, y, texture, size);
+                    break;
+                case BlockType.GRASS:
+                    newBlock = new GrassBlock(x, y, texture, size);
+                    break;
+                case BlockType.EMPTY:
+                    break;
             }
-            if (type == "GRASS")
-            {
-                newBlock = new GrassBlock(x, y, texture);
-            }
-            /*if (type == "LeftCorner")
-            {
-                newBlock = new LeftCorner(x, y, graphics);
-            }*/
             return newBlock;
         }
     }
 
-    }
+}

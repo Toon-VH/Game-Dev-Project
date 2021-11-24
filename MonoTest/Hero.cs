@@ -40,8 +40,8 @@ namespace MonoTest
             this.WalkRight.GetFramesFromTextureProperties(77, texture.Width, 70, 15, 3);
             this.Idle.GetFramesFromTextureProperties(10, texture.Width, 70, 15, 0);*/
 
-            this.Idle.GetFramesFromTextureProperties(0, texture.Width, 36, 8, 0);
-            this.Walk.GetFramesFromTextureProperties(36, texture.Width, 36, 8, 0);
+            this.Idle.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 0, 0);
+            this.Walk.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 0, 1);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -49,18 +49,13 @@ namespace MonoTest
             switch (Direction)
             {
                 case Direction.Left:
-                    spriteBatch.Draw(texture, Position, Walk.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.FlipHorizontally, 0f);
-                    Debug.WriteLine("Left");
+                    spriteBatch.Draw(texture, Position, Walk.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.FlipHorizontally, 0f);
                     break;
                 case Direction.Right:
-                    spriteBatch.Draw(texture, Position, Walk.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0f);
-
-                    Debug.WriteLine("Right");
+                    spriteBatch.Draw(texture, Position, Walk.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
                     break;
                 case Direction.Idle:
-                    spriteBatch.Draw(texture, Position, Idle.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0f);
-
-                    Debug.WriteLine("Idle");
+                    spriteBatch.Draw(texture, Position, Idle.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
                     break;
             }
         }

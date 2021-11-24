@@ -5,29 +5,63 @@ using MonoTest.Input;
 using MonoTest.Tiles;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace MonoTest
 {
     public class Game1 : Game
     {
-        //private BlockFactory blockFactory;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
         private Texture2D _heroTexture;
         private Texture2D _backGroundTexture;
         private Texture2D _middleGroundTexture;
         private Texture2D _tiles;
         private Hero hero;
         private Background background;
-
+        private int ActualWidth;
+        private int ActualHeight;
+        private int SizeBlock;
         private List<Block> blocks;
+        int[,] gameboard = new int[,]{{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                      {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
+                                      {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                                      {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                                      {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                                      {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                                      };
+                                                  
+        private Matrix Matrix;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
-           // blockFactory = new BlockFactory();
-            //_graphics.IsFullScreen = true;
-            _graphics.PreferredBackBufferHeight = 240 * 3;
-            _graphics.PreferredBackBufferWidth = 384 * 3;
+            ActualWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            ActualHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            SizeBlock = 12;
+            var scaleX = (float)ActualWidth / 384;
+            var scaleY = (float)ActualHeight / 240;
+            Matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
+            _graphics.PreferredBackBufferWidth = ActualWidth;
+            _graphics.PreferredBackBufferHeight = ActualHeight;
+            _graphics.IsFullScreen = true;
             Window.Title = "Title";
             _graphics.ApplyChanges();
             Content.RootDirectory = "Content";
@@ -66,44 +100,31 @@ namespace MonoTest
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            _spriteBatch.Begin();
-            // TODO: Add your drawing code here
-            background.Draw(_spriteBatch);
+            _spriteBatch.Begin(transformMatrix: Matrix);
 
-            foreach (Block item in blocks)
+            background.Draw(_spriteBatch);
+            blocks.ForEach(block =>
             {
-                item.Draw(_spriteBatch);
-            }
-            //blocks.ForEach((block) => {
-            //    Console.WriteLine(block);
-            //    block.Draw(_spriteBatch);
-            //});
+                if (block != null)
+                {
+                    block.Draw(_spriteBatch);
+                }
+            });
             hero.Draw(_spriteBatch);
+
             _spriteBatch.End();
             base.Draw(gameTime);
         }
 
         private void CreateBlocks()
         {
-            
-            blocks.Add(BlockFactory.CreateBlock("normal", 90, 100,_tiles));
-            blocks.Add(BlockFactory.CreateBlock("grass", 90,50, _tiles));
-
-            /*for (int l = 0; l < gameboard.GetLength(0); l++)
+            for (int x = 0; x < gameboard.GetLength(0); x++)
             {
-                for (int c = 0; k < gameboard.GetLength(1); k++)
+                for (int y = 0; y < gameboard.GetLength(1); y++)
                 {
-                    if (gameboard[l, c] == 1)
-                    {
-                        blocks.Add(new Block(
-                            new Rectangle((c * 10), (l * 10), 10, 10),
-                            false,
-                            Color.Green,
-                            blokTexture));
-                    }
-
+                    blocks.Add(BlockFactory.CreateBlock((BlockType)gameboard[x, y], y, x, _tiles, SizeBlock));
                 }
-            }*/
+            }
         }
     }
 }
