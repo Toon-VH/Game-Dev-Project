@@ -13,8 +13,10 @@ namespace MonoTest
     {
 
         private Texture2D texture;
+
         private Animation Walk;
         private Animation Idle;
+        private Animation Rol;
 
         public Vector2 Position { get; set; }
         public Vector2 Speed { get; set; }
@@ -35,6 +37,7 @@ namespace MonoTest
             this.movementManager = new MovementManager();
             this.Walk = new Animation();
             this.Idle = new Animation();
+            this.Rol = new Animation();
 
             /*this.WalkLeft.GetFramesFromTextureProperties(718, texture.Width, 70, 15, 3);
             this.WalkRight.GetFramesFromTextureProperties(77, texture.Width, 70, 15, 3);
@@ -42,6 +45,7 @@ namespace MonoTest
 
             this.Idle.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 0, 0);
             this.Walk.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 0, 1);
+            this.Rol.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 1, 2);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -52,7 +56,7 @@ namespace MonoTest
                     spriteBatch.Draw(texture, Position, Walk.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.FlipHorizontally, 0f);
                     break;
                 case Direction.Right:
-                    spriteBatch.Draw(texture, Position, Walk.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(texture, Position, Rol.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
                     break;
                 case Direction.Idle:
                     spriteBatch.Draw(texture, Position, Idle.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
@@ -69,7 +73,7 @@ namespace MonoTest
                     Walk.Update(gameTime);
                     break;
                 case Direction.Right:
-                    Walk.Update(gameTime);
+                    Rol.Update(gameTime);
                     break;
                 case Direction.Idle:
                     Idle.Update(gameTime);

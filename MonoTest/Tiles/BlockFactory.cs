@@ -20,6 +20,9 @@ namespace MonoTest.Tiles
                 case BlockType.GRASS:
                     newBlock = new GrassBlock(x, y, texture, size);
                     break;
+                case BlockType.PLANT:
+                    newBlock = new PlantBlock(x, y, texture, size);
+                    break;
                 case BlockType.EMPTY:
                     break;
             }

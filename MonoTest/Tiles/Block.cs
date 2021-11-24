@@ -20,7 +20,7 @@ namespace MonoTest.Tiles
 
         public Block(int x, int y, Texture2D texture, int size) //GraphicsDevice graphics)
         {
-            BoundingBox = new Rectangle(x * (size-1), y * (size-1), size, size);
+            BoundingBox = new Rectangle(x * size, y * size, size, size);
             Passable = false;
             Color = Color.White;
             Texture = texture;

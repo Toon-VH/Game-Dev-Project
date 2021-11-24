@@ -26,7 +26,7 @@ namespace MonoTest
         {
             CurrentFrame = frames[counter];
             secondCounter += gameTime.ElapsedGameTime.TotalSeconds;
-            int fps = 15;
+            int fps = 12;
             if (secondCounter >= 1d / fps)
             {
                 counter++;
