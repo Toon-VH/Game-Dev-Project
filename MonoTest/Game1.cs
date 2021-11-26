@@ -98,10 +98,10 @@ namespace MonoTest
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            _spriteBatch.Begin(transformMatrix: Matrix);
+            GraphicsDevice.Clear(Color.Red);
+            _spriteBatch.Begin(transformMatrix: Matrix * 0.5f);
 
-            background.Draw(_spriteBatch);
+            //background.Draw(_spriteBatch);
             blocks.ForEach(block =>
             {
                 if (block != null)

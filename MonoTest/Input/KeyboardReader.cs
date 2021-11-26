@@ -23,20 +23,20 @@ namespace MonoTest.Input
             {
                 switch (key)
                 {
-                    case Keys.Left:
-                        direction.X--;
+                    case Keys.W:
+                        direction.Y--;
                         break;
 
-                    case Keys.Right:
+                    case Keys.D:
                         direction.X++;
                         break;
 
-                    case Keys.Down:
+                    case Keys.S:
                         direction.Y++;
                         break;
 
-                    case Keys.Up:
-                        direction.Y--;
+                    case Keys.A:
+                        direction.X--;
                         break;
 
                     default:

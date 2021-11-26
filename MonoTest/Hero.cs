@@ -30,7 +30,7 @@ namespace MonoTest
         public Hero(Texture2D texture, IInputReader inputReader)
         {
             Position = new Vector2(1, 1);
-            Speed = new Vector2(2, 2);
+            Speed = new Vector2(1, 1);
             Acceleration = new Vector2(0.1f, 0.1f);
             this.texture = texture;
             this.InputReader = inputReader;
@@ -80,10 +80,12 @@ namespace MonoTest
                     break;
             }
         }
+
         private void Move()
         {
             movementManager.Move(this);
         }
+
         private Vector2 Limit(Vector2 v, float max)
         {
             if (v.Length() > max)
