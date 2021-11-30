@@ -14,12 +14,12 @@ namespace MonoTest.Input
 
         public Vector2 ReadInput()
         {
-            KeyboardState keyboardState = Keyboard.GetState();
-            Vector2 direction = Vector2.Zero;
+            var keyboardState = Keyboard.GetState();
+            var direction = Vector2.Zero;
 
-            Keys[] keys = keyboardState.GetPressedKeys();
+            var keys = keyboardState.GetPressedKeys();
 
-            foreach (Keys key in keys)
+            foreach (var key in keys)
             {
                 switch (key)
                 {

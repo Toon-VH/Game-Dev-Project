@@ -26,7 +26,7 @@ namespace MonoTest
         {
             CurrentFrame = frames[counter];
             secondCounter += gameTime.ElapsedGameTime.TotalSeconds;
-            int fps = 12;
+            var fps = 12;
             if (secondCounter >= 1d / fps)
             {
                 counter++;
@@ -42,10 +42,10 @@ namespace MonoTest
 
         public void GetFramesFromTextureProperties(int width, int height, int numberOfHeightSprites, int numberOfWidthSprites, int emptyFrames,int startLine)
         {
-            int widthOfFrame = width / numberOfWidthSprites;
-            int heightOfFrame = height / numberOfHeightSprites;
+            var widthOfFrame = width / numberOfWidthSprites;
+            var heightOfFrame = height / numberOfHeightSprites;
 
-            for (int x = 0; x <= width - (widthOfFrame * (emptyFrames + 1)); x += widthOfFrame)
+            for (var x = 0; x <= width - (widthOfFrame * (emptyFrames + 1)); x += widthOfFrame)
             {
                 frames.Add(new AnimationFrame(new Rectangle(x, startLine * heightOfFrame, widthOfFrame, heightOfFrame)));
             }

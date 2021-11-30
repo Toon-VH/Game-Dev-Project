@@ -10,7 +10,7 @@ namespace MonoTest
     {
        
         void Update(GameTime gameTime);
-        void Draw(SpriteBatch spriteBatch);
+        void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics);
 
     }
 }

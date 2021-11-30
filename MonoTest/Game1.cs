@@ -55,9 +55,9 @@ namespace MonoTest
             ActualWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             ActualHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             SizeBlock = 12;
-            var scaleX = (float)ActualWidth / 384;
-            var scaleY = (float)ActualHeight / 240;
-            Matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
+            var scaleX = (double)ActualWidth / 384;
+            var scaleY = (double)ActualHeight / 240;
+            Matrix = Matrix.CreateScale((float)scaleX, (float)scaleY, 1.0f);
             _graphics.PreferredBackBufferWidth = ActualWidth;
             _graphics.PreferredBackBufferHeight = ActualHeight;
             _graphics.IsFullScreen = true;
@@ -85,6 +85,8 @@ namespace MonoTest
             _backGroundTexture = Content.Load<Texture2D>("background");
             _middleGroundTexture = Content.Load<Texture2D>("middleground");
             _tiles = Content.Load<Texture2D>("tileset");
+            Debug.WriteLine(_tiles.Width);
+            Debug.WriteLine(_tiles.Height);
         }
 
         protected override void Update(GameTime gameTime)
@@ -99,17 +101,17 @@ namespace MonoTest
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Red);
-            _spriteBatch.Begin(transformMatrix: Matrix * 0.5f);
+            _spriteBatch.Begin(samplerState:SamplerState.PointClamp,transformMatrix: Matrix);
 
-            //background.Draw(_spriteBatch);
+            background.Draw(_spriteBatch);
             blocks.ForEach(block =>
             {
                 if (block != null)
                 {
-                    block.Draw(_spriteBatch);
+                    block.Draw(_spriteBatch, GraphicsDevice);
                 }
             });
-            hero.Draw(_spriteBatch);
+            hero.Draw(_spriteBatch, GraphicsDevice);
 
             _spriteBatch.End();
             base.Draw(gameTime);
@@ -117,13 +119,32 @@ namespace MonoTest
 
         private void CreateBlocks()
         {
-            for (int x = 0; x < gameboard.GetLength(0); x++)
+            for (var y = 0; y < gameboard.GetLength(0); y++)
             {
-                for (int y = 0; y < gameboard.GetLength(1); y++)
+                for (var x = 0; x < gameboard.GetLength(1); x++)
                 {
-                    blocks.Add(BlockFactory.CreateBlock((BlockType)gameboard[x, y], y, x, _tiles, SizeBlock));
+                    blocks.Add(BlockFactory.CreateBlock((BlockType)gameboard[y, x], x, y, _tiles, SizeBlock));
                 }
             }
+        }
+
+        private void Collision()
+        {
+            // foreach (Block block in blocks) 
+            // {
+            //     if (Hero.GetBoundingBox().Intersects(block.BoundingBox);
+            //     {
+            //         if (block.IsPassable)
+            //         {
+            //             PushPlayerBack();
+            //         }
+            //     }
+            // }
+        }
+
+        private void PushPlayerBack()
+        {
+            throw new NotImplementedException();
         }
     }
 }

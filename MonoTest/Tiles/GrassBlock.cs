@@ -10,6 +10,7 @@ namespace MonoTest.Tiles
     {
         public GrassBlock(int x, int y, Texture2D texture, int size) : base(x, y, texture,size)
         {
+            IsPassable = false;
             SourceRectangle = new Rectangle(107, 32, 16, 16);
         }
     }

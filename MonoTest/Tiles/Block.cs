@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace MonoTest.Tiles
@@ -9,7 +10,7 @@ namespace MonoTest.Tiles
    abstract class Block : IGameObject
     {
         public Rectangle BoundingBox { get; set; }
-        public bool Passable { get; set; }
+        public bool IsPassable { get; set; }
         public Color Color { get; set; }
         public Texture2D Texture { get; set; }
         public Vector2 Position { get; set; }
@@ -21,22 +22,18 @@ namespace MonoTest.Tiles
         public Block(int x, int y, Texture2D texture, int size) //GraphicsDevice graphics)
         {
             BoundingBox = new Rectangle(x * size, y * size, size, size);
-            Passable = false;
+            Debug.WriteLine($"x: {x * size}, y: {y * size}, width: {size}, height: {size}");
+            IsPassable = false;
             Color = Color.White;
             Texture = texture;
             //CollideWithEvent = new NoEvent();
         }
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
             spriteBatch.Draw(Texture, BoundingBox, SourceRectangle, Color);
             
         }
-        //public virtual void IsCollidedWithEvent
-        //(Character collider)
-        //{
-        //    CollideWithEvent.Execute();
-        //}
-
+        
         public void Update(GameTime gameTime)
         {
             throw new NotImplementedException();

@@ -14,8 +14,8 @@ namespace MonoTest.Input
 
         public Vector2 ReadInput()
         {
-            MouseState mouseState = Mouse.GetState();
-            Vector2 postionMouse = new Vector2(mouseState.X, mouseState.Y);
+            var mouseState = Mouse.GetState();
+            var postionMouse = new Vector2(mouseState.X, mouseState.Y);
             
             return postionMouse;
 
