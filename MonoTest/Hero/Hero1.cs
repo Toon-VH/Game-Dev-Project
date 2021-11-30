@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoTest.Interaces;
 using MonoTest.Managers;
 
-namespace MonoTest
+namespace MonoTest.Hero
 {
-    class Hero : IGameObject, IMoveable
+    class Hero1 : IGameObject, IMoveable
     {
 
         private Texture2D texture;
@@ -23,9 +23,9 @@ namespace MonoTest
         private MovementManager movementManager;
         
 
-        public Hero(Texture2D texture, IInputReader inputReader)
+        public Hero1(Texture2D texture, IInputReader inputReader)
         {
-            Position = new Vector2(1, 1);
+            Position = new Vector2(1, 182);
             Speed = new Vector2(1, 1);
             Acceleration = new Vector2(0.1f, 0.1f);
             this.texture = texture;
@@ -78,21 +78,21 @@ namespace MonoTest
             movementManager.Move(this);
         }
 
-        private Vector2 Limit(Vector2 v, float max)
-        {
-            if (v.Length() > max)
-            {
-                var ratio = max / v.Length();
-                v.X *= ratio;
-                v.Y *= ratio;
-            }
-            return v;
-        }
+        // private Vector2 Limit(Vector2 v, float max)
+        // {
+        //     if (v.Length() > max)
+        //     {
+        //         var ratio = max / v.Length();
+        //         v.X *= ratio;
+        //         v.Y *= ratio;
+        //     }
+        //     return v;
+        // }
 
-        public void ChangeInput(IInputReader inputReader)
-        {
-            this.InputReader = inputReader;
-        }
+        // public void ChangeInput(IInputReader inputReader)
+        // {
+        //     this.InputReader = inputReader;
+        // }
 
     }
 }

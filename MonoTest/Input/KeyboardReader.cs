@@ -1,10 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoTest.Interaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 
 namespace MonoTest.Input
 {

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MonoTest
 {
-     internal interface IGameObject
+    public interface IGameObject
     {
        
         void Update(GameTime gameTime);

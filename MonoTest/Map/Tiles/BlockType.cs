@@ -2,6 +2,6 @@
 {
     public enum BlockType
     {
-        EMPTY,DIRT,GRASS,PLANT
+        EMPTY, DIRT, GRASS ,PLANT
     }
 }
