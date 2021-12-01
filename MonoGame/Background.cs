@@ -13,8 +13,8 @@ namespace MonoTest
 
         public Background(Texture2D background, Texture2D middleground)
         {
-            this._backGroundTexture = background;
-            this._middleGroundTexture = middleground;
+            _backGroundTexture = background;
+            _middleGroundTexture = middleground;
         }
 
         public void Draw(SpriteBatch spriteBatch )

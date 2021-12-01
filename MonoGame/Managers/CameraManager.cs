@@ -6,11 +6,11 @@ namespace MonoTest.Managers
 {
     public class CameraManager
     {
-        private IMoveable _trackingObject;
+        private readonly IMoveable _trackingObject;
         private Vector2 _cameraLocation;
-        private float _deltaX;
-        private float _deltaY;
-
+        private readonly float _deltaX;
+        private readonly float _deltaY;
+        
         public CameraManager(IMoveable trackingObject, float deltaX = 0, float deltaY = 0)
         {
             _trackingObject = trackingObject;
@@ -27,8 +27,8 @@ namespace MonoTest.Managers
             targetLocation.X += _deltaX;
             targetLocation.Y += _deltaY; 
             var distance = Vector2.Distance(_cameraLocation, targetLocation);
-            var maxVelocity = 600;
-            var minVelocity = 60;
+            var maxVelocity = 1;
+            var minVelocity = 1;
             var velocity = distance > maxVelocity ? maxVelocity : distance;
             velocity = velocity < minVelocity ? minVelocity : velocity;
             
@@ -39,7 +39,7 @@ namespace MonoTest.Managers
         }
 
         public Vector2 GetCameraPosition() => _cameraLocation;
-        
+
         private void Visualize(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
             var rect = new Texture2D(graphics, 5, 5);

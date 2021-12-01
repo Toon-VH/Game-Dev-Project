@@ -5,7 +5,7 @@ using MonoTest.Managers;
 
 namespace MonoTest.GameObjects
 {
-    class Hero : IGameObject, IMoveable
+    class Hero : IMoveable
     {
 
         private readonly Texture2D _texture;
@@ -58,7 +58,6 @@ namespace MonoTest.GameObjects
 
         public void Update(GameTime gameTime)
         {
-            Move();
             switch (Direction)
             {
                 case Direction.Left:
@@ -71,11 +70,6 @@ namespace MonoTest.GameObjects
                     _idle.Update(gameTime);
                     break;
             }
-        }
-
-        private void Move()
-        {
-            _movementManager.Move(this);
         }
 
         // private Vector2 Limit(Vector2 v, float max)

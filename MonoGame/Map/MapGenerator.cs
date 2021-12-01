@@ -7,8 +7,8 @@ namespace MonoTest.Map
 {
     public class MapGenerator
     {
-        private int _sizeBlock;
-        private int[,] _map;
+        private readonly int _sizeBlock;
+        private readonly int[,] _map;
 
         public MapGenerator(int[,] map, int sizeBlock)
         {

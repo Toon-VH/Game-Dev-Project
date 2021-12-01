@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoTest.GameObjects;
 
 namespace MonoTest.Input
 {
-    public interface IMoveable
+    public interface IMoveable: IGameObject
     {
         public Vector2 Position { get; set; }
         public Vector2 Speed { get; set; }
