@@ -1,4 +1,4 @@
-﻿namespace MonoTest.Tiles
+﻿namespace MonoTest.Map.Tiles
 {
     public enum BlockType
     {

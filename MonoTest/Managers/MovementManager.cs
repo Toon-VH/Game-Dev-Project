@@ -1,8 +1,4 @@
-﻿using MonoTest.Interaces;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+﻿using MonoTest.Input;
 
 namespace MonoTest.Managers
 {
@@ -10,7 +6,7 @@ namespace MonoTest.Managers
     {
         public void Move(IMoveable moveable)
         {
-            var direction = moveable.InputReader.ReadInput();
+            var direction = moveable.InputReader.ReadInput().Movement;
             if (moveable.InputReader.IsDestinationInput)
             {
                 direction -= moveable.Position;

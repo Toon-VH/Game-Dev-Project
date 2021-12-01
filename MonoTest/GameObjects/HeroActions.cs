@@ -1,4 +1,4 @@
-﻿namespace MonoTest.Hero
+﻿namespace MonoTest.GameObjects
 {
     public enum HeroActions
     {

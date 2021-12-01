@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoTest.Interaces;
 
 namespace MonoTest.Input
 {
@@ -8,13 +7,15 @@ namespace MonoTest.Input
     {
         public bool IsDestinationInput => false;
 
-        public Vector2 ReadInput()
+        public Input ReadInput()
         {
             var keyboardState = Keyboard.GetState();
             var direction = Vector2.Zero;
 
             var keys = keyboardState.GetPressedKeys();
 
+            var jump = false;
+            
             foreach (var key in keys)
             {
                 switch (key)
@@ -34,14 +35,22 @@ namespace MonoTest.Input
                     case Keys.A:
                         direction.X--;
                         break;
+                    
+                    case Keys.Space:
+                        jump = true;
+                        break;
 
                     default:
                         break;
                 }
             }
 
-        
-            return direction;
+            return new Input
+            {
+                Movement = direction,
+                Attack = false,
+                Jump = jump
+            };
         }
     }
 }

@@ -1,18 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoTest.Interaces;
+using MonoTest.Input;
 using MonoTest.Managers;
 
-namespace MonoTest.Hero
+namespace MonoTest.GameObjects
 {
-    class Hero1 : IGameObject, IMoveable
+    class Hero : IGameObject, IMoveable
     {
 
-        private Texture2D texture;
+        private readonly Texture2D _texture;
 
-        private Animation Walk;
-        private Animation Idle;
-        private Animation Rol;
+        private readonly Animation _walk;
+        private readonly Animation _idle;
+        private readonly Animation _rol;
 
         public Vector2 Position { get; set; }
         public Vector2 Speed { get; set; }
@@ -20,24 +20,24 @@ namespace MonoTest.Hero
         public IInputReader InputReader { get; set; }
         public Direction Direction { get; set; }
 
-        private MovementManager movementManager;
+        private readonly MovementManager _movementManager;
         
 
-        public Hero1(Texture2D texture, IInputReader inputReader)
+        public Hero(Texture2D texture, IInputReader inputReader)
         {
-            Position = new Vector2(1, 182);
+            Position = new Vector2(500, 182);
             Speed = new Vector2(1, 1);
             Acceleration = new Vector2(0.1f, 0.1f);
-            this.texture = texture;
+            this._texture = texture;
             InputReader = inputReader;
-            movementManager = new MovementManager();
-            Walk = new Animation();
-            Idle = new Animation();
-            Rol = new Animation();
+            _movementManager = new MovementManager();
+            _walk = new Animation();
+            _idle = new Animation();
+            _rol = new Animation();
 
-            Idle.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 0, 0);
-            Walk.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 0, 1);
-            Rol.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 1, 2);
+            _idle.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 0, 0);
+            _walk.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 0, 1);
+            _rol.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 1, 2);
         }
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
@@ -45,13 +45,13 @@ namespace MonoTest.Hero
             switch (Direction)
             {
                 case Direction.Left:
-                    spriteBatch.Draw(texture, Position, Walk.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.FlipHorizontally, 0f);
+                    spriteBatch.Draw(_texture, Position, _walk.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.FlipHorizontally, 0f);
                     break;
                 case Direction.Right:
-                    spriteBatch.Draw(texture, Position, Walk.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(_texture, Position, _walk.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
                     break;
                 case Direction.Idle:
-                    spriteBatch.Draw(texture, Position, Idle.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(_texture, Position, _idle.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
                     break;
             }
         }
@@ -62,20 +62,20 @@ namespace MonoTest.Hero
             switch (Direction)
             {
                 case Direction.Left:
-                    Walk.Update(gameTime);
+                    _walk.Update(gameTime);
                     break;
                 case Direction.Right:
-                    Walk.Update(gameTime);
+                    _walk.Update(gameTime);
                     break;
                 case Direction.Idle:
-                    Idle.Update(gameTime);
+                    _idle.Update(gameTime);
                     break;
             }
         }
 
         private void Move()
         {
-            movementManager.Move(this);
+            _movementManager.Move(this);
         }
 
         // private Vector2 Limit(Vector2 v, float max)

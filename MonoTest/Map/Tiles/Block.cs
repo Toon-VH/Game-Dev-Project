@@ -1,11 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoTest.GameObjects;
 
-namespace MonoTest.Tiles
+namespace MonoTest.Map.Tiles
 {
    abstract class Block : IGameObject
     {
@@ -31,7 +30,6 @@ namespace MonoTest.Tiles
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
             spriteBatch.Draw(Texture, BoundingBox, SourceRectangle, Color);
-            
         }
         
         public void Update(GameTime gameTime)

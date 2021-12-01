@@ -1,11 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace MonoTest.Interaces
+namespace MonoTest.Input
 {
-    interface IMoveable
+    public interface IMoveable
     {
         public Vector2 Position { get; set; }
         public Vector2 Speed { get; set; }

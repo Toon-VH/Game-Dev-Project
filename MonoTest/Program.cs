@@ -5,10 +5,10 @@ namespace MonoTest
     public static class Program
     {
         [STAThread]
-        static void Main()
+        private static void Main()
         {
-            using (var game = new GameEngine())
-                game.Run();
+            using var game = new GameEngine();
+            game.Run();
         }
     }
 }
