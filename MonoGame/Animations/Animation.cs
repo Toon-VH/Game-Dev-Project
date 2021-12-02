@@ -1,41 +1,40 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using Microsoft.Xna.Framework;
 
-namespace MonoTest
+namespace MonoTest.Animations
 {
-    class Animation
+    public class Animation
     {
-        private Double secondCounter = 0;
+        private Double _secondCounter = 0;
         public AnimationFrame CurrentFrame { get; set; }
-        private List<AnimationFrame> frames;
-        private int counter;
+        private List<AnimationFrame> _frames;
+        private int _counter;
 
         public Animation()
         {
-            frames = new List<AnimationFrame>();
+            _frames = new List<AnimationFrame>();
         }
         public void AddFrame(AnimationFrame frame)
         {
-            frames.Add(frame);
-            CurrentFrame = frames[0];
+            _frames.Add(frame);
+            CurrentFrame = _frames[0];
         }
 
         public void Update(GameTime gameTime)
         {
-            CurrentFrame = frames[counter];
-            secondCounter += gameTime.ElapsedGameTime.TotalSeconds;
+            CurrentFrame = _frames[_counter];
+            _secondCounter += gameTime.ElapsedGameTime.TotalSeconds;
             var fps = 12;
-            if (secondCounter >= 1d / fps)
+            if (_secondCounter >= 1d / fps)
             {
-                counter++;
-                secondCounter = 0;
+                _counter++;
+                _secondCounter = 0;
             }
 
-            if (counter >= frames.Count)
+            if (_counter >= _frames.Count)
             {
-                counter = 0;
+                _counter = 0;
             }
 
         }

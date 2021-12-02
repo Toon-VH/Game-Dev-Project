@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -12,18 +11,18 @@ namespace MonoTest
 {
     public class GameEngine : Game
     {
-        private readonly GraphicsDeviceManager _graphics;
-        private readonly MapGenerator _mapGenerator;
-        private readonly DisplayManager _displayManager;
+        private Background _background;
+        private Hero _hero;
         private SpriteBatch _spriteBatch;
-
-        private Texture2D _heroTexture;
         private Texture2D _backGroundTexture;
+        private Texture2D _heroTexture;
         private Texture2D _middleGroundTexture;
         private Texture2D _tiles;
-        private Hero _hero;
-        private Background _background;
+        private readonly DisplayManager _displayManager;
         private readonly GameObjectManager _gameObjectManager;
+        private readonly GraphicsDeviceManager _graphics;
+        private readonly MapGenerator _mapGenerator;
+        private readonly MovementManager _movementManager;
 
         private CameraManager _cameraManager;
 
@@ -31,6 +30,7 @@ namespace MonoTest
         {
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
+            _movementManager = new MovementManager();
             _mapGenerator = new MapGenerator(Maps.map1, 12);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
@@ -43,8 +43,8 @@ namespace MonoTest
             base.Initialize();
             _displayManager.InitializeDisplay(_graphics, 384, 240);
             _hero = new Hero(_heroTexture, new KeyboardReader());
-            _mapGenerator.InitializeBlocks(_tiles, _gameObjectManager.GameObjects.ToList());
             _gameObjectManager.AddGameObject(_hero);
+            _mapGenerator.InitializeBlocks(_tiles, _gameObjectManager);
             _background = new Background(_backGroundTexture, _middleGroundTexture);
             _cameraManager = new CameraManager(_hero, 25);
         }
@@ -63,6 +63,7 @@ namespace MonoTest
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
             _hero.Update(gameTime);
+            _gameObjectManager.Moveables.ForEach(_movementManager.Move);
             base.Update(gameTime);
         }
 

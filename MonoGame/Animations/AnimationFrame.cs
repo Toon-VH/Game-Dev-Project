@@ -1,11 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace MonoTest
+namespace MonoTest.Animations
 {
-    class AnimationFrame
+    public class AnimationFrame
     {
         public Rectangle SourceRectangle { get; set; }
         

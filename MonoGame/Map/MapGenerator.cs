@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using MonoTest.GameObjects;
+using MonoTest.Managers;
 using MonoTest.Map.Tiles;
 
 namespace MonoTest.Map
@@ -16,13 +17,13 @@ namespace MonoTest.Map
             _map = map;
         }
 
-        public void InitializeBlocks(Texture2D tiles, List<IGameObject> gameObjects)
+        public void InitializeBlocks(Texture2D tiles, GameObjectManager gameObjectManager)
         {
             for (var y = 0; y < _map.GetLength(0); y++)
             {
                 for (var x = 0; x < _map.GetLength(1); x++)
                 {
-                    gameObjects.Add(BlockFactory.CreateBlock((BlockType) _map[y, x], x, y, tiles, _sizeBlock));
+                    gameObjectManager.AddGameObject(BlockFactory.CreateBlock((BlockType) _map[y, x], x, y, tiles, _sizeBlock));
                 }
             }
         }

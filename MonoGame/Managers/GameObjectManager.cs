@@ -8,21 +8,21 @@ namespace MonoTest.Managers
     public sealed class GameObjectManager
     {
         public ImmutableList<IGameObject> GameObjects => _gameObjects.ToImmutableList();
-        public ImmutableList<IMoveable> Moveables => _moveables.ToImmutableList();
+        public ImmutableList<Moveable> Moveables => _moveables.ToImmutableList();
         
         private readonly List<IGameObject> _gameObjects;
-        private readonly List<IMoveable> _moveables;
+        private readonly List<Moveable> _moveables;
 
         public GameObjectManager()
         {
             _gameObjects = new List<IGameObject>();
-            _moveables = new List<IMoveable>();
+            _moveables = new List<Moveable>();
         }
 
         public void AddGameObject(IGameObject gameObject)
         {
             _gameObjects.Add(gameObject);
-            if (gameObject is IMoveable moveable) _moveables.Add(moveable);
+            if (gameObject is Moveable moveable) _moveables.Add(moveable);
         }
     }
 }

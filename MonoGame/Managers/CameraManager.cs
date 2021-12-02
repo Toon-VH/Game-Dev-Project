@@ -6,12 +6,12 @@ namespace MonoTest.Managers
 {
     public class CameraManager
     {
-        private readonly IMoveable _trackingObject;
+        private readonly Moveable _trackingObject;
         private Vector2 _cameraLocation;
         private readonly float _deltaX;
         private readonly float _deltaY;
         
-        public CameraManager(IMoveable trackingObject, float deltaX = 0, float deltaY = 0)
+        public CameraManager(Moveable trackingObject, float deltaX = 0, float deltaY = 0)
         {
             _trackingObject = trackingObject;
             _deltaX = deltaX;
