@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoTest.Input;
@@ -15,17 +16,14 @@ namespace MonoTest.GameObjects
         private readonly Animation _walkLeft;
         private readonly Animation _idle;
         private readonly Animation _rol;
-        private Animation _currentAnimation;
         private float Scale;
 
-        public Hero(Texture2D texture, IInputReader inputReader)
+        public Hero(Texture2D texture)
         {
             Scale = 1f;
             Position = new Vector2(200, 176);
-            Speed = new Vector2(1, 1);
-            Acceleration = new Vector2(0.1f, 0.1f);
+            Velocity = new Vector2(0, 0);
             _texture = texture;
-            InputReader = inputReader;
 
             _walkRight = new Animation();
             _walkLeft = new Animation();
@@ -37,7 +35,7 @@ namespace MonoTest.GameObjects
             _walkLeft.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 0, 1);
             _rol.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 1, 2);
             CreateHitboxes();
-            _currentAnimation = _idle;
+            CurrentAnimation = _idle;
         }
 
         private void CreateHitboxes()
@@ -72,15 +70,15 @@ namespace MonoTest.GameObjects
 
         public override void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            var width = _currentAnimation.CurrentHitbox.Width;
-            var height = _currentAnimation.CurrentHitbox.Height;
+            var width = CurrentAnimation.CurrentHitbox.Width;
+            var height = CurrentAnimation.CurrentHitbox.Height;
 
             var rectangle = new Rectangle(
-                (int)Position.X + (int)Math.Ceiling(_currentAnimation.CurrentHitbox.X * Scale),
-                (int)Position.Y + (int)(_currentAnimation.CurrentHitbox.Y * Scale), (int)Math.Ceiling(width * Scale),
+                (int)Position.X + (int)Math.Ceiling(CurrentAnimation.CurrentHitbox.X * Scale),
+                (int)Position.Y + (int)(CurrentAnimation.CurrentHitbox.Y * Scale), (int)Math.Ceiling(width * Scale),
                 (int)Math.Ceiling(height * Scale));
 
-            DrawRectangle(spriteBatch, Color.Red, rectangle, 1);
+            DrawRectangle(spriteBatch, rectangle, 1);
             switch (AbsoluteDirection)
             {
                 case AbsoluteDirection.Left:
@@ -99,7 +97,7 @@ namespace MonoTest.GameObjects
             }
         }
 
-        public override void Update(GameTime gameTime) => _currentAnimation.Update(gameTime);
+        public override void Update(GameTime gameTime) => CurrentAnimation.Update(gameTime);
 
 
         private void DrawAnimation(SpriteBatch spriteBatch, Animation animation, bool flip = false)
@@ -111,14 +109,15 @@ namespace MonoTest.GameObjects
 
             var rectangle = new Rectangle((int)Position.X, (int)Position.Y, sourceRectangle.Width,
                 sourceRectangle.Height);
-            DrawRectangle(spriteBatch, Color.Honeydew, rectangle, 1);
+            DrawRectangle(spriteBatch, rectangle, 1);
             
-            _currentAnimation = animation;
+            CurrentAnimation = animation;
         }
 
 
-        private void DrawRectangle(SpriteBatch spriteBatch, Color color, Rectangle rectangle, int lineWidth)
+        private void DrawRectangle(SpriteBatch spriteBatch, Rectangle rectangle, int lineWidth)
         {
+            var color = IsIntersecting ? Color.Red : Color.Green;
             var pointTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
             pointTexture.SetData(new[]
             {

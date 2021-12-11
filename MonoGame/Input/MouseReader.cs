@@ -14,7 +14,7 @@ namespace MonoTest.Input
             
             return new Input
             {
-                Movement = postionMouse,
+                MovementDirection = postionMouse,
                 Attack = false
             };
 

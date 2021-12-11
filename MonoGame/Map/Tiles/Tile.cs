@@ -6,7 +6,7 @@ using MonoTest.GameObjects;
 
 namespace MonoTest.Map.Tiles
 {
-   abstract class Block : IGameObject
+   abstract class Tile : IGameObject
     {
         public Rectangle BoundingBox { get; set; }
         public bool IsPassable { get; set; }
@@ -18,7 +18,7 @@ namespace MonoTest.Map.Tiles
         public Rectangle SourceRectangle { get; set; }
         //public CollideWithEvent CollideWithEvent { get; set; }
 
-        public Block(int x, int y, Texture2D texture, int size) //GraphicsDevice graphics)
+        public Tile(int x, int y, Texture2D texture, int size) //GraphicsDevice graphics)
         {
             BoundingBox = new Rectangle(x * size, y * size, size, size);
             //Debug.WriteLine($"x: {x * size}, y: {y * size}, width: {size}, height: {size}");

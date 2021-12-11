@@ -51,7 +51,7 @@ namespace MonoTest.Input
             
             return new Input
             {
-                Movement = direction,
+                MovementDirection = direction,
                 Attack = false,
                 Jump = jump,
                 Rol = rol

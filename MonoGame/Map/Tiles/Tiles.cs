@@ -3,40 +3,40 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoTest.Map.Tiles
 {
-    class DirtBlock : Block
+    class DirtTile : Tile
     {
-        public DirtBlock(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
+        public DirtTile(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
         {
             IsPassable = false;
             SourceRectangle = new Rectangle(107, 49, 16, 16);
         }
     }
-    class GrassBlock : Block
+    class GrassTile : Tile
     {
-        public GrassBlock(int x, int y, Texture2D texture, int size) : base(x, y, texture,size)
+        public GrassTile(int x, int y, Texture2D texture, int size) : base(x, y, texture,size)
         {
             IsPassable = false;
             SourceRectangle = new Rectangle(107, 32, 16, 16);
         }
     }
-    class PlantBlock :Block
+    class PlantTile :Tile
     {
-        public PlantBlock(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
+        public PlantTile(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
         {
             IsPassable = true;
             SourceRectangle = new Rectangle(107, 15, 16, 16);
         }
     }
-    class TopRightCorner :Block
+    class TopRightCorner :Tile
     {
         public TopRightCorner(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
         {
-            IsPassable = true;
+            IsPassable = false;
             SourceRectangle = new Rectangle(73, 32, 16, 16);
         }
     }
     
-    class Grass :Block
+    class Grass :Tile
     {
         public Grass(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
         {
@@ -44,11 +44,11 @@ namespace MonoTest.Map.Tiles
             SourceRectangle = new Rectangle(90, 15, 16, 16);
         }
     }
-    class LeftGrassBlock :Block
+    class LeftGrassTile :Tile
     {
-        public LeftGrassBlock(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
+        public LeftGrassTile(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
         {
-            IsPassable = true;
+            IsPassable = false;
             SourceRectangle = new Rectangle(73, 83, 16, 16);
         }
     }

@@ -22,7 +22,8 @@ namespace MonoTest
         private readonly GameObjectManager _gameObjectManager;
         private readonly GraphicsDeviceManager _graphics;
         private readonly MapGenerator _mapGenerator;
-        private readonly MovementManager _movementManager;
+        private readonly PhysicsManager _physicsManager;
+        private InputManager _inputManager;
 
         private CameraManager _cameraManager;
 
@@ -30,7 +31,7 @@ namespace MonoTest
         {
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
-            _movementManager = new MovementManager();
+            _physicsManager = new PhysicsManager();
             _mapGenerator = new MapGenerator(Maps.map1, 12);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
@@ -42,9 +43,10 @@ namespace MonoTest
         {
             base.Initialize();
             _displayManager.InitializeDisplay(_graphics, 384, 240);
-            _hero = new Hero(_heroTexture, new KeyboardReader());
+            _hero = new Hero(_heroTexture);
             _mapGenerator.InitializeBlocks(_tiles, _gameObjectManager);
             _gameObjectManager.AddGameObject(_hero);
+            _inputManager = new InputManager(new KeyboardReader(), _hero);
             _background = new Background(_backGroundTexture, _middleGroundTexture);
             _cameraManager = new CameraManager(_hero);
         }
@@ -60,10 +62,10 @@ namespace MonoTest
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
+            _inputManager.ProcessInput();
             _hero.Update(gameTime);
-            _gameObjectManager.Moveables.ForEach(_movementManager.Move);
+            _gameObjectManager.Moveables.ForEach(m => _physicsManager.Move(m, gameTime.ElapsedGameTime.Milliseconds, _gameObjectManager.GameObjects));
             base.Update(gameTime);
         }
 
@@ -71,25 +73,18 @@ namespace MonoTest
         {
             GraphicsDevice.Clear(Color.Red);
 
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp,
-                transformMatrix: _displayManager.CalculateMatrix());
-            
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _displayManager.CalculateMatrix());
+
             _background.Draw(_spriteBatch);
             _spriteBatch.End();
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: CreateMatrix());
-            _gameObjectManager.GameObjects.ForEach(gameObject =>
-            {
-                if (gameObject != null)
-                {
-                    gameObject.Draw(_spriteBatch, GraphicsDevice);
-                }
-            });
+            _gameObjectManager.GameObjects.ForEach(gameObject => gameObject?.Draw(_spriteBatch, GraphicsDevice));
             _cameraManager.Update(_spriteBatch, _graphics.GraphicsDevice);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
-        
+
 
         private Matrix CreateMatrix()
         {
