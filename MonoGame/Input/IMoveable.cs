@@ -26,6 +26,8 @@ namespace MonoTest.Input
         public abstract void Update(GameTime gameTime);
 
         public abstract void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics);
+
+        
     }
 
     public enum AbsoluteDirection

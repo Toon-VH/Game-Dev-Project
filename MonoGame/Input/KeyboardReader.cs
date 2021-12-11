@@ -15,6 +15,7 @@ namespace MonoTest.Input
             var keys = keyboardState.GetPressedKeys();
 
             var jump = false;
+            var rol = false;
             
             foreach (var key in keys)
             {
@@ -39,17 +40,21 @@ namespace MonoTest.Input
                     case Keys.Space:
                         jump = true;
                         break;
-
+                    case Keys.LeftControl:
+                        rol = true;
+                        break;
                     default:
                         break;
                 }
             }
 
+            
             return new Input
             {
                 Movement = direction,
                 Attack = false,
-                Jump = jump
+                Jump = jump,
+                Rol = rol
             };
         }
     }

@@ -19,10 +19,11 @@ namespace MonoTest.Managers
                 if (input.Movement.X < 0) moveable.Direction = new Vector2(-1,0);
                 if (input.Movement.X > 0) moveable.Direction = new Vector2(1,0);
                 if (input.Movement.X == 0) moveable.Direction = new Vector2(0,0);
+                
                 input.Movement *= moveable.Speed;
             }
-            var newPosition = moveable.Position + input?.Movement ?? moveable.Direction;
 
+            var newPosition = moveable.Position + input?.Movement ?? moveable.Direction;
             if (newPosition.X < 0) newPosition.X = moveable.Position.X;
             moveable.Position = newPosition;
         }

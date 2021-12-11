@@ -43,10 +43,10 @@ namespace MonoTest
             base.Initialize();
             _displayManager.InitializeDisplay(_graphics, 384, 240);
             _hero = new Hero(_heroTexture, new KeyboardReader());
-            _gameObjectManager.AddGameObject(_hero);
             _mapGenerator.InitializeBlocks(_tiles, _gameObjectManager);
+            _gameObjectManager.AddGameObject(_hero);
             _background = new Background(_backGroundTexture, _middleGroundTexture);
-            _cameraManager = new CameraManager(_hero, 25);
+            _cameraManager = new CameraManager(_hero);
         }
 
         protected override void LoadContent()
@@ -73,6 +73,7 @@ namespace MonoTest
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp,
                 transformMatrix: _displayManager.CalculateMatrix());
+            
             _background.Draw(_spriteBatch);
             _spriteBatch.End();
 
@@ -88,26 +89,7 @@ namespace MonoTest
             _spriteBatch.End();
             base.Draw(gameTime);
         }
-
-
-        private void Collision()
-        {
-            // foreach (Block block in blocks) 
-            // {
-            //     if (Hero.GetBoundingBox().Intersects(block.BoundingBox);
-            //     {
-            //         if (block.IsPassable)
-            //         {
-            //             PushPlayerBack();
-            //         }
-            //     }
-            // }
-        }
-
-        private void PushPlayerBack()
-        {
-            throw new NotImplementedException();
-        }
+        
 
         private Matrix CreateMatrix()
         {

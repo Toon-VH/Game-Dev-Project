@@ -7,5 +7,6 @@ namespace MonoTest.Input
         public Vector2 Movement { get; set; }
         public bool Attack { get; set; }
         public bool Jump { get; set; }
+        public bool Rol { get; set; }
     }
 }
