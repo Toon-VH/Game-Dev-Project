@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using MonoTest.GameObjects;
 using MonoTest.Input;
+using SharpDX.MediaFoundation;
 
 namespace MonoTest.Managers
 {
@@ -8,11 +11,13 @@ namespace MonoTest.Managers
     {
         private readonly IInputReader _inputReader;
         private readonly Moveable _moveable;
+        private readonly SoundEffect _jumpSong;
 
-        public InputManager(IInputReader inputReader, Moveable moveable)
+        public InputManager(IInputReader inputReader, Moveable moveable, SoundEffect jumpSong)
         {
             _inputReader = inputReader;
             _moveable = moveable;
+            _jumpSong = jumpSong;
         }
 
         public void ProcessInput()
@@ -34,6 +39,7 @@ namespace MonoTest.Managers
                 {
                     _moveable.Velocity = new Vector2(_moveable.Velocity.X, -150);
                     _moveable.IsTouchingGround = false;
+                    _jumpSong.Play();
                 }
             }
             

@@ -49,18 +49,42 @@ namespace MonoTest.GameObjects
                 rectangle, rectangle
             };
 
+            // var hitBoxesWalkRight = new List<Rectangle>()
+            // {
+            //     new Rectangle(26, 6, 15, 22), new Rectangle(26, 5, 14, 20), new Rectangle(26, 3, 14, 20),
+            //     new Rectangle(26, 4, 14, 21), new Rectangle(26, 6, 15, 22), new Rectangle(26, 5, 17, 20),
+            //     new Rectangle(26, 3, 17, 21), new Rectangle(26, 4, 17, 21)
+            // };
+            //
+            // var hitBoxesWalkLeft = new List<Rectangle>()
+            // {
+            //     new Rectangle(23, 6, 15, 22), new Rectangle(24, 5, 14, 20), new Rectangle(24, 3, 14, 20),
+            //     new Rectangle(24, 4, 14, 21), new Rectangle(23, 6, 15, 22), new Rectangle(21, 5, 17, 20),
+            //     new Rectangle(21, 3, 17, 21), new Rectangle(21, 4, 17, 21)
+            // };
+            
             var hitBoxesWalkRight = new List<Rectangle>()
             {
-                new Rectangle(26, 6, 15, 22), new Rectangle(26, 5, 14, 20), new Rectangle(26, 3, 14, 20),
-                new Rectangle(26, 4, 14, 21), new Rectangle(26, 6, 15, 22), new Rectangle(26, 5, 17, 20),
-                new Rectangle(26, 3, 17, 21), new Rectangle(26, 4, 17, 21)
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22)
             };
 
             var hitBoxesWalkLeft = new List<Rectangle>()
             {
-                new Rectangle(23, 6, 15, 22), new Rectangle(24, 5, 14, 20), new Rectangle(24, 3, 14, 20),
-                new Rectangle(24, 4, 14, 21), new Rectangle(23, 6, 15, 22), new Rectangle(21, 5, 17, 20),
-                new Rectangle(21, 3, 17, 21), new Rectangle(21, 4, 17, 21)
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22),
+                new Rectangle(25, 6, 16, 22)
             };
 
             _idle.AddHitboxList(hitBoxesIdle);
@@ -125,11 +149,11 @@ namespace MonoTest.GameObjects
             });
             
             spriteBatch.Draw(pointTexture,
-                new Rectangle(rectangle.X-1, rectangle.Y, lineWidth, rectangle.Height + lineWidth), color);
+                new Rectangle(rectangle.X, rectangle.Y, lineWidth, rectangle.Height + lineWidth), color);
             spriteBatch.Draw(pointTexture,
-                new Rectangle(rectangle.X-1, rectangle.Y-1, rectangle.Width + lineWidth, lineWidth), color);
+                new Rectangle(rectangle.X, rectangle.Y, rectangle.Width + lineWidth, lineWidth), color);
             spriteBatch.Draw(pointTexture,
-                new Rectangle(rectangle.X + rectangle.Width, rectangle.Y-1, lineWidth, rectangle.Height + lineWidth),
+                new Rectangle(rectangle.X + rectangle.Width, rectangle.Y, lineWidth, rectangle.Height + lineWidth),
                 color);
             spriteBatch.Draw(pointTexture,
                 new Rectangle(rectangle.X , rectangle.Y + rectangle.Height, rectangle.Width + lineWidth, lineWidth),
