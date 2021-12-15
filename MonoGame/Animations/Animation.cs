@@ -55,8 +55,7 @@ namespace MonoTest.Animations
         {
             var widthOfFrame = width / numberOfWidthSprites;
             var heightOfFrame = height / numberOfHeightSprites;
-
-            Debug.WriteLine($"WidtOfFrame :{widthOfFrame},heightOfFrame: {heightOfFrame} ");
+            
             for (var x = 0; x <= width - (widthOfFrame * (emptyFrames + 1)); x += widthOfFrame)
             {
                 AddFrame(new AnimationFrame(new Rectangle(x, startLine * heightOfFrame, widthOfFrame, heightOfFrame)));

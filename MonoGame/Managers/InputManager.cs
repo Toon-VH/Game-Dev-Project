@@ -32,8 +32,8 @@ namespace MonoTest.Managers
                     input.MovementDirection.Normalize();
                 }
 
-                if (input.MovementDirection.X < 0) _moveable.Velocity = new Vector2(-80, _moveable.Velocity.Y);
-                if (input.MovementDirection.X > 0) _moveable.Velocity = new Vector2(80, _moveable.Velocity.Y);
+                if (input.MovementDirection.X < 0) _moveable.Velocity = new Vector2(-_moveable.Speed, _moveable.Velocity.Y);
+                if (input.MovementDirection.X > 0) _moveable.Velocity = new Vector2(_moveable.Speed, _moveable.Velocity.Y);
                 if (input.MovementDirection.X == 0) _moveable.Velocity = new Vector2(0, _moveable.Velocity.Y);
                 if (input.Jump && _moveable.IsTouchingGround)
                 {

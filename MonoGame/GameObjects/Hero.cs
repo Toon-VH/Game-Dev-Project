@@ -21,7 +21,8 @@ namespace MonoTest.GameObjects
         public Hero(Texture2D texture)
         {
             Scale = 1f;
-            Position = new Vector2(200, 176);
+            Position = new Vector2(100, 150);
+            Speed = 80f;
             Velocity = new Vector2(0, 0);
             _texture = texture;
 
@@ -133,7 +134,7 @@ namespace MonoTest.GameObjects
 
             var rectangle = new Rectangle((int)Position.X, (int)Position.Y, sourceRectangle.Width,
                 sourceRectangle.Height);
-            DrawRectangle(spriteBatch, rectangle, 1);
+            //DrawRectangle(spriteBatch, rectangle, 1);
             
             CurrentAnimation = animation;
         }

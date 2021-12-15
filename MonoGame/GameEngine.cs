@@ -72,8 +72,7 @@ namespace MonoTest
             _hero.Update(gameTime);
             _gameObjectManager.Moveables.ForEach(m =>
             {
-                _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds,
-                    _gameObjectManager.GameObjects);
+                _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds, _gameObjectManager.GameObjects);
             });
             base.Update(gameTime);
         }

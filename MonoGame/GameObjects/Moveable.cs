@@ -8,6 +8,7 @@ namespace MonoTest.GameObjects
     {
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }
+        public float Speed { get; set; }
         public bool IsTouchingGround { get; set; }
         public Animation CurrentAnimation { get; protected set; }
         public bool IsIntersecting { get; set; }
