@@ -13,10 +13,12 @@ namespace MonoTest.Screens
     class GameScreen : IScreen
     {
 
-        
+
 
         public void Draw(SpriteBatch _spriteBatch)
         {
+
+          
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: GameEngine._displayManager.CalculateMatrix());
 
             GameEngine._background.Draw(_spriteBatch);
@@ -28,11 +30,13 @@ namespace MonoTest.Screens
             _spriteBatch.End();
         }
 
-        public void Update(GameTime delta)
+        public void Update(GameTime gameTime)
         {
             GameEngine._inputManager.ProcessInput();
-            GameEngine._hero.Update(delta);
-            GameEngine._gameObjectManager.Moveables.ForEach(m => GameEngine._physicsManager.Move(m, (float)delta.ElapsedGameTime.Milliseconds, GameEngine._gameObjectManager.GameObjects));
+            GameEngine._hero.Update(gameTime);
+            GameEngine._gameObjectManager.Moveables.ForEach(m => GameEngine._physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds,
+            GameEngine._gameObjectManager.GameObjects));
+
         }
 
         private Matrix CreateMatrix()

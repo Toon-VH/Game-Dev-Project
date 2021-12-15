@@ -30,7 +30,8 @@ namespace MonoTest
         public static PhysicsManager _physicsManager;
         public static InputManager _inputManager;
 
-        private CameraManager _cameraManager;
+        public static CameraManager _cameraManager;
+        public static ScreenManager _screenManager;
         private SoundEffect _jumpSong;
 
 
@@ -80,14 +81,14 @@ namespace MonoTest
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
-            _inputManager.ProcessInput();
-            _hero.Update(gameTime);
-            _gameObjectManager.Moveables.ForEach(m =>
+                Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds,
-                    _gameObjectManager.GameObjects);
-            });
+                _screenManager.SetScreen(new StartScreen(this, Content));
+                _screenManager.SwitchScreen();
+               
+            }
+
+            _screenManager.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -95,12 +96,7 @@ namespace MonoTest
         {
             GraphicsDevice.Clear(Color.Red);
 
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp,
-                transformMatrix: _displayManager.CalculateMatrix());
-
-            _background.Draw(_spriteBatch);
-            _spriteBatch.End();
-
+            _screenManager.Draw(_spriteBatch);
             base.Draw(gameTime);
         }
 
