@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoTest.Controls;
+using Microsoft.Xna.Framework.Media;
 using MonoTest.GameObjects;
 using MonoTest.Input;
 using MonoTest.Managers;
@@ -29,8 +30,8 @@ namespace MonoTest
         public static PhysicsManager _physicsManager;
         public static InputManager _inputManager;
 
-        public static CameraManager _cameraManager;
-        public static ScreenManager _screenManager;
+        private CameraManager _cameraManager;
+        private SoundEffect _jumpSong;
 
 
 
@@ -56,7 +57,7 @@ namespace MonoTest
             _hero = new Hero(_heroTexture);
             _mapGenerator.InitializeBlocks(_tiles, _gameObjectManager);
             _gameObjectManager.AddGameObject(_hero);
-            _inputManager = new InputManager(new KeyboardReader(), _hero);
+            _inputManager = new InputManager(new KeyboardReader(), _hero, _jumpSong);
             _background = new Background(_backGroundTexture, _middleGroundTexture);
             _cameraManager = new CameraManager(_hero);
             _screenManager = new ScreenManager();
@@ -72,27 +73,33 @@ namespace MonoTest
             _backGroundTexture = Content.Load<Texture2D>("background");
             _middleGroundTexture = Content.Load<Texture2D>("middleground");
             _tiles = Content.Load<Texture2D>("tileset");
-
-
+            _jumpSong = Content.Load<SoundEffect>("jump");
         }
 
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+                Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
+            _inputManager.ProcessInput();
+            _hero.Update(gameTime);
+            _gameObjectManager.Moveables.ForEach(m =>
             {
-                _screenManager.SetScreen(new StartScreen(this, Content));
-                _screenManager.SwitchScreen();
-            }
-            _screenManager?.Update(gameTime);
-
+                _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds,
+                    _gameObjectManager.GameObjects);
+            });
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Red);
-            _screenManager?.Draw(_spriteBatch);
+
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp,
+                transformMatrix: _displayManager.CalculateMatrix());
+
+            _background.Draw(_spriteBatch);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

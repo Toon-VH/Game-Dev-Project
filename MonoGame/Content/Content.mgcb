@@ -56,6 +56,12 @@
 /processorParam:TextureFormat=Compressed
 /build:Font.spritefont
 
+#begin jump.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:jump.wav
+
 #begin middleground.png
 /importer:TextureImporter
 /processor:TextureProcessor
