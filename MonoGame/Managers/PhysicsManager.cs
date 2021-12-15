@@ -7,7 +7,7 @@ using MonoTest.Map.Tiles;
 
 namespace MonoTest.Managers
 {
-    class PhysicsManager
+    public class PhysicsManager
     {
         private const float Gravity = 350f;
         private static Vector2 prevVelocity;
@@ -70,7 +70,7 @@ namespace MonoTest.Managers
                     newPosition.X = moveable.Position.X;
                 }
             }
-            
+
             moveable.Position = newPosition;
         }
     }
