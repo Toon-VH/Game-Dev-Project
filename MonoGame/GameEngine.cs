@@ -1,31 +1,40 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoTest.Controls;
 using MonoTest.GameObjects;
 using MonoTest.Input;
 using MonoTest.Managers;
 using MonoTest.Map;
+using MonoTest.Screens;
 
 namespace MonoTest
 {
     public class GameEngine : Game
     {
-        private Background _background;
-        private Hero _hero;
+        public static Background _background;
+        public static Hero _hero;
         private SpriteBatch _spriteBatch;
         private Texture2D _backGroundTexture;
         private Texture2D _heroTexture;
         private Texture2D _middleGroundTexture;
         private Texture2D _tiles;
-        private readonly DisplayManager _displayManager;
-        private readonly GameObjectManager _gameObjectManager;
-        private readonly GraphicsDeviceManager _graphics;
+        public static DisplayManager _displayManager;
+        public static GameObjectManager _gameObjectManager;
+        public static GraphicsDeviceManager _graphics;
         private readonly MapGenerator _mapGenerator;
-        private readonly PhysicsManager _physicsManager;
-        private InputManager _inputManager;
+        public static PhysicsManager _physicsManager;
+        public static InputManager _inputManager;
 
-        private CameraManager _cameraManager;
+        public static CameraManager _cameraManager;
+        public static ScreenManager _screenManager;
+
+
+
+        public static List<Component> _gameComponents;
 
         public GameEngine()
         {
@@ -36,12 +45,13 @@ namespace MonoTest
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";
-            IsMouseVisible = false;
+            IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
             base.Initialize();
+            Mouse.WindowHandle = Window.Handle;
             _displayManager.InitializeDisplay(_graphics, 384, 240);
             _hero = new Hero(_heroTexture);
             _mapGenerator.InitializeBlocks(_tiles, _gameObjectManager);
@@ -49,48 +59,45 @@ namespace MonoTest
             _inputManager = new InputManager(new KeyboardReader(), _hero);
             _background = new Background(_backGroundTexture, _middleGroundTexture);
             _cameraManager = new CameraManager(_hero);
+            _screenManager = new ScreenManager();
+            _screenManager.SetScreen(new StartScreen(this, Content));
+            _screenManager.SwitchScreen();
         }
 
         protected override void LoadContent()
         {
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _heroTexture = Content.Load<Texture2D>("Archaeologist Sprite Sheet");
             _backGroundTexture = Content.Load<Texture2D>("background");
             _middleGroundTexture = Content.Load<Texture2D>("middleground");
             _tiles = Content.Load<Texture2D>("tileset");
+
+
         }
+
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
-            _inputManager.ProcessInput();
-            _hero.Update(gameTime);
-            _gameObjectManager.Moveables.ForEach(m => _physicsManager.Move(m, gameTime.ElapsedGameTime.Milliseconds, _gameObjectManager.GameObjects));
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                _screenManager.SetScreen(new StartScreen(this, Content));
+                _screenManager.SwitchScreen();
+            }
+            _screenManager?.Update(gameTime);
+
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Red);
+            _screenManager?.Draw(_spriteBatch);
 
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _displayManager.CalculateMatrix());
-
-            _background.Draw(_spriteBatch);
-            _spriteBatch.End();
-
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: CreateMatrix());
-            _gameObjectManager.GameObjects.ForEach(gameObject => gameObject?.Draw(_spriteBatch, GraphicsDevice));
-            _cameraManager.Update(_spriteBatch, _graphics.GraphicsDevice);
-            _spriteBatch.End();
             base.Draw(gameTime);
         }
 
 
-        private Matrix CreateMatrix()
-        {
-            return _displayManager.CalculateMatrix() * Matrix.CreateTranslation(new Vector3(
-                (-_cameraManager.GetCameraPosition().X * _displayManager.GetScaleX()) +
-                ((float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2), 0, 0));
-        }
+       
     }
 }

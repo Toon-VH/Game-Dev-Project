@@ -5,15 +5,15 @@ using MonoTest.Map.Tiles;
 
 namespace MonoTest.Managers
 {
-    class PhysicsManager
+    public class PhysicsManager
     {
         private const float Gravity = 300f;
         public void Move(Moveable moveable, float deltaTime, IEnumerable<IGameObject> map)
         {
             moveable.IsIntersecting = false;
-            
+
             deltaTime /= 1000;
-            if(!moveable.IsTouchingGround) moveable.Velocity = new Vector2(moveable.Velocity.X, moveable.Velocity.Y + Gravity * deltaTime);
+            if (!moveable.IsTouchingGround) moveable.Velocity = new Vector2(moveable.Velocity.X, moveable.Velocity.Y + Gravity * deltaTime);
             var newPosition = moveable.Position + moveable.Velocity * new Vector2(deltaTime, deltaTime);
             var moveableHitBox = moveable.CurrentAnimation.CurrentHitbox;
             moveableHitBox.X += (int)newPosition.X;
@@ -29,7 +29,7 @@ namespace MonoTest.Managers
                         moveable.IsIntersecting = true;
                         if (moveableHitBox.Bottom >= tile.BoundingBox.Top)
                         {
-                            if(moveable.Velocity.Y >= 0)
+                            if (moveable.Velocity.Y >= 0)
                             {
                                 moveable.Velocity = new Vector2(moveable.Velocity.X, 0);
                                 moveable.IsTouchingGround = true;
@@ -46,7 +46,7 @@ namespace MonoTest.Managers
                     }
                 }
             }
-            
+
             moveable.Position = newPosition;
         }
     }
