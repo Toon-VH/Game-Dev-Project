@@ -21,7 +21,7 @@ namespace MonoTest.GameObjects
         public Hero(Texture2D texture)
         {
             Scale = 1f;
-            Position = new Vector2(100, 150);
+            Position = new Vector2(0, 0);
             Speed = 80f;
             Velocity = new Vector2(0, 0);
             _texture = texture;
@@ -41,9 +41,9 @@ namespace MonoTest.GameObjects
 
         private void CreateHitboxes()
         {
-            var rectangle = new Rectangle(25, 6, 16, 22);
+            var rectangle = new RectangleF(25, 6, 16, 22);
 
-            var hitBoxesIdle = new List<Rectangle>()
+            var hitBoxesIdle = new List<RectangleF>()
             {
                 rectangle, rectangle, rectangle,
                 rectangle, rectangle, rectangle,
@@ -64,28 +64,28 @@ namespace MonoTest.GameObjects
             //     new Rectangle(21, 3, 17, 21), new Rectangle(21, 4, 17, 21)
             // };
             
-            var hitBoxesWalkRight = new List<Rectangle>()
+            var hitBoxesWalkRight = new List<RectangleF>()
             {
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22)
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22)
             };
 
-            var hitBoxesWalkLeft = new List<Rectangle>()
+            var hitBoxesWalkLeft = new List<RectangleF>()
             {
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22),
-                new Rectangle(25, 6, 16, 22)
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22),
+                new RectangleF(25, 6, 16, 22)
             };
 
             _idle.AddHitboxList(hitBoxesIdle);
@@ -149,16 +149,16 @@ namespace MonoTest.GameObjects
                 Color.White
             });
             
+            
+            spriteBatch.Draw(pointTexture, new Rectangle(rectangle.X, rectangle.Y, lineWidth, rectangle.Height + lineWidth), color);
             spriteBatch.Draw(pointTexture,
-                new Rectangle(rectangle.X, rectangle.Y, lineWidth, rectangle.Height + lineWidth), color);
-            spriteBatch.Draw(pointTexture,
-                new Rectangle(rectangle.X, rectangle.Y, rectangle.Width + lineWidth, lineWidth), color);
-            spriteBatch.Draw(pointTexture,
-                new Rectangle(rectangle.X + rectangle.Width, rectangle.Y, lineWidth, rectangle.Height + lineWidth),
-                color);
-            spriteBatch.Draw(pointTexture,
-                new Rectangle(rectangle.X , rectangle.Y + rectangle.Height, rectangle.Width + lineWidth, lineWidth),
-                color);
+                 new Rectangle(rectangle.X, rectangle.Y, rectangle.Width + lineWidth, lineWidth), color);
+             spriteBatch.Draw(pointTexture,
+                 new Rectangle(rectangle.X + rectangle.Width, rectangle.Y, lineWidth, rectangle.Height + lineWidth),
+                 color);
+             spriteBatch.Draw(pointTexture,
+                 new Rectangle(rectangle.X , rectangle.Y + rectangle.Height, rectangle.Width + lineWidth, lineWidth),
+                 color);
         }
     }
 }

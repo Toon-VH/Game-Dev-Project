@@ -15,20 +15,20 @@ namespace MonoTest.Managers
 
         public void Move(Moveable moveable, float deltaTime, IEnumerable<IGameObject> map)
         {
-            if (prevVelocity != moveable.Velocity)
-            {
-                Debug.WriteLine($"Velocity =  {moveable.Velocity}");
-            }
-
-            if (prevPosition != moveable.Position)
-            {
-                Debug.WriteLine($"Position =  {moveable.Position}");
-            }
+            // if (prevVelocity != moveable.Velocity)
+            // {
+            //     Debug.WriteLine($"Velocity =  {moveable.Velocity}");
+            // }
+            //
+            // if (prevPosition != moveable.Position)
+            // {
+            //     Debug.WriteLine($"Position =  {moveable.Position}");
+            // }
 
             prevVelocity = moveable.Velocity;
             prevPosition = moveable.Position;
             moveable.IsIntersecting = false;
-
+            
             moveable.Velocity = new Vector2(moveable.Velocity.X, moveable.Velocity.Y + Gravity * deltaTime);
             
             var newPosition = moveable.Position;
@@ -40,9 +40,8 @@ namespace MonoTest.Managers
             newPosition += new Vector2(moveable.Velocity.X * deltaTime, 0);
             CheckCollisions(Direction.Horizontal, moveable, newPosition, map);
         }
-
-        // A helper function for the next two
-        private bool Intersects(Rectangle player, Rectangle block, Direction direction, out Vector2 depth)
+        
+        private bool Intersects(RectangleF player, Rectangle block, Direction direction, out Vector2 depth)
         {
             if (player.Intersects(block))
             {
@@ -56,7 +55,7 @@ namespace MonoTest.Managers
             return false;
         }
 
-        private float GetHorizontalIntersectionDepth(Rectangle rectA, Rectangle rectB)
+        private float GetHorizontalIntersectionDepth(RectangleF rectA, Rectangle rectB)
         {
             // Calculate half sizes.
             float halfWidthA = rectA.Width / 2.0f;
@@ -78,7 +77,7 @@ namespace MonoTest.Managers
             return distanceX > 0 ? minDistanceX - distanceX : -minDistanceX - distanceX;
         }
 
-        private float GetVerticalIntersectionDepth(Rectangle rectA, Rectangle rectB)
+        private float GetVerticalIntersectionDepth(RectangleF rectA, Rectangle rectB)
         {
             // Calculate half sizes.
             float halfHeightA = rectA.Height / 2.0f;
@@ -100,11 +99,12 @@ namespace MonoTest.Managers
             return distanceY > 0 ? minDistanceY - distanceY : -minDistanceY - distanceY;
         }
 
-        private void CheckCollisions(Direction direction, Moveable moveable,Vector2 newPosition, IEnumerable<IGameObject> map)
+        private void CheckCollisions(Direction direction, Moveable moveable, Vector2 newPosition, IEnumerable<IGameObject> map)
         {
             var moveableHitBox = moveable.CurrentAnimation.CurrentHitbox;
-            moveableHitBox.X += (int)newPosition.X;
-            moveableHitBox.Y += (int)newPosition.Y;
+            moveableHitBox.X += newPosition.X;
+            moveableHitBox.Y += newPosition.Y;
+            Debug.WriteLine(moveableHitBox.Position);
             //Get a list of objects to test against
             //You probably already have a mechanism for this
 
@@ -124,11 +124,11 @@ namespace MonoTest.Managers
                     
                     //If an intersection was found - adjust position
                     newPosition += depth;
-                    moveableHitBox.X += (int)depth.X;
-                    moveableHitBox.Y += (int)depth.Y;
+                    moveableHitBox.X += depth.X;
+                    moveableHitBox.Y += depth.Y;
                     Debug.WriteLine($"Depth: (${depth.X}, ${depth.Y})");
                     
-                    //Adjust velocity based on intersection directionaaaaaaaaaaaa
+                    //Adjust velocity based on intersection direction
                     if (direction == Direction.Horizontal)
                         moveable.Velocity = new Vector2(0, moveable.Velocity.Y);
                     else
