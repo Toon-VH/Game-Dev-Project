@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MonoTest
 {
-    class Background
+    public class Background
     {
         private Texture2D _backGroundTexture;
         private Texture2D _middleGroundTexture;
@@ -17,11 +17,11 @@ namespace MonoTest
             _middleGroundTexture = middleground;
         }
 
-        public void Draw(SpriteBatch spriteBatch )
+        public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_backGroundTexture, new Vector2(0, 0), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             spriteBatch.Draw(_middleGroundTexture, new Vector2(0, 0), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
-           
+
     }
 }
