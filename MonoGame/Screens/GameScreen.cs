@@ -4,28 +4,22 @@ using MonoTest.GameObjects;
 using MonoTest.Managers;
 using System;
 using System.Collections.Generic;
-
 using System.Text;
-
 
 namespace MonoTest.Screens
 {
     class GameScreen : IScreen
     {
-
-
-
         public void Draw(SpriteBatch _spriteBatch)
         {
-
-          
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: GameEngine._displayManager.CalculateMatrix());
-
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp,
+                transformMatrix: GameEngine._displayManager.CalculateMatrix());
             GameEngine._background.Draw(_spriteBatch);
             _spriteBatch.End();
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: CreateMatrix());
-            GameEngine._gameObjectManager.GameObjects.ForEach(gameObject => gameObject?.Draw(_spriteBatch, GameEngine._graphics.GraphicsDevice));
+            GameEngine._gameObjectManager.GameObjects.ForEach(gameObject =>
+                gameObject?.Draw(_spriteBatch, GameEngine._graphics.GraphicsDevice));
             GameEngine._cameraManager.Update(_spriteBatch, GameEngine._graphics.GraphicsDevice);
             _spriteBatch.End();
         }
@@ -34,9 +28,9 @@ namespace MonoTest.Screens
         {
             GameEngine._inputManager.ProcessInput();
             GameEngine._hero.Update(gameTime);
-            GameEngine._gameObjectManager.Moveables.ForEach(m => GameEngine._physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds,
-            GameEngine._gameObjectManager.GameObjects));
-
+            GameEngine._gameObjectManager.Moveables.ForEach(m => GameEngine._physicsManager.Move(m,
+                (float)gameTime.ElapsedGameTime.TotalSeconds,
+                GameEngine._gameObjectManager.GameObjects));
         }
 
         private Matrix CreateMatrix()
