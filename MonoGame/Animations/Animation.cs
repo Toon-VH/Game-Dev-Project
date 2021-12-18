@@ -9,15 +9,15 @@ namespace MonoTest.Animations
     {
         private Double _secondCounter = 0;
         public AnimationFrame CurrentFrame { get; set; }
-        public Rectangle CurrentHitbox { get; set; }
+        public RectangleF CurrentHitbox { get; set; }
         private List<AnimationFrame> _frames;
-        private List<Rectangle> _hitboxes;
+        private List<RectangleF> _hitboxes;
         private int _counter;
 
         public Animation()
         {
             _frames = new List<AnimationFrame>();
-            _hitboxes = new List<Rectangle>();
+            _hitboxes = new List<RectangleF>();
         }
 
         public void AddFrame(AnimationFrame frame)
@@ -26,7 +26,7 @@ namespace MonoTest.Animations
             CurrentFrame = _frames[0];
         }
 
-        public void AddHitboxList(List<Rectangle> hitboxes)
+        public void AddHitboxList(List<RectangleF> hitboxes)
         {
             _hitboxes = hitboxes;
             CurrentHitbox = _hitboxes[0];
@@ -55,8 +55,7 @@ namespace MonoTest.Animations
         {
             var widthOfFrame = width / numberOfWidthSprites;
             var heightOfFrame = height / numberOfHeightSprites;
-
-            Debug.WriteLine($"WidtOfFrame :{widthOfFrame},heightOfFrame: {heightOfFrame} ");
+            
             for (var x = 0; x <= width - (widthOfFrame * (emptyFrames + 1)); x += widthOfFrame)
             {
                 AddFrame(new AnimationFrame(new Rectangle(x, startLine * heightOfFrame, widthOfFrame, heightOfFrame)));

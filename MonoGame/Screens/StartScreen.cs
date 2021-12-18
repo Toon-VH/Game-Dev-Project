@@ -4,38 +4,47 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoTest.Controls;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 
 namespace MonoTest.Screens
 {
-    class StartScreen : IScreen
+    public class StartScreen : IScreen
     {
-        private List<Component> _gameComponents;
-        private GameEngine _game;
-        private Texture2D _name;
-        public StartScreen( GameEngine game,ContentManager content)
+        private readonly ContentManager _contentManager;
+        private readonly Matrix _scalingMatrix;
+        private readonly Texture2D _title;
+        
+        private List<Component> _buttons;
+
+        public event EventHandler OnExit;
+        public event EventHandler OnStart;
+        
+        public StartScreen(ContentManager contentManager, Matrix scalingMatrix)
         {
-            _name = content.Load<Texture2D>("Name");
-            _game = game;
-            var startButton = new Button(content.Load<Texture2D>("Button (1)"), content.Load<SpriteFont>("Font"))
+            _title = contentManager.Load<Texture2D>("Name");
+            _contentManager = contentManager;
+            _scalingMatrix = scalingMatrix;
+            LoadUI();
+        }
+
+        private void LoadUI()
+        {
+            var startButton = new Button(_contentManager.Load<Texture2D>("Button (1)"), _contentManager.Load<SpriteFont>("Font"))
             {
-                
                 Position = new Vector2(133, 100),
                 Text = "start",
                 PenColor = Color.CornflowerBlue
             };
-            startButton.Click += new EventHandler(StartButton_Click);
+            startButton.Click += StartButton_Click;
 
-            var quitButton = new Button(content.Load<Texture2D>("Button (1)"), content.Load<SpriteFont>("Font"))
+            var quitButton = new Button(_contentManager.Load<Texture2D>("Button (1)"), _contentManager.Load<SpriteFont>("Font"))
             {
                 Position = new Vector2(133, 150),
                 Text = "Quit",
                 PenColor = Color.CornflowerBlue
             };
-            quitButton.Click += new EventHandler( QuitButton_Click);
+            quitButton.Click += QuitButton_Click;
 
-            _gameComponents = new List<Component>()
+            _buttons = new List<Component>()
             {
                 startButton,
                 quitButton
@@ -44,40 +53,30 @@ namespace MonoTest.Screens
 
         private void QuitButton_Click(object sender, EventArgs e)
         {
-            _game.Exit();
+            OnExit?.Invoke(this, EventArgs.Empty);
         }
 
         private void StartButton_Click(object sender, EventArgs e)
         {
-            GameEngine._screenManager.SetScreen(new GameScreen());
-           
+            OnStart?.Invoke(this, EventArgs.Empty);
         }
 
-        public void Draw(SpriteBatch _spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
-
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: GameEngine._displayManager.CalculateMatrix());
-
-
-
-            GameEngine._background.Draw(_spriteBatch);
-
-            _spriteBatch.Draw(_name,new Rectangle(100,10,200,50),Color.White);
-            foreach (var item in _gameComponents)
+            spriteBatch.Begin(transformMatrix: _scalingMatrix);
+            spriteBatch.Draw(_title,new Rectangle(100,10,200,50),Color.White);
+            foreach (var button in _buttons)
             {
-                item.Draw(_spriteBatch);
-
+                button.Draw(spriteBatch);
             }
-            _spriteBatch.End();
+            spriteBatch.End();
         }
 
         public void Update(GameTime delta)
         {
-            GameEngine._screenManager.SwitchScreen();
-            foreach (var item in _gameComponents)
+            foreach (var button in _buttons)
             {
-                item.Update(delta);
-
+                button.Update(delta, _scalingMatrix);
             }
         }
     }
