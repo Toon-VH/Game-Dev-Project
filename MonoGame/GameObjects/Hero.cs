@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoTest.Input;
 using MonoTest.Animations;
-using SharpDX.Direct2D1.Effects;
 
 namespace MonoTest.GameObjects
 {

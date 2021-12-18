@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using MonoTest.GameObjects;
 using MonoTest.Input;
 using MonoTest.Managers;
@@ -16,27 +13,25 @@ namespace MonoTest
 {
     public class GameEngine : Game
     {
-        public static Background _background;
-        public static Hero _hero;
+        private Background _background;
+        private Hero _hero;
+        private DisplayManager _displayManager;
+        private GameObjectManager _gameObjectManager;
+        private GraphicsDeviceManager _graphics;
+        private PhysicsManager _physicsManager;
+        private InputManager _inputManager;
+        private CameraManager _cameraManager;
+        private ScreenManager _screenManager;
+        
         private SpriteBatch _spriteBatch;
         private Texture2D _backGroundTexture;
         private Texture2D _heroTexture;
         private Texture2D _middleGroundTexture;
         private Texture2D _tiles;
-        public static DisplayManager _displayManager;
-        public static GameObjectManager _gameObjectManager;
-        public static GraphicsDeviceManager _graphics;
-        private readonly MapGenerator _mapGenerator;
-        public static PhysicsManager _physicsManager;
-        public static InputManager _inputManager;
-
-        public static CameraManager _cameraManager;
-        public static ScreenManager _screenManager;
         private SoundEffect _jumpSong;
-
-
-
-        public static List<Component> _gameComponents;
+        private readonly MapGenerator _mapGenerator;
+        private GameScreen _gameScreen;
+        private StartScreen _startScreen;
 
         public GameEngine()
         {
@@ -48,6 +43,7 @@ namespace MonoTest
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
         }
 
         protected override void Initialize()
@@ -62,8 +58,9 @@ namespace MonoTest
             _background = new Background(_backGroundTexture, _middleGroundTexture);
             _cameraManager = new CameraManager(_hero);
             _screenManager = new ScreenManager();
-            _screenManager.SetScreen(new StartScreen(this, Content));
-            _screenManager.SwitchScreen();
+            _gameScreen = InitializeGameScreen();
+            _startScreen = InitializeStartScreen();
+            _screenManager.SetScreen(_startScreen);
         }
 
         protected override void LoadContent()
@@ -76,16 +73,12 @@ namespace MonoTest
             _tiles = Content.Load<Texture2D>("tileset");
             _jumpSong = Content.Load<SoundEffect>("jump");
         }
-
-
+        
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                _screenManager.SetScreen(new StartScreen(this, Content));
-                _screenManager.SwitchScreen();
-               
+                _screenManager.SetScreen(_startScreen);
             }
 
             _screenManager.Update(gameTime);
@@ -95,12 +88,28 @@ namespace MonoTest
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Red);
-
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _displayManager.CalculateMatrix());
+            _background.Draw(_spriteBatch);
+            _spriteBatch.End();
+            
             _screenManager.Draw(_spriteBatch);
             base.Draw(gameTime);
         }
 
-
-       
+        private GameScreen InitializeGameScreen()
+        {
+            return new GameScreen(_displayManager, _gameObjectManager, _cameraManager, _physicsManager, _inputManager, _graphics.GraphicsDevice, _hero);
+        }
+        
+        private StartScreen InitializeStartScreen()
+        {
+            var startScreen = new StartScreen(Content, _displayManager.CalculateMatrix());
+            startScreen.OnExit += (sender, args) => Exit();
+            startScreen.OnStart += (sender, args) =>
+            {
+                _screenManager.SetScreen(_gameScreen);
+            };
+            return startScreen;
+        }
     }
 }
