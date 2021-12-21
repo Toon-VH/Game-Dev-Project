@@ -30,11 +30,6 @@ namespace MonoTest.Managers
             Visualize(spriteBatch, graphics);
         }
 
-        internal void Update(SpriteBatch spriteBatch, object graphicsDevice)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public Vector2 GetCameraPosition() => _cameraLocation;
 
         private void Visualize(SpriteBatch spriteBatch, GraphicsDevice graphics)

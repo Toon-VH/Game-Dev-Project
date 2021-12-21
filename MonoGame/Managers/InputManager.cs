@@ -37,7 +37,7 @@ namespace MonoTest.Managers
                 if (input.MovementDirection.X == 0) _moveable.Velocity = new Vector2(0, _moveable.Velocity.Y);
                 if (input.Jump && _moveable.IsTouchingGround)
                 {
-                    _moveable.Velocity = new Vector2(_moveable.Velocity.X, -150);
+                    _moveable.Velocity = new Vector2(_moveable.Velocity.X, -250);
                     _moveable.IsTouchingGround = false;
                     _jumpSong.Play();
                 }

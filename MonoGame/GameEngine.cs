@@ -22,7 +22,7 @@ namespace MonoTest
         private InputManager _inputManager;
         private CameraManager _cameraManager;
         private ScreenManager _screenManager;
-        
+
         private SpriteBatch _spriteBatch;
         private Texture2D _backGroundTexture;
         private Texture2D _heroTexture;
@@ -38,19 +38,18 @@ namespace MonoTest
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
-            _mapGenerator = new MapGenerator(Maps.map1, 12);
+            _mapGenerator = new MapGenerator(Maps.map1, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
         }
 
         protected override void Initialize()
         {
             base.Initialize();
             Mouse.WindowHandle = Window.Handle;
-            _displayManager.InitializeDisplay(_graphics, 384, 240);
+            _displayManager.InitializeDisplay(_graphics, 384 * 2, 240 * 2);
             _hero = new Hero(_heroTexture);
             _mapGenerator.InitializeBlocks(_tiles, _gameObjectManager);
             _gameObjectManager.AddGameObject(_hero);
@@ -65,7 +64,6 @@ namespace MonoTest
 
         protected override void LoadContent()
         {
-
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _heroTexture = Content.Load<Texture2D>("Archaeologist Sprite Sheet");
             _backGroundTexture = Content.Load<Texture2D>("background");
@@ -73,10 +71,11 @@ namespace MonoTest
             _tiles = Content.Load<Texture2D>("tileset");
             _jumpSong = Content.Load<SoundEffect>("jump");
         }
-        
+
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+                Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 _screenManager.SetScreen(_startScreen);
             }
@@ -88,27 +87,26 @@ namespace MonoTest
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Red);
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _displayManager.CalculateMatrix());
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp,
+                transformMatrix: _displayManager.CalculateMatrix());
             _background.Draw(_spriteBatch);
             _spriteBatch.End();
-            
+
             _screenManager.Draw(_spriteBatch);
             base.Draw(gameTime);
         }
 
         private GameScreen InitializeGameScreen()
         {
-            return new GameScreen(_displayManager, _gameObjectManager, _cameraManager, _physicsManager, _inputManager, _graphics.GraphicsDevice, _hero);
+            return new GameScreen(_displayManager, _gameObjectManager, _cameraManager, _physicsManager, _inputManager,
+                _graphics.GraphicsDevice, _hero);
         }
-        
+
         private StartScreen InitializeStartScreen()
         {
             var startScreen = new StartScreen(Content, _displayManager.CalculateMatrix());
             startScreen.OnExit += (sender, args) => Exit();
-            startScreen.OnStart += (sender, args) =>
-            {
-                _screenManager.SetScreen(_gameScreen);
-            };
+            startScreen.OnStart += (sender, args) => { _screenManager.SetScreen(_gameScreen); };
             return startScreen;
         }
     }

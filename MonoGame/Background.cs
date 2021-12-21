@@ -19,8 +19,8 @@ namespace MonoTest
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_backGroundTexture, new Vector2(0, 0), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(_middleGroundTexture, new Vector2(0, 0), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_backGroundTexture, new Vector2(0, 0), null, Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_middleGroundTexture, new Vector2(0, 0), null, Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
         }
 
     }

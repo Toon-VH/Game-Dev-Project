@@ -13,13 +13,13 @@ namespace MonoTest.GameObjects
         private readonly Animation _walkLeft;
         private readonly Animation _idle;
         private readonly Animation _rol;
-        private float Scale;
+        private readonly int _scale;
 
         public Hero(Texture2D texture)
         {
-            Scale = 1f;
+            _scale = 2;
             Position = new Vector2(0, 0);
-            Speed = 80f;
+            Speed = 160f;
             Velocity = new Vector2(0, 0);
             _texture = texture;
 
@@ -38,7 +38,7 @@ namespace MonoTest.GameObjects
 
         private void CreateHitboxes()
         {
-            var rectangle = new RectangleF(25, 6, 16, 22);
+            var rectangle = new RectangleF(25 * _scale, 6 * _scale, 16* _scale, 22* _scale);
 
             var hitBoxesIdle = new List<RectangleF>()
             {
@@ -63,26 +63,16 @@ namespace MonoTest.GameObjects
             
             var hitBoxesWalkRight = new List<RectangleF>()
             {
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22)
+                rectangle, rectangle, rectangle,
+                rectangle, rectangle, rectangle,
+                rectangle, rectangle
             };
 
             var hitBoxesWalkLeft = new List<RectangleF>()
             {
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22),
-                new RectangleF(25, 6, 16, 22)
+                rectangle, rectangle, rectangle,
+                rectangle, rectangle, rectangle,
+                rectangle, rectangle
             };
 
             _idle.AddHitboxList(hitBoxesIdle);
@@ -95,12 +85,13 @@ namespace MonoTest.GameObjects
             var width = CurrentAnimation.CurrentHitbox.Width;
             var height = CurrentAnimation.CurrentHitbox.Height;
 
-            var rectangle = new Rectangle(
-                (int)Position.X + (int)Math.Ceiling(CurrentAnimation.CurrentHitbox.X * Scale),
-                (int)Position.Y + (int)(CurrentAnimation.CurrentHitbox.Y * Scale), (int)Math.Ceiling(width * Scale),
-                (int)Math.Ceiling(height * Scale));
+            var rectangle = new RectangleF(
+                (int)Position.X + CurrentAnimation.CurrentHitbox.X,
+                (int)Position.Y + CurrentAnimation.CurrentHitbox.Y, width,
+                height);
 
-            DrawRectangle(spriteBatch, rectangle, 1);
+            DrawRectangle(spriteBatch, rectangle, 2);
+            
             switch (AbsoluteDirection)
             {
                 case AbsoluteDirection.Left:
@@ -125,19 +116,16 @@ namespace MonoTest.GameObjects
         private void DrawAnimation(SpriteBatch spriteBatch, Animation animation, bool flip = false)
         {
             var sourceRectangle = animation.CurrentFrame.SourceRectangle;
-            spriteBatch.Draw(_texture, new Vector2(Position.X, Position.Y), sourceRectangle, Color.White, 0f,
-                Vector2.Zero,
-                Scale, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
-
-            var rectangle = new Rectangle((int)Position.X, (int)Position.Y, sourceRectangle.Width,
-                sourceRectangle.Height);
-            //DrawRectangle(spriteBatch, rectangle, 1);
+            spriteBatch.Draw(_texture, new Vector2(Position.X, Position.Y), sourceRectangle , Color.White, 0f, Vector2.Zero, _scale, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+            
+            // var rectangle = new Rectangle((int)Position.X, (int)Position.Y, sourceRectangle.Width * (int)Scale,
+            //     sourceRectangle.Height * (int)Scale);
+            // DrawRectangle(spriteBatch, rectangle, 1);
             
             CurrentAnimation = animation;
         }
 
-
-        private void DrawRectangle(SpriteBatch spriteBatch, Rectangle rectangle, int lineWidth)
+        private void DrawRectangle(SpriteBatch spriteBatch, RectangleF rectangle, int lineWidth)
         {
             var color = IsIntersecting ? Color.Red : Color.Green;
             var pointTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
@@ -147,15 +135,21 @@ namespace MonoTest.GameObjects
             });
             
             
-            spriteBatch.Draw(pointTexture, new Rectangle(rectangle.X, rectangle.Y, lineWidth, rectangle.Height + lineWidth), color);
-            spriteBatch.Draw(pointTexture,
-                 new Rectangle(rectangle.X, rectangle.Y, rectangle.Width + lineWidth, lineWidth), color);
-             spriteBatch.Draw(pointTexture,
-                 new Rectangle(rectangle.X + rectangle.Width, rectangle.Y, lineWidth, rectangle.Height + lineWidth),
-                 color);
-             spriteBatch.Draw(pointTexture,
-                 new Rectangle(rectangle.X , rectangle.Y + rectangle.Height, rectangle.Width + lineWidth, lineWidth),
-                 color);
+            
+            spriteBatch.Draw(pointTexture, rectangle.Position, null , color, 0f, Vector2.Zero, new Vector2(rectangle.Width,lineWidth), SpriteEffects.None, 0f);
+            spriteBatch.Draw(pointTexture, rectangle.Position, null , color, 0f, Vector2.Zero, new Vector2(lineWidth,rectangle.Height), SpriteEffects.None, 0f);
+            spriteBatch.Draw(pointTexture, new Vector2(rectangle.X + rectangle.Width, rectangle.Y), null , color, 0f, Vector2.Zero, new Vector2(lineWidth,rectangle.Height), SpriteEffects.None, 0f);
+            spriteBatch.Draw(pointTexture, new Vector2(rectangle.X ,rectangle.Y+ rectangle.Height), null , color, 0f, Vector2.Zero, new Vector2(rectangle.Width +lineWidth,lineWidth), SpriteEffects.None, 0f);
+
+            // spriteBatch.Draw(pointTexture, new Rectangle(rectangle.X, rectangle.Y, lineWidth, rectangle.Height + lineWidth), color);
+            // spriteBatch.Draw(pointTexture,
+            //      new Rectangle(rectangle.X, rectangle.Y, rectangle.Width + lineWidth, lineWidth), color);
+            //  spriteBatch.Draw(pointTexture,
+            //      new Rectangle(rectangle.X + rectangle.Width, rectangle.Y, lineWidth, rectangle.Height + lineWidth),
+            //      color);
+            //  spriteBatch.Draw(pointTexture,
+            //      new Rectangle(rectangle.X , rectangle.Y + rectangle.Height, rectangle.Width + lineWidth, lineWidth),
+            //      color);
         }
     }
 }

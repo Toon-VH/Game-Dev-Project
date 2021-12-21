@@ -9,7 +9,7 @@ namespace MonoTest.Managers
 {
     public class PhysicsManager
     {
-        private const float Gravity = 350f;
+        private const float Gravity = 570f;
         private static Vector2 prevVelocity;
         private static Vector2 prevPosition;
 
