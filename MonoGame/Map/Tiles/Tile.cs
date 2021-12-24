@@ -6,7 +6,7 @@ using MonoTest.GameObjects;
 
 namespace MonoTest.Map.Tiles
 {
-   abstract class Tile : IGameObject
+    internal abstract class Tile : IGameObject
     {
         public Rectangle BoundingBox { get; set; }
         public bool IsPassable { get; set; }
@@ -34,7 +34,6 @@ namespace MonoTest.Map.Tiles
         
         public void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
         }
     }
 }

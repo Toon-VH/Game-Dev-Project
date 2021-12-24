@@ -52,4 +52,13 @@ namespace MonoTest.Map.Tiles
             SourceRectangle = new Rectangle(73, 83, 16, 16);
         }
     }
+    
+    class BearTrap :Tile
+    {
+        public BearTrap(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
+        {
+            IsPassable = true;
+            SourceRectangle = new Rectangle(114, 121, 16, 16);
+        }
+    }
 }

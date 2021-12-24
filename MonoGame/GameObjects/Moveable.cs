@@ -11,6 +11,7 @@ namespace MonoTest.GameObjects
         public float Speed { get; set; }
         public bool IsTouchingGround { get; set; }
         public Animation CurrentAnimation { get; protected set; }
+        public RectangleF BoundingBox { get; set; }
         public bool IsIntersecting { get; set; }
 
 

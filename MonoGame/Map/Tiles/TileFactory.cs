@@ -1,13 +1,12 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoTest.Map.Tiles
 {
-    class  BlockFactory
+    class BlockFactory
     {
-
-        public static Tile CreateBlock(BlockType type,int x, int y,Texture2D texture, int size)
+        public static Tile CreateBlock(BlockType type, int x, int y, Texture2D texture, int size)
         {
-
             Tile newTile = null;
             switch (type)
             {
@@ -25,15 +24,17 @@ namespace MonoTest.Map.Tiles
                     break;
                 case BlockType.Grass:
                     newTile = new Grass(x, y, texture, size);
-                    break; 
+                    break;
                 case BlockType.LeftGrassBlock:
                     newTile = new LeftGrassTile(x, y, texture, size);
-                    break; 
+                    break;
                 case BlockType.Empty:
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
+
             return newTile;
         }
     }
-
 }

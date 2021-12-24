@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoTest.Components;
 using MonoTest.GameObjects;
 using MonoTest.Managers;
 
@@ -32,6 +33,23 @@ namespace MonoTest.Screens
             _graphicsDevice = graphicsDevice;
             _hero = hero;
         }
+        
+        private void LoadUI()
+        {
+            // var startButton = new Button(_contentManager.Load<Texture2D>("Button (1)"), _contentManager.Load<SpriteFont>("Font"))
+            // {
+            //     Position = new Vector2(133, 100),
+            //     Text = "start",
+            //     PenColor = Color.CornflowerBlue
+            // };
+            // startButton.Click += StartButton_Click;
+            //
+            // _buttons = new List<Component>()
+            // {
+            //     startButton,
+            //     quitButton
+            // };
+        }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -44,11 +62,15 @@ namespace MonoTest.Screens
         public void Update(GameTime gameTime)
         {
             _inputManager.ProcessInput();
-            _hero.Update(gameTime);
-            _gameObjectManager.Moveables.ForEach(m =>
-                _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds, _gameObjectManager.GameObjects));
+            _gameObjectManager.GameObjects.ForEach(g => g?.Update(gameTime));
+            _gameObjectManager.Moveables.ForEach(m => _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds, _gameObjectManager.GameObjects));
         }
 
+        private void DrawHealth(SpriteBatch spriteBatch)
+        {
+            
+        }
+        
         private Matrix CreateMatrix()
         {
             return _displayManager.CalculateMatrix() * Matrix.CreateTranslation(

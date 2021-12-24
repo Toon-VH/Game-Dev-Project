@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoTest
+namespace MonoTest.Components
 {
     public abstract class Component
     {

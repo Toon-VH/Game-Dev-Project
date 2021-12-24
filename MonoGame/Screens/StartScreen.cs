@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoTest.Controls;
 using System;
 using System.Collections.Generic;
+using MonoTest.Components;
+using MonoTest.Managers;
 
 namespace MonoTest.Screens
 {
@@ -28,7 +30,8 @@ namespace MonoTest.Screens
 
         private void LoadUI()
         {
-            var startButton = new Button(_contentManager.Load<Texture2D>("Button (1)"), _contentManager.Load<SpriteFont>("Font"))
+            var texture = _contentManager.Load<Texture2D>("Button (1)");
+            var startButton = new Button(texture, _contentManager.Load<SpriteFont>("Font"))
             {
                 Position = new Vector2(133, 100),
                 Text = "start",
@@ -36,7 +39,7 @@ namespace MonoTest.Screens
             };
             startButton.Click += StartButton_Click;
 
-            var quitButton = new Button(_contentManager.Load<Texture2D>("Button (1)"), _contentManager.Load<SpriteFont>("Font"))
+            var quitButton = new Button(texture, _contentManager.Load<SpriteFont>("Font"))
             {
                 Position = new Vector2(133, 150),
                 Text = "Quit",

@@ -41,13 +41,11 @@ namespace MonoTest.Managers
             CheckCollisions(Direction.Horizontal, moveable, newPosition, map);
         }
         
-        private bool Intersects(RectangleF player, Rectangle block, Direction direction, out Vector2 depth)
+        private static bool Intersects(RectangleF player, Rectangle block, Direction direction, out Vector2 depth)
         {
             if (player.Intersects(block))
             {
-                if (direction == Direction.Vertical)
-                    depth = new Vector2(0, GetVerticalIntersectionDepth(player, block));
-                else depth = new Vector2(GetHorizontalIntersectionDepth(player, block), 0);
+                depth = direction == Direction.Vertical ? new Vector2(0, GetVerticalIntersectionDepth(player, block)) : new Vector2(GetHorizontalIntersectionDepth(player, block), 0);
                 return depth.Y != 0 || depth.X != 0;
             }
 
@@ -55,19 +53,19 @@ namespace MonoTest.Managers
             return false;
         }
 
-        private float GetHorizontalIntersectionDepth(RectangleF rectA, Rectangle rectB)
+        private static float GetHorizontalIntersectionDepth(RectangleF rectA, Rectangle rectB)
         {
             // Calculate half sizes.
-            float halfWidthA = rectA.Width / 2.0f;
-            float halfWidthB = rectB.Width / 2.0f;
+            var halfWidthA = rectA.Width / 2.0f;
+            var halfWidthB = rectB.Width / 2.0f;
 
             // Calculate centers.
-            float centerA = rectA.Left + halfWidthA;
-            float centerB = rectB.Left + halfWidthB;
+            var centerA = rectA.Left + halfWidthA;
+            var centerB = rectB.Left + halfWidthB;
 
             // Calculate current and minimum-non-intersecting distances between centers.
-            float distanceX = centerA - centerB;
-            float minDistanceX = halfWidthA + halfWidthB;
+            var distanceX = centerA - centerB;
+            var minDistanceX = halfWidthA + halfWidthB;
 
             // If we are not intersecting at all, return (0, 0).
             if (Math.Abs(distanceX) >= minDistanceX)
@@ -77,19 +75,19 @@ namespace MonoTest.Managers
             return distanceX > 0 ? minDistanceX - distanceX : -minDistanceX - distanceX;
         }
 
-        private float GetVerticalIntersectionDepth(RectangleF rectA, Rectangle rectB)
+        private static float GetVerticalIntersectionDepth(RectangleF rectA, Rectangle rectB)
         {
             // Calculate half sizes.
-            float halfHeightA = rectA.Height / 2.0f;
-            float halfHeightB = rectB.Height / 2.0f;
+            var halfHeightA = rectA.Height / 2.0f;
+            var halfHeightB = rectB.Height / 2.0f;
 
             // Calculate centers.
-            float centerA = rectA.Top + halfHeightA;
-            float centerB = rectB.Top + halfHeightB;
+            var centerA = rectA.Top + halfHeightA;
+            var centerB = rectB.Top + halfHeightB;
 
             // Calculate current and minimum-non-intersecting distances between centers.
-            float distanceY = centerA - centerB;
-            float minDistanceY = halfHeightA + halfHeightB;
+            var distanceY = centerA - centerB;
+            var minDistanceY = halfHeightA + halfHeightB;
 
             // If we are not intersecting at all, return (0, 0).
             if (Math.Abs(distanceY) >= minDistanceY)
@@ -101,10 +99,9 @@ namespace MonoTest.Managers
 
         private void CheckCollisions(Direction direction, Moveable moveable, Vector2 newPosition, IEnumerable<IGameObject> map)
         {
-            var moveableHitBox = moveable.CurrentAnimation.CurrentHitbox;
+            var moveableHitBox = moveable.BoundingBox;
             moveableHitBox.X += newPosition.X;
             moveableHitBox.Y += newPosition.Y;
-            Debug.WriteLine(moveableHitBox.Position);
             //Get a list of objects to test against
             //You probably already have a mechanism for this
 
@@ -117,23 +114,21 @@ namespace MonoTest.Managers
                 
                 //Calculate intersection depth
 
-                if (Intersects(moveableHitBox, tile.BoundingBox, direction, out var depth))
-                {
-                    moveable.IsIntersecting = true;
-                    if (depth.Y != 0) moveable.IsTouchingGround = true;
+                if (!Intersects(moveableHitBox, tile.BoundingBox, direction, out var depth)) continue;
+                moveable.IsIntersecting = true;
+                if (depth.Y != 0) moveable.IsTouchingGround = true;
                     
-                    //If an intersection was found - adjust position
-                    newPosition += depth;
-                    moveableHitBox.X += depth.X;
-                    moveableHitBox.Y += depth.Y;
-                    Debug.WriteLine($"Depth: (${depth.X}, ${depth.Y})");
+                //If an intersection was found - adjust position
+                newPosition += depth;
+                moveableHitBox.X += depth.X;
+                moveableHitBox.Y += depth.Y;
+                //Debug.WriteLine($"Depth: (${depth.X}, ${depth.Y})");
                     
-                    //Adjust velocity based on intersection direction
-                    if (direction == Direction.Horizontal)
-                        moveable.Velocity = new Vector2(0, moveable.Velocity.Y);
-                    else
-                        moveable.Velocity = new Vector2(moveable.Velocity.X, 0);
-                }
+                //Adjust velocity based on intersection direction
+                if (direction == Direction.Horizontal)
+                    moveable.Velocity = new Vector2(0, moveable.Velocity.Y);
+                else
+                    moveable.Velocity = new Vector2(moveable.Velocity.X, 0);
             }
             
             moveable.Position = direction == Direction.Horizontal

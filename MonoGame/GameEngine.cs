@@ -7,6 +7,7 @@ using MonoTest.GameObjects;
 using MonoTest.Input;
 using MonoTest.Managers;
 using MonoTest.Map;
+using MonoTest.Map.Plants;
 using MonoTest.Screens;
 
 namespace MonoTest
@@ -28,17 +29,20 @@ namespace MonoTest
         private Texture2D _heroTexture;
         private Texture2D _middleGroundTexture;
         private Texture2D _tiles;
+        private Texture2D _texturePlants;
         private SoundEffect _jumpSong;
         private readonly MapGenerator _mapGenerator;
         private GameScreen _gameScreen;
         private StartScreen _startScreen;
+
+        private Plant _plant;
 
         public GameEngine()
         {
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
-            _mapGenerator = new MapGenerator(Maps.map1, 24);
+            _mapGenerator = new MapGenerator(Maps.map1, Maps.Plants, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";
@@ -55,6 +59,7 @@ namespace MonoTest
             _gameObjectManager.AddGameObject(_hero);
             _inputManager = new InputManager(new KeyboardReader(), _hero, _jumpSong);
             _background = new Background(_backGroundTexture, _middleGroundTexture);
+            _mapGenerator.InitializePlants(_texturePlants,_gameObjectManager);
             _cameraManager = new CameraManager(_hero);
             _screenManager = new ScreenManager();
             _gameScreen = InitializeGameScreen();
@@ -69,6 +74,7 @@ namespace MonoTest
             _backGroundTexture = Content.Load<Texture2D>("background");
             _middleGroundTexture = Content.Load<Texture2D>("middleground");
             _tiles = Content.Load<Texture2D>("tileset");
+            _texturePlants = Content.Load<Texture2D>("Plants");
             _jumpSong = Content.Load<SoundEffect>("jump");
         }
 
@@ -79,7 +85,6 @@ namespace MonoTest
             {
                 _screenManager.SetScreen(_startScreen);
             }
-
             _screenManager.Update(gameTime);
             base.Update(gameTime);
         }
