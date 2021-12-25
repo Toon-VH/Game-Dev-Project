@@ -6,7 +6,7 @@ using MonoTest.GameObjects;
 
 namespace MonoTest.Map.Tiles
 {
-    abstract class Tile : IGameObject
+    internal abstract class Tile : IGameObject
     {
         public Rectangle BoundingBox { get; set; }
         public bool IsPassable { get; set; }
@@ -20,21 +20,21 @@ namespace MonoTest.Map.Tiles
 
         public Tile(int x, int y, Texture2D texture, int size) //GraphicsDevice graphics)
         {
-            Position = new Vector2(x, y);
             BoundingBox = new Rectangle(x * size, y * size, size, size);
+            //Debug.WriteLine($"x: {x * size}, y: {y * size}, width: {size}, height: {size}");
             IsPassable = false;
             Color = Color.White;
             Texture = texture;
+            //CollideWithEvent = new NoEvent();
         }
-
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
             spriteBatch.Draw(Texture, BoundingBox, SourceRectangle, Color);
         }
-
+        
         public void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
         }
     }
 }
+
