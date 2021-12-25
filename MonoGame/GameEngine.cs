@@ -46,6 +46,7 @@ namespace MonoTest
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            
         }
 
         protected override void Initialize()

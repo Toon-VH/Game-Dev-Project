@@ -16,6 +16,8 @@ namespace MonoTest.Screens
         private readonly GraphicsDevice _graphicsDevice;
         private readonly Hero _hero;
 
+      
+
         public GameScreen(
             DisplayManager displayManager,
             GameObjectManager gameObjectManager,
@@ -32,6 +34,7 @@ namespace MonoTest.Screens
             _inputManager = inputManager;
             _graphicsDevice = graphicsDevice;
             _hero = hero;
+           
         }
         
         private void LoadUI()

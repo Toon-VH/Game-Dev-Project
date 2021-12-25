@@ -735,7 +735,7 @@ namespace MonoTest.Map.Tiles
     {
         public MineBack2(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
         {
-            IsPassable = true;
+            IsPassable = false;
             SourceRectangle = new Rectangle(258, 15, 16, 16);
         }
     }
@@ -759,7 +759,7 @@ namespace MonoTest.Map.Tiles
     {
         public MineBack5(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
         {
-            IsPassable = true;
+            IsPassable = false;
             SourceRectangle = new Rectangle(258, 67, 16, 16);
         }
     }
@@ -791,7 +791,7 @@ namespace MonoTest.Map.Tiles
     {
         public MineBack9(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
         {
-            IsPassable = true;
+            IsPassable = false;
             SourceRectangle = new Rectangle(275, 67, 16, 16);
         }
     }
