@@ -30,15 +30,15 @@ namespace MonoTest.Screens
         {
             var startButton = new Button(_contentManager.Load<Texture2D>("Button (1)"), _contentManager.Load<SpriteFont>("Font"))
             {
-                Position = new Vector2(133, 100),
-                Text = "start",
+                Position = new Vector2(315, 200),
+                Text = "Start",
                 PenColor = Color.CornflowerBlue
             };
             startButton.Click += StartButton_Click;
 
             var quitButton = new Button(_contentManager.Load<Texture2D>("Button (1)"), _contentManager.Load<SpriteFont>("Font"))
             {
-                Position = new Vector2(133, 150),
+                Position = new Vector2(315, 250),
                 Text = "Quit",
                 PenColor = Color.CornflowerBlue
             };
@@ -64,7 +64,7 @@ namespace MonoTest.Screens
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(transformMatrix: _scalingMatrix);
-            spriteBatch.Draw(_title,new Rectangle(100,10,200,50),Color.White);
+            spriteBatch.Draw(_title,new Rectangle(250,10,250,75),Color.White);
             foreach (var button in _buttons)
             {
                 button.Draw(spriteBatch);
