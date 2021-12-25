@@ -27,7 +27,9 @@ namespace MonoTest.Managers
             var newLocation = Vector2.Lerp(_cameraLocation, targetLocation, velocity / maxVelocity);
             _cameraLocation = newLocation;
 
-            Visualize(spriteBatch, graphics);
+#if DEBUG
+          Visualize(spriteBatch, graphics);
+#endif
         }
 
         public Vector2 GetCameraPosition() => _cameraLocation;

@@ -27,6 +27,11 @@ namespace MonoTest
 
         public Vector2 Position => new Vector2(X,Y);
         
+        public bool Intersects(RectangleF value)
+        {
+            return value.Left < Right && Left < value.Right && value.Top < Bottom && Top < value.Bottom;
+        }
+        
         public bool Intersects(Rectangle value)
         {
             return value.Left < Right && Left < value.Right && value.Top < Bottom && Top < value.Bottom;

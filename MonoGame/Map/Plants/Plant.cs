@@ -11,8 +11,8 @@ namespace MonoTest.Map.Plants
 {
     public class Plant : IGameObject
     {
-        private readonly Vector2 _position;
-        private readonly Animation _animation;
+        public Animation Animation { get; set; }
+        public  Vector2 Position { get; set; }
         private readonly Texture2D _texture;
         private readonly double _timeBetweenAttacks;
         private double _time;
@@ -22,10 +22,10 @@ namespace MonoTest.Map.Plants
 
         public Plant(int x, int y, Texture2D texture, int typePlant, double timeBetweenAttacks)
         {
-            _position = new Vector2(x, y);
+            Position = new Vector2(x, y);
             _texture = texture;
             _timeBetweenAttacks = timeBetweenAttacks;
-            _animation = CreateAnimation(typePlant);
+            Animation = CreateAnimation(typePlant);
             _time = 0;
             _isIntersecting = false;
         }
@@ -37,43 +37,44 @@ namespace MonoTest.Map.Plants
             if (_time > _timeBetweenAttacks)
             {
                 t = true;
-                if (_animation.AnimationDoneFlag)
+                if (Animation.AnimationDoneFlag)
                 {
                     _time = 0;
                 }
 
-                _animation.Update(gameTime);
+                Animation.Update(gameTime);
             }
 
-            Debug.WriteLine($"Counter: {_animation.Counter}, Count: {_animation.Frames.Count}, {_time},{t}");
+            Debug.WriteLine($"Counter: {Animation.Counter}, Count: {Animation.Frames.Count}, {_time},{t}");
             var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             _time += elapsed;
         }
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
-            var sourceRectangle = _animation.CurrentFrame.SourceRectangle;
-            var position = _position - new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2);
+            var sourceRectangle = Animation.CurrentFrame.SourceRectangle;
+            var position = Position - new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2);
             spriteBatch.Draw(_texture, position, sourceRectangle, Color.White, 0f, Vector2.Zero, 1f,
                 SpriteEffects.None, 0f);
 
 
-            //Debug
-            var drawRectangleX = _position.X - sourceRectangle.Width / 2;
-            var drawRectangleY = _position.Y - sourceRectangle.Height / 2;
-
-            var debugR1 = new RectangleF((int)drawRectangleX, (int)drawRectangleY,
-                _animation.CurrentFrame.SourceRectangle.Width, _animation.CurrentFrame.SourceRectangle.Height);
-            //DebugService.DrawRectangle(spriteBatch, debugR1, 1, false);
-
-
-            var hitboxX = _animation.CurrentHitbox.X + _position.X - sourceRectangle.Width / 2;
-            var hitboxY = _animation.CurrentHitbox.Y + _position.Y - sourceRectangle.Height / 2;
-
-            var debugR2 = new RectangleF(hitboxX, hitboxY, _animation.CurrentHitbox.Width,
-                _animation.CurrentHitbox.Height);
-            DebugService.DrawRectangle(spriteBatch, debugR2, 1, _isIntersecting);
-            //End
+#if DEBUG
+                  var drawRectangleX = Position.X - sourceRectangle.Width / 2;
+                  var drawRectangleY = Position.Y - sourceRectangle.Height / 2;
+      
+                  var debugR1 = new RectangleF((int)drawRectangleX, (int)drawRectangleY,
+                      Animation.CurrentFrame.SourceRectangle.Width, Animation.CurrentFrame.SourceRectangle.Height);
+                  DebugService.DrawRectangle(spriteBatch, debugR1, 1, false);
+      
+      
+                  var hitboxX = Animation.CurrentHitbox.X + Position.X - sourceRectangle.Width / 2;
+                  var hitboxY = Animation.CurrentHitbox.Y + Position.Y - sourceRectangle.Height / 2;
+      
+                  var debugR2 = new RectangleF(hitboxX, hitboxY, Animation.CurrentHitbox.Width,
+                      Animation.CurrentHitbox.Height);
+                  DebugService.DrawRectangle(spriteBatch, debugR2, 1, _isIntersecting);      
+#endif
+            
         }
 
         private Animation CreateAnimation(int typePlant)

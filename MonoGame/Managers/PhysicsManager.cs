@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using MonoTest.GameObjects;
+using MonoTest.Map.Plants;
 using MonoTest.Map.Tiles;
 
 namespace MonoTest.Managers
@@ -28,24 +29,26 @@ namespace MonoTest.Managers
             prevVelocity = moveable.Velocity;
             prevPosition = moveable.Position;
             moveable.IsIntersecting = false;
-            
+
             moveable.Velocity = new Vector2(moveable.Velocity.X, moveable.Velocity.Y + Gravity * deltaTime);
-            
+
             var newPosition = moveable.Position;
 
             //Update one axis at a time
             newPosition += new Vector2(0, moveable.Velocity.Y * deltaTime);
-            CheckCollisions(Direction.Vertical, moveable,newPosition, map);
+            CheckCollisions(Direction.Vertical, moveable, newPosition, map);
             newPosition = moveable.Position;
             newPosition += new Vector2(moveable.Velocity.X * deltaTime, 0);
             CheckCollisions(Direction.Horizontal, moveable, newPosition, map);
         }
-        
+
         private static bool Intersects(RectangleF player, Rectangle block, Direction direction, out Vector2 depth)
         {
             if (player.Intersects(block))
             {
-                depth = direction == Direction.Vertical ? new Vector2(0, GetVerticalIntersectionDepth(player, block)) : new Vector2(GetHorizontalIntersectionDepth(player, block), 0);
+                depth = direction == Direction.Vertical
+                    ? new Vector2(0, GetVerticalIntersectionDepth(player, block))
+                    : new Vector2(GetHorizontalIntersectionDepth(player, block), 0);
                 return depth.Y != 0 || depth.X != 0;
             }
 
@@ -92,12 +95,13 @@ namespace MonoTest.Managers
             // If we are not intersecting at all, return (0, 0).
             if (Math.Abs(distanceY) >= minDistanceY)
                 return 0f;
-            
+
             // Calculate and return intersection depths.
             return distanceY > 0 ? minDistanceY - distanceY : -minDistanceY - distanceY;
         }
 
-        private void CheckCollisions(Direction direction, Moveable moveable, Vector2 newPosition, IEnumerable<IGameObject> map)
+        private void CheckCollisions(Direction direction, Moveable moveable, Vector2 newPosition,
+            IEnumerable<IGameObject> map)
         {
             var moveableHitBox = moveable.BoundingBox;
             moveableHitBox.X += newPosition.X;
@@ -109,28 +113,52 @@ namespace MonoTest.Managers
             foreach (var mapObject in map)
             {
                 if (mapObject == moveable) continue;
-                if (!(mapObject is Tile tile)) continue;
-                if (tile.IsPassable) continue;
-                
-                //Calculate intersection depth
+                if ((mapObject is Tile tile))
+                {
+                    if (tile.IsPassable) continue;
 
-                if (!Intersects(moveableHitBox, tile.BoundingBox, direction, out var depth)) continue;
-                moveable.IsIntersecting = true;
-                if (depth.Y != 0) moveable.IsTouchingGround = true;
-                    
-                //If an intersection was found - adjust position
-                newPosition += depth;
-                moveableHitBox.X += depth.X;
-                moveableHitBox.Y += depth.Y;
-                //Debug.WriteLine($"Depth: (${depth.X}, ${depth.Y})");
-                    
-                //Adjust velocity based on intersection direction
-                if (direction == Direction.Horizontal)
-                    moveable.Velocity = new Vector2(0, moveable.Velocity.Y);
-                else
-                    moveable.Velocity = new Vector2(moveable.Velocity.X, 0);
+                    //Calculate intersection depth
+
+                    if (!Intersects(moveableHitBox, tile.BoundingBox, direction, out var depth)) continue;
+                    moveable.IsIntersecting = true;
+                    if (depth.Y != 0) moveable.IsTouchingGround = true;
+
+                    //If an intersection was found - adjust position
+                    newPosition += depth;
+                    moveableHitBox.X += depth.X;
+                    moveableHitBox.Y += depth.Y;
+                    //Debug.WriteLine($"Depth: (${depth.X}, ${depth.Y})");
+
+                    //Adjust velocity based on intersection direction
+                    if (direction == Direction.Horizontal)
+                        moveable.Velocity = new Vector2(0, moveable.Velocity.Y);
+                    else
+                        moveable.Velocity = new Vector2(moveable.Velocity.X, 0);
+                }
+
+                if (mapObject is Plant plant)
+                {
+                    var rectX = plant.Position.X + plant.Animation.CurrentHitbox.X;
+                    var rectY = plant.Position.Y + plant.Animation.CurrentHitbox.Y;
+
+                    var rect = new RectangleF((int)rectX, (int)rectY,
+                        plant.Animation.CurrentHitbox.Width, plant.Animation.CurrentHitbox.Height);
+
+                    if (moveable.BoundingBox.Intersects(rect))
+                    {
+                        if (moveable.Velocity.X > 0)
+                        {
+                            moveable.Velocity = new Vector2(-30, moveable.Velocity.Y);
+                        }
+
+                        if (moveable.Velocity.X < 0)
+                        {
+                            moveable.Velocity = new Vector2(+30, moveable.Velocity.Y);
+                        }
+                    }
+                }
             }
-            
+
             moveable.Position = direction == Direction.Horizontal
                 ? new Vector2(newPosition.X, moveable.Position.Y)
                 : new Vector2(moveable.Position.X, newPosition.Y);

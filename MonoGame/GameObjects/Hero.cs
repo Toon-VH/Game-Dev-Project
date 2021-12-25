@@ -72,11 +72,12 @@ namespace MonoTest.GameObjects
 
         public override void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            //Debug 
+#if DEBUG
             var rectangle = new RectangleF((int)Position.X + BoundingBox.X, (int)Position.Y + BoundingBox.Y,
                 BoundingBox.Width, BoundingBox.Height);
             DebugService.DrawRectangle(spriteBatch, rectangle, 2, IsIntersecting);
-            //End
+#endif
+
 
             switch (AbsoluteDirection)
             {
@@ -104,14 +105,15 @@ namespace MonoTest.GameObjects
             var sourceRectangle = animation.CurrentFrame.SourceRectangle;
             spriteBatch.Draw(_texture, new Vector2(Position.X, Position.Y), sourceRectangle, Color.White, 0f,
                 Vector2.Zero, _scale, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
-
             CurrentAnimation = animation;
 
-            //Debug
-            // var rectangle = new RectangleF((int)Position.X, (int)Position.Y, sourceRectangle.Width * _scale,
-            //     sourceRectangle.Height * _scale);
-            // DebugService.DrawRectangle(spriteBatch, rectangle, 1, false);
-            //End
+#if DEBUG
+
+            var rectangle = new RectangleF((int)Position.X, (int)Position.Y, sourceRectangle.Width * _scale,
+                sourceRectangle.Height * _scale);
+            DebugService.DrawRectangle(spriteBatch, rectangle, 1, false);
+
+#endif
         }
     }
 }
