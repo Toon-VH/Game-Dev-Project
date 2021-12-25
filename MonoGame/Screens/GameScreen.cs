@@ -75,8 +75,9 @@ namespace MonoTest.Screens
         {
             return _displayManager.CalculateMatrix() * Matrix.CreateTranslation(
                 new Vector3(
-                    -_cameraManager.GetCameraPosition().X * _displayManager.GetScaleX()
-                    + (float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2, 0, 0));
+                    -_cameraManager.GetCameraPosition().X * _displayManager.GetScaleX() + (float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2,
+                    -_cameraManager.GetCameraPosition().Y * _displayManager.GetScaleY() + (float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2,
+                    0));
         }
     }
 }

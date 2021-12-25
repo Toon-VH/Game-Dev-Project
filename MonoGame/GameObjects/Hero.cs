@@ -103,7 +103,7 @@ namespace MonoTest.GameObjects
         private void DrawAnimation(SpriteBatch spriteBatch, Animation animation, bool flip = false)
         {
             var sourceRectangle = animation.CurrentFrame.SourceRectangle;
-            spriteBatch.Draw(_texture, new Vector2(Position.X, Position.Y), sourceRectangle, Color.White, 0f,
+            spriteBatch.Draw(_texture, new Vector2(Position.X, Position.Y), sourceRectangle, new Color(255,200,200), 0f,
                 Vector2.Zero, _scale, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
             CurrentAnimation = animation;
 

@@ -20,8 +20,8 @@ namespace MonoTest.Managers
         {
             var targetLocation = _trackingObject.Position;
             var distance = Vector2.Distance(_cameraLocation, targetLocation);
-            const int maxVelocity = 6000;
-            const int minVelocity = 700;
+            const int maxVelocity = 6000; //6000
+            const int minVelocity = 700; //700
             var velocity = distance > maxVelocity ? maxVelocity : distance;
             velocity = velocity < minVelocity ? minVelocity : velocity;
             var newLocation = Vector2.Lerp(_cameraLocation, targetLocation, velocity / maxVelocity);

@@ -21,6 +21,7 @@ namespace MonoTest.Managers
         }
 
         public float GetScaleX() => _scaleX;
+        public float GetScaleY() => _scaleY;
 
         public Matrix CalculateMatrix()
         {

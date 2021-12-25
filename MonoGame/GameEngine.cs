@@ -35,14 +35,13 @@ namespace MonoTest
         private GameScreen _gameScreen;
         private StartScreen _startScreen;
 
-        private Plant _plant;
-
         public GameEngine()
         {
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
-            _mapGenerator = new MapGenerator(Maps.map1, Maps.Plants, 24);
+            _mapGenerator = new MapGenerator(Maps.map1, Maps.Plants1, 24);
+            //_mapGenerator = new MapGenerator(Maps.map2, Maps.Plants2, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";

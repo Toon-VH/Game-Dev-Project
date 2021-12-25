@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
-using MonoTest.GameObjects;
 using MonoTest.Managers;
 using MonoTest.Map.Plants;
 using MonoTest.Map.Tiles;
@@ -35,12 +33,16 @@ namespace MonoTest.Map
 
         public void InitializePlants(Texture2D texture, GameObjectManager gameObjectManager)
         {
-            foreach (var plant in _plants)
+            if (_plants.Any())
             {
-                gameObjectManager.AddGameObject(new Plant((int)plant.Position.X * _sizeBlock,
-                    (int)plant.Position.Y * _sizeBlock, texture, plant.PlantType,
-                    plant.AttackSpeed));
+                foreach (var plant in _plants)
+                {
+                    gameObjectManager.AddGameObject(new Plant((int)plant.Position.X * _sizeBlock,
+                        (int)plant.Position.Y * _sizeBlock, texture, plant.PlantType,
+                        plant.AttackSpeed));
+                }  
             }
+            
         }
     }
 }
