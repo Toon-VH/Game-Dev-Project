@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoTest.GameObjects;
 using MonoTest.Input;
@@ -26,6 +27,7 @@ namespace MonoTest.Managers
             velocity = velocity < minVelocity ? minVelocity : velocity;
             var newLocation = Vector2.Lerp(_cameraLocation, targetLocation, velocity / maxVelocity);
             _cameraLocation = newLocation;
+            Debug.WriteLine($"cameraLocation: {_cameraLocation}");
 
 #if DEBUG
           Visualize(spriteBatch, graphics);

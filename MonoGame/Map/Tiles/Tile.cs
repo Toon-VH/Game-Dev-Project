@@ -21,11 +21,9 @@ namespace MonoTest.Map.Tiles
         public Tile(int x, int y, Texture2D texture, int size) //GraphicsDevice graphics)
         {
             BoundingBox = new Rectangle(x * size, y * size, size, size);
-            //Debug.WriteLine($"x: {x * size}, y: {y * size}, width: {size}, height: {size}");
             IsPassable = false;
             Color = Color.White;
             Texture = texture;
-            //CollideWithEvent = new NoEvent();
         }
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
