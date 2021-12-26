@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
+using MonoTest.Animations;
 using MonoTest.GameObjects;
 using MonoTest.Input;
 using SharpDX.MediaFoundation;
@@ -21,7 +22,7 @@ namespace MonoTest.Managers
         }
 
         public void ProcessInput()
-        { 
+        {
             if (_moveable is null) return;
             var input = _inputReader?.ReadInput();
             if (input != null)
@@ -32,9 +33,25 @@ namespace MonoTest.Managers
                     input.MovementDirection.Normalize();
                 }
 
-                if (input.MovementDirection.X < 0) _moveable.Velocity = new Vector2(-_moveable.Speed, _moveable.Velocity.Y);
-                if (input.MovementDirection.X > 0) _moveable.Velocity = new Vector2(_moveable.Speed, _moveable.Velocity.Y);
+                if (_moveable is Hero hero)
+                {
+                    if (input.Attack)
+                    {
+                        hero.Action(Actions.Attack);
+                    }
+
+                    if (input.Rol)
+                    {
+                        hero.Action(Actions.Rol);
+                    }
+                }
+
+                if (input.MovementDirection.X < 0)
+                    _moveable.Velocity = new Vector2(-_moveable.Speed, _moveable.Velocity.Y);
+                if (input.MovementDirection.X > 0)
+                    _moveable.Velocity = new Vector2(_moveable.Speed, _moveable.Velocity.Y);
                 if (input.MovementDirection.X == 0) _moveable.Velocity = new Vector2(0, _moveable.Velocity.Y);
+
                 if (input.Jump && _moveable.IsTouchingGround)
                 {
                     _moveable.Velocity = new Vector2(_moveable.Velocity.X, -250);
@@ -42,7 +59,6 @@ namespace MonoTest.Managers
                     _jumpSong.Play();
                 }
             }
-            
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,6 +20,7 @@ namespace MonoTest.Screens
         private readonly ContentManager _contentManager;
         private readonly Hero _hero;
         private List<Component> _components;
+        public event EventHandler OnDead;
 
 
         public GameScreen(
@@ -47,7 +49,7 @@ namespace MonoTest.Screens
             var texture = _contentManager.Load<Texture2D>("healthBar");
             var healthBar = new HealthBar(texture,
                 new Vector2(
-                    (GraphicsDeviceManager.DefaultBackBufferWidth / 2) - ((texture.Width / 5) * (_hero.InitialHealth / 4))/2 ,
+                    _displayManager.GetMiddlePointScreen - ((texture.Width / 5) * (_hero.InitialHealth / 4))/2 ,
                     GraphicsDeviceManager.DefaultBackBufferHeight - 30),
                 _hero);
 
@@ -71,11 +73,17 @@ namespace MonoTest.Screens
         public void Update(GameTime gameTime)
         {
             _components.ForEach(c => c.Update(gameTime, _displayManager.CalculateMatrix()));
-            _cameraManager.Update(_graphicsDevice);
+            _cameraManager.Update(_graphicsDevice, gameTime);
             _inputManager.ProcessInput();
             _gameObjectManager.GameObjects.ForEach(g => g?.Update(gameTime));
             _gameObjectManager.Moveables.ForEach(m =>
                 _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds, _gameObjectManager.GameObjects));
+            if (_hero.Health <= 0 || _hero.Position.Y > 1000)
+            {
+                _hero.Health = 0;
+                OnDead?.Invoke(this,EventArgs.Empty);
+            }
+            
         }
 
 

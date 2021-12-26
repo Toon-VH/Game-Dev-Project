@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoTest.Controls;
+using MonoTest.GameObjects;
 using System;
 using System.Collections.Generic;
 using MonoTest.Components;
@@ -9,39 +10,44 @@ using MonoTest.Managers;
 
 namespace MonoTest.Screens
 {
-    public class StartScreen : IScreen
+    class EndScreen : IScreen
     {
         private readonly ContentManager _contentManager;
         private readonly DisplayManager _displayManager;
         private readonly Texture2D _title;
-
+        private readonly Texture2D _gameOverText;
+        private readonly Texture2D _victoryText;
+        private readonly Hero _hero;
         private List<Component> _buttons;
 
         public event EventHandler OnExit;
-        public event EventHandler OnStart;
+        public event EventHandler OnRestart;
 
-        public StartScreen(ContentManager contentManager, DisplayManager displayManager)
+        public EndScreen(ContentManager contentManager, DisplayManager displayManager, Hero hero)
         {
             _title = contentManager.Load<Texture2D>("Name");
+            _gameOverText = contentManager.Load<Texture2D>("GameOverText");
+            _victoryText = contentManager.Load<Texture2D>("VictoryText");
             _contentManager = contentManager;
             _displayManager = displayManager;
+            _hero = hero;
+
             LoadUI();
         }
-
         private void LoadUI()
         {
             var texture = _contentManager.Load<Texture2D>("Button (1)");
-            var startButton = new Button(texture, _contentManager.Load<SpriteFont>("Font"))
+            var restartButton = new Button(texture, _contentManager.Load<SpriteFont>("Font"))
             {
-                Position = new Vector2(_displayManager.GetMiddlePointScreen - texture.Width/2, 200),
-                Text = "Start",
+                Position = new Vector2(_displayManager.GetMiddlePointScreen - texture.Width/2, 210),
+                Text = "Restart",
                 PenColor = Color.CornflowerBlue
             };
-            startButton.Click += StartButton_Click;
+            restartButton.Click += RestartButton_Click;
 
             var quitButton = new Button(texture, _contentManager.Load<SpriteFont>("Font"))
             {
-                Position = new Vector2(_displayManager.GetMiddlePointScreen - texture.Width/2, 250),
+                Position = new Vector2(_displayManager.GetMiddlePointScreen - texture.Width/2 , 270),
                 Text = "Quit",
                 PenColor = Color.CornflowerBlue
             };
@@ -49,7 +55,7 @@ namespace MonoTest.Screens
 
             _buttons = new List<Component>()
             {
-                startButton,
+                restartButton,
                 quitButton
             };
         }
@@ -59,9 +65,9 @@ namespace MonoTest.Screens
             OnExit?.Invoke(this, EventArgs.Empty);
         }
 
-        private void StartButton_Click(object sender, EventArgs e)
+        private void RestartButton_Click(object sender, EventArgs e)
         {
-            OnStart?.Invoke(this, EventArgs.Empty);
+            OnRestart?.Invoke(this, EventArgs.Empty);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -69,12 +75,21 @@ namespace MonoTest.Screens
             spriteBatch.Begin(transformMatrix: _displayManager.CalculateMatrix());
             spriteBatch.Draw(_title, new Vector2(_displayManager.GetMiddlePointScreen - _title.Width/4, 40), null, Color.White, 0f,
                 Vector2.Zero, 0.5f,SpriteEffects.None, 0f);
-            
+            if (_hero.Health <= 0)
+            {
+                spriteBatch.Draw(_gameOverText, new Vector2(_displayManager.GetMiddlePointScreen - _gameOverText.Width/4, 120), null, Color.White, 0f,
+                    Vector2.Zero, 0.5f,SpriteEffects.None, 0f);
+            }
+            else 
+            {
+                spriteBatch.Draw(_victoryText, new Vector2(_displayManager.GetMiddlePointScreen - _victoryText.Width/4, 120), null, Color.White, 0f,
+                    Vector2.Zero, 0.5f,SpriteEffects.None, 0f);
+
+            }
             foreach (var button in _buttons)
             {
                 button.Draw(spriteBatch);
             }
-
             spriteBatch.End();
         }
 
