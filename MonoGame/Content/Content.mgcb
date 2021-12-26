@@ -56,7 +56,7 @@
 /processorParam:TextureFormat=Compressed
 /build:Font.spritefont
 
-#begin GameOverText.png
+#begin healthBar.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -66,7 +66,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:GameOverText.png
+/build:healthBar.png
 
 #begin jump.wav
 /importer:WavImporter
@@ -98,6 +98,18 @@
 /processorParam:TextureFormat=Color
 /build:Name.png
 
+#begin Plants.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Plants.png
+
 #begin tileset.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -109,16 +121,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:tileset.png
-
-#begin VictoryText.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:VictoryText.png
 

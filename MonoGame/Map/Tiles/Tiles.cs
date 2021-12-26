@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace MonoTest.Map.Tiles
 {
     #region solid
+    
     #region bridge
     class LeftBridgeCorner : Tile
     {
@@ -32,7 +33,6 @@ namespace MonoTest.Map.Tiles
         }
     }
     #endregion
-
     #region platform
     class PlatformLadder1 : Tile
     {
@@ -115,7 +115,6 @@ namespace MonoTest.Map.Tiles
 
 
     #endregion
-
     #region dirtBlocks
     class DirtTile : Tile
     {
@@ -236,7 +235,6 @@ namespace MonoTest.Map.Tiles
     }
 
     #endregion
-
     #region rock
     class RockCornerLeft : Tile
     {
@@ -274,7 +272,6 @@ namespace MonoTest.Map.Tiles
 
 
     #endregion
-
     #region stones
     class SmallStone : Tile
     {
@@ -350,9 +347,11 @@ namespace MonoTest.Map.Tiles
         }
     }
     #endregion
+    
     #endregion
 
     #region passable
+    
     #region plants
     class PlantTile : Tile
     {
@@ -406,7 +405,6 @@ namespace MonoTest.Map.Tiles
         }
     }
     #endregion
-
     #region supportBlocks
     class SupportDirt : Tile
     {
@@ -497,7 +495,6 @@ namespace MonoTest.Map.Tiles
         }
     }
     #endregion
-
     #region MineShaft
     class MineLadder1 : Tile
     {
@@ -815,6 +812,7 @@ namespace MonoTest.Map.Tiles
         }
     }
     #endregion
+    
     #endregion
 
 
