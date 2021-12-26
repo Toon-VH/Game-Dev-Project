@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using MonoTest.Components;
 
 namespace MonoTest.Controls
 {
@@ -10,7 +11,7 @@ namespace MonoTest.Controls
         private MouseState _currentMouseState;
         private MouseState _previousMouse;
         private readonly SpriteFont _font;
-        private readonly Texture2D _texture;
+        public readonly Texture2D _texture;
         private bool _isHovering;
 
         public Color PenColor { get; set; }
@@ -32,6 +33,7 @@ namespace MonoTest.Controls
             if (_isHovering) color = Color.Gray;
             
             spriteBatch.Draw(_texture, GetRectangle(), color);
+            
             if (string.IsNullOrEmpty(Text)) return;
             var x =(rectangle.X +(rectangle.Width/2))-(_font.MeasureString(Text).X/2);
             var y = (rectangle.Y + (rectangle.Height / 2)) - (_font.MeasureString(Text).Y / 2);

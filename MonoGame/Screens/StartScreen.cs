@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoTest.Controls;
 using System;
 using System.Collections.Generic;
+using MonoTest.Components;
+using MonoTest.Managers;
 
 namespace MonoTest.Screens
 {
@@ -12,12 +14,12 @@ namespace MonoTest.Screens
         private readonly ContentManager _contentManager;
         private readonly Matrix _scalingMatrix;
         private readonly Texture2D _title;
-        
+
         private List<Component> _buttons;
 
         public event EventHandler OnExit;
         public event EventHandler OnStart;
-        
+
         public StartScreen(ContentManager contentManager, Matrix scalingMatrix)
         {
             _title = contentManager.Load<Texture2D>("Name");
@@ -28,17 +30,18 @@ namespace MonoTest.Screens
 
         private void LoadUI()
         {
-            var startButton = new Button(_contentManager.Load<Texture2D>("Button (1)"), _contentManager.Load<SpriteFont>("Font"))
+            var texture = _contentManager.Load<Texture2D>("Button (1)");
+            var startButton = new Button(texture, _contentManager.Load<SpriteFont>("Font"))
             {
-                Position = new Vector2(315, 200),
+                Position = new Vector2(GraphicsDeviceManager.DefaultBackBufferWidth / 2 - (texture.Width) / 2, 200),
                 Text = "Start",
                 PenColor = Color.CornflowerBlue
             };
             startButton.Click += StartButton_Click;
 
-            var quitButton = new Button(_contentManager.Load<Texture2D>("Button (1)"), _contentManager.Load<SpriteFont>("Font"))
+            var quitButton = new Button(texture, _contentManager.Load<SpriteFont>("Font"))
             {
-                Position = new Vector2(315, 250),
+                Position = new Vector2(GraphicsDeviceManager.DefaultBackBufferWidth / 2 - texture.Width / 2, 250),
                 Text = "Quit",
                 PenColor = Color.CornflowerBlue
             };
@@ -64,11 +67,12 @@ namespace MonoTest.Screens
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(transformMatrix: _scalingMatrix);
-            spriteBatch.Draw(_title,new Rectangle(250,10,250,75),Color.White);
+            spriteBatch.Draw(_title, new Rectangle(GraphicsDeviceManager.DefaultBackBufferWidth / 2 - 250 / 2, 25, 250, 75), Color.White);
             foreach (var button in _buttons)
             {
                 button.Draw(spriteBatch);
             }
+
             spriteBatch.End();
         }
 

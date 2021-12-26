@@ -4,7 +4,6 @@ namespace MonoTest.Map.Tiles
 {
     class BlockFactory
     {
-
         public static Tile CreateBlock(BlockType type, int x, int y, Texture2D texture, int size)
         {
 
@@ -286,11 +285,8 @@ namespace MonoTest.Map.Tiles
                     break;
                 case BlockType.Empty:
                     break;
-
             }
-            
             return newTile;
         }
     }
-
 }

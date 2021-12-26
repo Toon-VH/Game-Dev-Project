@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoTest.GameObjects;
 using MonoTest.Input;
@@ -16,21 +17,27 @@ namespace MonoTest.Managers
             _cameraLocation = trackingObject.Position;
         }
 
-        public void Update(SpriteBatch spriteBatch, GraphicsDevice graphics)
+        public void Update(GraphicsDevice graphics)
         {
             var targetLocation = _trackingObject.Position;
             var distance = Vector2.Distance(_cameraLocation, targetLocation);
-            const int maxVelocity = 6000;
-            const int minVelocity = 700;
+            const int maxVelocity = 6000; //6000
+            const int minVelocity = 700; //700
             var velocity = distance > maxVelocity ? maxVelocity : distance;
             velocity = velocity < minVelocity ? minVelocity : velocity;
             var newLocation = Vector2.Lerp(_cameraLocation, targetLocation, velocity / maxVelocity);
             _cameraLocation = newLocation;
-
-            Visualize(spriteBatch, graphics);
+            Debug.WriteLine($"cameraLocation: {_cameraLocation}");
         }
 
         public Vector2 GetCameraPosition() => _cameraLocation;
+
+        public void Draw(SpriteBatch spriteBatch,GraphicsDevice graphics)
+        {
+#if DEBUG
+          Visualize(spriteBatch, graphics);
+#endif
+        }
 
         private void Visualize(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
