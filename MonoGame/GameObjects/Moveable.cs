@@ -10,17 +10,17 @@ namespace MonoTest.GameObjects
         public Vector2 Velocity { get; set; }
         public float Speed { get; protected set; }
         public bool IsTouchingGround { get; set; }
-        protected Animation CurrentAnimation { get; set; }
+        public Animation CurrentAnimation { get; set; }
         public RectangleF BoundingBox { get; protected set; }
         public bool IsIntersecting { get; set; }
         protected Color Color { get; set; }
-        public float InvulnerableTime { get; set; }
+        protected float InvulnerableTime { get; set; }
 
 
         protected AbsoluteDirection AbsoluteDirection
         {
             get
-            {
+            { 
                 if (Velocity.X > 0) return AbsoluteDirection.Right;
                 if (Velocity.X < 0) return AbsoluteDirection.Left;
                 return AbsoluteDirection.Idle;

@@ -12,7 +12,7 @@ namespace MonoTest.Screens
     public class StartScreen : IScreen
     {
         private readonly ContentManager _contentManager;
-        private readonly Matrix _scalingMatrix;
+        private readonly DisplayManager _displayManager;
         private readonly Texture2D _title;
 
         private List<Component> _buttons;
@@ -20,11 +20,11 @@ namespace MonoTest.Screens
         public event EventHandler OnExit;
         public event EventHandler OnStart;
 
-        public StartScreen(ContentManager contentManager, Matrix scalingMatrix)
+        public StartScreen(ContentManager contentManager, DisplayManager displayManager)
         {
             _title = contentManager.Load<Texture2D>("Name");
             _contentManager = contentManager;
-            _scalingMatrix = scalingMatrix;
+            _displayManager = displayManager;
             LoadUI();
         }
 
@@ -33,7 +33,7 @@ namespace MonoTest.Screens
             var texture = _contentManager.Load<Texture2D>("Button (1)");
             var startButton = new Button(texture, _contentManager.Load<SpriteFont>("Font"))
             {
-                Position = new Vector2(GraphicsDeviceManager.DefaultBackBufferWidth / 2 - (texture.Width) / 2, 200),
+                Position = new Vector2(_displayManager.GetMiddlePointScreen - texture.Width/2, 200),
                 Text = "Start",
                 PenColor = Color.CornflowerBlue
             };
@@ -41,7 +41,7 @@ namespace MonoTest.Screens
 
             var quitButton = new Button(texture, _contentManager.Load<SpriteFont>("Font"))
             {
-                Position = new Vector2(GraphicsDeviceManager.DefaultBackBufferWidth / 2 - texture.Width / 2, 250),
+                Position = new Vector2(_displayManager.GetMiddlePointScreen - texture.Width/2, 250),
                 Text = "Quit",
                 PenColor = Color.CornflowerBlue
             };
@@ -66,8 +66,10 @@ namespace MonoTest.Screens
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(transformMatrix: _scalingMatrix);
-            spriteBatch.Draw(_title, new Rectangle(GraphicsDeviceManager.DefaultBackBufferWidth / 2 - 250 / 2, 25, 250, 75), Color.White);
+            spriteBatch.Begin(transformMatrix: _displayManager.CalculateMatrix());
+            spriteBatch.Draw(_title, new Vector2(_displayManager.GetMiddlePointScreen - _title.Width/4, 40), null, Color.White, 0f,
+                Vector2.Zero, 0.5f,SpriteEffects.None, 0f);
+            
             foreach (var button in _buttons)
             {
                 button.Draw(spriteBatch);
@@ -80,7 +82,7 @@ namespace MonoTest.Screens
         {
             foreach (var button in _buttons)
             {
-                button.Update(delta, _scalingMatrix);
+                button.Update(delta, _displayManager.CalculateMatrix());
             }
         }
     }

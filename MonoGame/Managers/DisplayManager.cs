@@ -27,5 +27,8 @@ namespace MonoTest.Managers
         {
             return Matrix.CreateScale(_scaleX, _scaleY, 1.0f);
         }
+
+        public int GetMiddlePointScreen =>
+            (int)(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2 / GetScaleX());
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -7,7 +6,6 @@ using MonoTest.GameObjects;
 using MonoTest.Input;
 using MonoTest.Managers;
 using MonoTest.Map;
-using MonoTest.Map.Plants;
 using MonoTest.Screens;
 
 namespace MonoTest
@@ -35,19 +33,20 @@ namespace MonoTest
         private GameScreen _gameScreen;
         private StartScreen _startScreen;
         private EndScreen _endScreen;
+        private int _milliSecondsSinceRestart;
 
         public GameEngine()
         {
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
-            _mapGenerator = new MapGenerator(Maps.map1, Maps.Plants1, 24);
-            //_mapGenerator = new MapGenerator(Maps.map2, Maps.Plants2, 24);
+            //_mapGenerator = new MapGenerator(Maps.map1, Maps.Plants1, 24);
+            _mapGenerator = new MapGenerator(Maps.map2, Maps.Plants2, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            
+            _milliSecondsSinceRestart = 0;
         }
 
         protected override void Initialize()
@@ -60,13 +59,13 @@ namespace MonoTest
             _gameObjectManager.AddGameObject(_hero);
             _inputManager = new InputManager(new KeyboardReader(), _hero, _jumpSong);
             _background = new Background(_backGroundTexture, _middleGroundTexture);
-            _mapGenerator.InitializePlants(_texturePlants,_gameObjectManager);
-            _cameraManager = new CameraManager(_hero);
+            _mapGenerator.InitializePlants(_texturePlants, _gameObjectManager);
+            _cameraManager = new CameraManager(_hero, _graphics, _displayManager);
             _screenManager = new ScreenManager();
             _gameScreen = InitializeGameScreen();
             _startScreen = InitializeStartScreen();
             _endScreen = InitializeEndScreen();
-            _screenManager.SetScreen(_endScreen);
+            _screenManager.SetScreen(_startScreen);
         }
 
         protected override void LoadContent()
@@ -82,11 +81,18 @@ namespace MonoTest
 
         protected override void Update(GameTime gameTime)
         {
+            _milliSecondsSinceRestart += gameTime.ElapsedGameTime.Milliseconds;
+            // if(_milliSecondsSinceRestart > 3000)
+            // {
+            //     _cameraManager.MaxVelocity = 6000;
+            //     _cameraManager.MinVelocity = 700;
+            // }
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 _screenManager.SetScreen(_startScreen);
             }
+
             _screenManager.Update(gameTime);
             base.Update(gameTime);
         }
@@ -105,13 +111,17 @@ namespace MonoTest
 
         private GameScreen InitializeGameScreen()
         {
-            return new GameScreen(_displayManager, _gameObjectManager, _cameraManager, _physicsManager, _inputManager,
+            _hero.Health = _hero.InitialHealth;
+            var gameScreen = new GameScreen(_displayManager, _gameObjectManager, _cameraManager, _physicsManager,
+                _inputManager,
                 _graphics.GraphicsDevice, _hero, Content);
+            gameScreen.OnDead += (sender, args) => { _screenManager.SetScreen(_endScreen); };
+            return gameScreen;
         }
 
         private StartScreen InitializeStartScreen()
         {
-            var startScreen = new StartScreen(Content, _displayManager.CalculateMatrix());
+            var startScreen = new StartScreen(Content, _displayManager);
             startScreen.OnExit += (sender, args) => Exit();
             startScreen.OnStart += (sender, args) => { _screenManager.SetScreen(_gameScreen); };
             return startScreen;
@@ -119,12 +129,16 @@ namespace MonoTest
 
         private EndScreen InitializeEndScreen()
         {
-            var endScreen = new EndScreen(Content, _displayManager.CalculateMatrix());
+            var endScreen = new EndScreen(Content, _displayManager, _hero);
             endScreen.OnExit += (sender, args) => Exit();
-            endScreen.OnRestart += (sender, args) => { _screenManager.SetScreen(_gameScreen); };
+            endScreen.OnRestart += (sender, args) =>
+            {
+                _hero.Position = new Vector2(30, 200);
+                _milliSecondsSinceRestart = 0;
+                _cameraManager.Cinematic = true;
+                _screenManager.SetScreen(InitializeGameScreen());
+            };
             return endScreen;
         }
-
-
     }
 }
