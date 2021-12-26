@@ -17,7 +17,7 @@ namespace MonoTest.Managers
             _cameraLocation = trackingObject.Position;
         }
 
-        public void Update(SpriteBatch spriteBatch, GraphicsDevice graphics)
+        public void Update(GraphicsDevice graphics)
         {
             var targetLocation = _trackingObject.Position;
             var distance = Vector2.Distance(_cameraLocation, targetLocation);
@@ -28,13 +28,16 @@ namespace MonoTest.Managers
             var newLocation = Vector2.Lerp(_cameraLocation, targetLocation, velocity / maxVelocity);
             _cameraLocation = newLocation;
             Debug.WriteLine($"cameraLocation: {_cameraLocation}");
+        }
 
+        public Vector2 GetCameraPosition() => _cameraLocation;
+
+        public void Draw(SpriteBatch spriteBatch,GraphicsDevice graphics)
+        {
 #if DEBUG
           Visualize(spriteBatch, graphics);
 #endif
         }
-
-        public Vector2 GetCameraPosition() => _cameraLocation;
 
         private void Visualize(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {

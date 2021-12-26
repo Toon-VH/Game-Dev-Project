@@ -8,7 +8,8 @@ namespace MonoTest.GameObjects
 {
     public class Hero : Moveable
     {
-        private readonly int _health;
+        public int InitialHealth { get; set; }
+        public int Health { get; set; }
         private readonly Texture2D _texture;
         private readonly Animation _walkRight;
         private readonly Animation _walkLeft;
@@ -18,7 +19,8 @@ namespace MonoTest.GameObjects
 
         public Hero(Texture2D texture)
         {
-            _health = 5;
+            InitialHealth = 20;
+            Health = InitialHealth;
             Position = new Vector2(0, 0);
             Speed = 160f;
             Velocity = new Vector2(0, 0);
@@ -103,7 +105,7 @@ namespace MonoTest.GameObjects
         private void DrawAnimation(SpriteBatch spriteBatch, Animation animation, bool flip = false)
         {
             var sourceRectangle = animation.CurrentFrame.SourceRectangle;
-            spriteBatch.Draw(_texture, new Vector2(Position.X, Position.Y), sourceRectangle, new Color(255,200,200), 0f,
+            spriteBatch.Draw(_texture, new Vector2(Position.X, Position.Y), sourceRectangle, Color.White, 0f,
                 Vector2.Zero, _scale, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
             CurrentAnimation = animation;
 

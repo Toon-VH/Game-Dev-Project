@@ -104,7 +104,7 @@ namespace MonoTest
         private GameScreen InitializeGameScreen()
         {
             return new GameScreen(_displayManager, _gameObjectManager, _cameraManager, _physicsManager, _inputManager,
-                _graphics.GraphicsDevice, _hero);
+                _graphics.GraphicsDevice, _hero, Content);
         }
 
         private StartScreen InitializeStartScreen()

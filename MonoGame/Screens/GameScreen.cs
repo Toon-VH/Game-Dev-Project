@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoTest.Components;
 using MonoTest.GameObjects;
@@ -14,9 +16,10 @@ namespace MonoTest.Screens
         private readonly PhysicsManager _physicsManager;
         private readonly InputManager _inputManager;
         private readonly GraphicsDevice _graphicsDevice;
+        private readonly ContentManager _contentManager;
         private readonly Hero _hero;
+        private List<Component> _components;
 
-      
 
         public GameScreen(
             DisplayManager displayManager,
@@ -25,7 +28,8 @@ namespace MonoTest.Screens
             PhysicsManager physicsManager,
             InputManager inputManager,
             GraphicsDevice graphicsDevice,
-            Hero hero)
+            Hero hero,
+            ContentManager contentManager)
         {
             _displayManager = displayManager;
             _gameObjectManager = gameObjectManager;
@@ -34,52 +38,54 @@ namespace MonoTest.Screens
             _inputManager = inputManager;
             _graphicsDevice = graphicsDevice;
             _hero = hero;
-           
+            _contentManager = contentManager;
+            LoadUI();
         }
-        
+
         private void LoadUI()
         {
-            // var startButton = new Button(_contentManager.Load<Texture2D>("Button (1)"), _contentManager.Load<SpriteFont>("Font"))
-            // {
-            //     Position = new Vector2(133, 100),
-            //     Text = "start",
-            //     PenColor = Color.CornflowerBlue
-            // };
-            // startButton.Click += StartButton_Click;
-            //
-            // _buttons = new List<Component>()
-            // {
-            //     startButton,
-            //     quitButton
-            // };
+            var texture = _contentManager.Load<Texture2D>("healthBar");
+            var healthBar = new HealthBar(texture,
+                new Vector2(
+                    (GraphicsDeviceManager.DefaultBackBufferWidth / 2) - ((texture.Width / 5) * (_hero.InitialHealth / 4))/2 ,
+                    GraphicsDeviceManager.DefaultBackBufferHeight - 30),
+                _hero);
+
+            _components = new List<Component>()
+            {
+                healthBar
+            };
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: CreateMatrix());
             _gameObjectManager.GameObjects.ForEach(gameObject => gameObject?.Draw(spriteBatch, _graphicsDevice));
-            _cameraManager.Update(spriteBatch, _graphicsDevice);
+            _cameraManager.Draw(spriteBatch, _graphicsDevice);
+            spriteBatch.End();
+            spriteBatch.Begin(transformMatrix: _displayManager.CalculateMatrix());
+            _components.ForEach(c => c.Draw(spriteBatch));
             spriteBatch.End();
         }
 
         public void Update(GameTime gameTime)
         {
+            _components.ForEach(c => c.Update(gameTime, _displayManager.CalculateMatrix()));
+            _cameraManager.Update(_graphicsDevice);
             _inputManager.ProcessInput();
             _gameObjectManager.GameObjects.ForEach(g => g?.Update(gameTime));
-            _gameObjectManager.Moveables.ForEach(m => _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds, _gameObjectManager.GameObjects));
+            _gameObjectManager.Moveables.ForEach(m =>
+                _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds, _gameObjectManager.GameObjects));
         }
 
-        private void DrawHealth(SpriteBatch spriteBatch)
-        {
-            
-        }
-        
+
         private Matrix CreateMatrix()
         {
             return _displayManager.CalculateMatrix() * Matrix.CreateTranslation(
                 new Vector3(
-                    (int)(-_cameraManager.GetCameraPosition().X * _displayManager.GetScaleX() + (float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2),
-                    (int)(-_cameraManager.GetCameraPosition().Y * _displayManager.GetScaleY() + (float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2),
+                    (int)(-_cameraManager.GetCameraPosition().X * _displayManager.GetScaleX() +
+                          (float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2),
+                    0, //(int)(-_cameraManager.GetCameraPosition().Y * _displayManager.GetScaleY() + (float)GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2)
                     0));
         }
     }
