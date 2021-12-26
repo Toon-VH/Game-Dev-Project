@@ -127,17 +127,14 @@ namespace MonoTest.Managers
                         var rect = new RectangleF((int)hitboxX, (int)hitboxY, plant.Animation.CurrentHitbox.Width,
                             plant.Animation.CurrentHitbox.Height);
                         plant.IsIntersecting = false;
+                        
                         if (moveableHitBox.Intersects(rect))
                         {
-                            plant.IsIntersecting = true;
-                            if (moveable.Velocity.X > 0)
+                            if (plant.Attack)
                             {
-                                moveable.Velocity = new Vector2(-30, moveable.Velocity.Y);
-                            }
-
-                            if (moveable.Velocity.X < 0)
-                            {
-                                moveable.Velocity = new Vector2(+30, moveable.Velocity.Y);
+                                plant.IsIntersecting = true;
+                                moveable.GetDamage(plant.Damage,2);
+                                moveable.Velocity = new Vector2(moveable.Velocity.X, -200); 
                             }
                         }
                         break;

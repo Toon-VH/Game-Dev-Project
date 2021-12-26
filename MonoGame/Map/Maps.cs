@@ -33,7 +33,7 @@ namespace MonoTest.Map
         public static readonly PlantConfig[] Plants1 =
         {
             new PlantConfig(new Vector2(13,16), 3,0),
-            new PlantConfig(new Vector2(32,16), 3,0)
+            new PlantConfig(new Vector2(15,16), 1,0)
         };
         
         public static int[,] map2 =

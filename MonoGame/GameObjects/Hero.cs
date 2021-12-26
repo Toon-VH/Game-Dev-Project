@@ -19,7 +19,7 @@ namespace MonoTest.GameObjects
 
         public Hero(Texture2D texture)
         {
-            InitialHealth = 40;
+            InitialHealth = 20;
             Health = InitialHealth;
             Position = new Vector2(0, 0);
             Speed = 160f;
@@ -42,35 +42,6 @@ namespace MonoTest.GameObjects
             CurrentAnimation = _idle;
         }
 
-        // private void CreateHitboxes()
-        // {
-        //     var rectangle = new RectangleF(25 * _scale, 6 * _scale, 16* _scale, 22* _scale);
-        //
-        //     var hitBoxesIdle = new List<RectangleF>()
-        //     {
-        //         rectangle, rectangle, rectangle,
-        //         rectangle, rectangle, rectangle,
-        //         rectangle, rectangle
-        //     };
-        //
-        //     var hitBoxesWalkRight = new List<RectangleF>()
-        //     {
-        //         rectangle, rectangle, rectangle,
-        //         rectangle, rectangle, rectangle,
-        //         rectangle, rectangle
-        //     };
-        //
-        //     var hitBoxesWalkLeft = new List<RectangleF>()
-        //     {
-        //         rectangle, rectangle, rectangle,
-        //         rectangle, rectangle, rectangle,
-        //         rectangle, rectangle
-        //     };
-        //
-        //     _idle.AddHitboxList(hitBoxesIdle);
-        //     _walkRight.AddHitboxList(hitBoxesWalkRight);
-        //     _walkLeft.AddHitboxList(hitBoxesWalkLeft);
-        // }
 
         public override void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
@@ -99,13 +70,33 @@ namespace MonoTest.GameObjects
             }
         }
 
-        public override void Update(GameTime gameTime) => CurrentAnimation.Update(gameTime);
+        public override void GetDamage(int amount, float invulnerableTime)
+        {
+            if (InvulnerableTime <= 0)
+            {
+                Health -= amount;
+                InvulnerableTime = invulnerableTime;
+            }
+            Color = new Color(255, 120, 120);
+            
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (InvulnerableTime <= 0)
+            {
+                Color = Color.White;
+            }
+            else InvulnerableTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            CurrentAnimation.Update(gameTime);
+        }
 
 
         private void DrawAnimation(SpriteBatch spriteBatch, Animation animation, bool flip = false)
         {
             var sourceRectangle = animation.CurrentFrame.SourceRectangle;
-            spriteBatch.Draw(_texture, new Vector2(Position.X, Position.Y), sourceRectangle, Color.White, 0f,
+            spriteBatch.Draw(_texture, new Vector2(Position.X, Position.Y), sourceRectangle, Color, 0f,
                 Vector2.Zero, _scale, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
             CurrentAnimation = animation;
 

@@ -4,18 +4,21 @@ using MonoTest.Animations;
 
 namespace MonoTest.GameObjects
 {
-    public abstract class Moveable: IGameObject
+    public abstract class Moveable : IGameObject
     {
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }
-        public float Speed { get; set; }
+        public float Speed { get; protected set; }
         public bool IsTouchingGround { get; set; }
-        public Animation CurrentAnimation { get; protected set; }
-        public RectangleF BoundingBox { get; set; }
+        protected Animation CurrentAnimation { get; set; }
+        public RectangleF BoundingBox { get; protected set; }
         public bool IsIntersecting { get; set; }
+        protected Color Color { get; set; }
+        public float InvulnerableTime { get; set; }
 
 
-        public AbsoluteDirection AbsoluteDirection {
+        protected AbsoluteDirection AbsoluteDirection
+        {
             get
             {
                 if (Velocity.X > 0) return AbsoluteDirection.Right;
@@ -28,6 +31,6 @@ namespace MonoTest.GameObjects
 
         public abstract void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics);
 
-        
+        public abstract void GetDamage(int amount, float invulnerableTime);
     }
 }

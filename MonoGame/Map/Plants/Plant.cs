@@ -14,10 +14,11 @@ namespace MonoTest.Map.Plants
         public Animation Animation { get; set; }
         public  Vector2 Position { get; set; }
         public bool IsIntersecting { get; set; }
+        public bool Attack { get; set; }
+        public int Damage { get; set; } = 5;
         private readonly Texture2D _texture;
         private readonly double _timeBetweenAttacks;
         private double _time;
-        private bool _attack;
 
 
         public Plant(int x, int y, Texture2D texture, int typePlant, double timeBetweenAttacks)
@@ -33,19 +34,20 @@ namespace MonoTest.Map.Plants
 
         public void Update(GameTime gameTime)
         {
-            var t = false;
             if (_time > _timeBetweenAttacks)
             {
-                t = true;
+                Attack = true;
                 if (Animation.AnimationDoneFlag)
                 {
                     _time = 0;
+                    Attack = false;
                 }
 
                 Animation.Update(gameTime);
             }
+            
 
-            Debug.WriteLine($"Counter: {Animation.Counter}, Count: {Animation.Frames.Count}, {_time},{t}");
+            Debug.WriteLine($"Counter: {Animation.Counter}, Count: {Animation.Frames.Count}, {_time}");
             var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             _time += elapsed;
         }
