@@ -32,6 +32,7 @@ namespace MonoTest
         private readonly MapGenerator _mapGenerator;
         private GameScreen _gameScreen;
         private StartScreen _startScreen;
+        private EndScreen _endScreen;
 
         public GameEngine()
         {
@@ -60,7 +61,8 @@ namespace MonoTest
             _screenManager = new ScreenManager();
             _gameScreen = InitializeGameScreen();
             _startScreen = InitializeStartScreen();
-            _screenManager.SetScreen(_startScreen);
+            _endScreen = InitializeEndScreen();
+            _screenManager.SetScreen(_endScreen);
         }
 
         protected override void LoadContent()
@@ -110,5 +112,15 @@ namespace MonoTest
             startScreen.OnStart += (sender, args) => { _screenManager.SetScreen(_gameScreen); };
             return startScreen;
         }
+
+        private EndScreen InitializeEndScreen()
+        {
+            var endScreen = new EndScreen(Content, _displayManager.CalculateMatrix());
+            endScreen.OnExit += (sender, args) => Exit();
+            endScreen.OnRestart += (sender, args) => { _screenManager.SetScreen(_gameScreen); };
+            return endScreen;
+        }
+
+
     }
 }
