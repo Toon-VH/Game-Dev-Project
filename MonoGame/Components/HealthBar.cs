@@ -37,7 +37,7 @@ namespace MonoTest.Components
         public override void Draw(SpriteBatch spriteBatch)
         {
             var counter = 0;
-            var health = 14;
+            var health = _hero.Health;
 
             for (var i = _hero.InitialHealth - 1; i >= 0; i--)
             {

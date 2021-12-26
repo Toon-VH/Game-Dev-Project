@@ -13,11 +13,11 @@ namespace MonoTest.Map.Plants
     {
         public Animation Animation { get; set; }
         public  Vector2 Position { get; set; }
+        public bool IsIntersecting { get; set; }
         private readonly Texture2D _texture;
         private readonly double _timeBetweenAttacks;
         private double _time;
         private bool _attack;
-        private readonly bool _isIntersecting;
 
 
         public Plant(int x, int y, Texture2D texture, int typePlant, double timeBetweenAttacks)
@@ -27,7 +27,7 @@ namespace MonoTest.Map.Plants
             _timeBetweenAttacks = timeBetweenAttacks;
             Animation = CreateAnimation(typePlant);
             _time = 0;
-            _isIntersecting = false;
+            IsIntersecting = false;
         }
 
 
@@ -61,18 +61,15 @@ namespace MonoTest.Map.Plants
 #if DEBUG
                   var drawRectangleX = Position.X - sourceRectangle.Width / 2;
                   var drawRectangleY = Position.Y - sourceRectangle.Height / 2;
-      
                   var debugR1 = new RectangleF((int)drawRectangleX, (int)drawRectangleY,
                       Animation.CurrentFrame.SourceRectangle.Width, Animation.CurrentFrame.SourceRectangle.Height);
                   DebugService.DrawRectangle(spriteBatch, debugR1, 1, false);
-      
-      
+
                   var hitboxX = Animation.CurrentHitbox.X + Position.X - sourceRectangle.Width / 2;
                   var hitboxY = Animation.CurrentHitbox.Y + Position.Y - sourceRectangle.Height / 2;
-      
                   var debugR2 = new RectangleF(hitboxX, hitboxY, Animation.CurrentHitbox.Width,
                       Animation.CurrentHitbox.Height);
-                  DebugService.DrawRectangle(spriteBatch, debugR2, 1, _isIntersecting);      
+                  DebugService.DrawRectangle(spriteBatch, debugR2, 1, IsIntersecting);      
 #endif
             
         }

@@ -19,7 +19,7 @@ namespace MonoTest.GameObjects
 
         public Hero(Texture2D texture)
         {
-            InitialHealth = 20;
+            InitialHealth = 40;
             Health = InitialHealth;
             Position = new Vector2(0, 0);
             Speed = 160f;

@@ -5,9 +5,9 @@ namespace MonoTest
 {
     public static class DebugService
     {
-        public static void DrawRectangle(SpriteBatch spriteBatch, RectangleF rectangle, int lineWidth, bool IsIntersecting)
+        public static void DrawRectangle(SpriteBatch spriteBatch, RectangleF rectangle, int lineWidth, bool isIntersecting)
         {
-            var color = IsIntersecting ? Color.Red : Color.Green;
+            var color = isIntersecting ? Color.Red : Color.Green;
             var pointTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
             pointTexture.SetData(new[]
             {
