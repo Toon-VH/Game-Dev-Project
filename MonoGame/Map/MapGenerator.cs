@@ -37,7 +37,7 @@ namespace MonoTest.Map
             {
                 foreach (var plant in _plants)
                 {
-                    gameObjectManager.AddGameObject(new Plant((int)plant.Position.X * _sizeBlock,
+                    gameObjectManager.AddGameObject(new Plant((int)(plant.Position.X * _sizeBlock) - _sizeBlock/2,
                         (int)plant.Position.Y * _sizeBlock, texture, plant.PlantType,
                         plant.AttackSpeed));
                 }  
