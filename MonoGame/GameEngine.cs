@@ -28,7 +28,12 @@ namespace MonoTest
         private Texture2D _middleGroundTexture;
         private Texture2D _tiles;
         private Texture2D _texturePlants;
-        private SoundEffect _jumpSong;
+        private Texture2D _gorilla;
+        private SoundEffect _jumpSound;
+        private SoundEffect _hitSound;
+        private SoundEffect _gorillaRoarSound;
+        private SoundEffect _gameOverSound;
+        private SoundEffectInstance _bgSoundInstance;
         private readonly MapGenerator _mapGenerator;
         private GameScreen _gameScreen;
         private StartScreen _startScreen;
@@ -40,8 +45,8 @@ namespace MonoTest
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
-            //_mapGenerator = new MapGenerator(Maps.map1, Maps.Plants1, 24);
-            _mapGenerator = new MapGenerator(Maps.map2, Maps.Plants2, 24);
+            // _mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
+            _mapGenerator = new MapGenerator(Maps.Map2, Maps.Plants2, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";
@@ -54,12 +59,13 @@ namespace MonoTest
             base.Initialize();
             Mouse.WindowHandle = Window.Handle;
             _displayManager.InitializeDisplay(_graphics, 384 * 2, 240 * 2);
-            _hero = new Hero(_heroTexture);
+            _hero = new Hero(_heroTexture, _hitSound);
             _mapGenerator.InitializeBlocks(_tiles, _gameObjectManager);
             _gameObjectManager.AddGameObject(_hero);
-            _inputManager = new InputManager(new KeyboardReader(), _hero, _jumpSong);
+            _inputManager = new InputManager(new KeyboardReader(), _hero, _jumpSound);
             _background = new Background(_backGroundTexture, _middleGroundTexture);
-            _mapGenerator.InitializePlants(_texturePlants, _gameObjectManager);
+            _gorillaRoarSound = Content.Load<SoundEffect>("Lion-roar");
+            _mapGenerator.InitializePlants(_texturePlants, _gorilla, _gameObjectManager, _gorillaRoarSound);
             _cameraManager = new CameraManager(_hero, _graphics, _displayManager);
             _screenManager = new ScreenManager();
             _gameScreen = InitializeGameScreen();
@@ -72,11 +78,15 @@ namespace MonoTest
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _heroTexture = Content.Load<Texture2D>("Archaeologist Sprite Sheet");
+            _gorilla = Content.Load<Texture2D>("Giant Gorilla Sprite Sheet");
             _backGroundTexture = Content.Load<Texture2D>("background");
             _middleGroundTexture = Content.Load<Texture2D>("middleground");
             _tiles = Content.Load<Texture2D>("tileset");
             _texturePlants = Content.Load<Texture2D>("Plants");
-            _jumpSong = Content.Load<SoundEffect>("jump");
+            _jumpSound = Content.Load<SoundEffect>("jump");
+            _hitSound = Content.Load<SoundEffect>("hitHurt");
+            _gameOverSound = Content.Load<SoundEffect>("gameover2");
+            _bgSoundInstance = Content.Load<SoundEffect>("bg-song").CreateInstance();
         }
 
         protected override void Update(GameTime gameTime)
@@ -115,7 +125,12 @@ namespace MonoTest
             var gameScreen = new GameScreen(_displayManager, _gameObjectManager, _cameraManager, _physicsManager,
                 _inputManager,
                 _graphics.GraphicsDevice, _hero, Content);
-            gameScreen.OnDead += (sender, args) => { _screenManager.SetScreen(_endScreen); };
+            gameScreen.OnDead += (sender, args) =>
+            {
+                _bgSoundInstance.Stop();
+                _gameOverSound.Play();
+                _screenManager.SetScreen(_endScreen);
+            };
             return gameScreen;
         }
 
@@ -123,7 +138,11 @@ namespace MonoTest
         {
             var startScreen = new StartScreen(Content, _displayManager);
             startScreen.OnExit += (sender, args) => Exit();
-            startScreen.OnStart += (sender, args) => { _screenManager.SetScreen(_gameScreen); };
+            startScreen.OnStart += (sender, args) =>
+            {
+                _bgSoundInstance.Play();
+                _screenManager.SetScreen(_gameScreen);
+            };
             return startScreen;
         }
 
@@ -133,6 +152,7 @@ namespace MonoTest
             endScreen.OnExit += (sender, args) => Exit();
             endScreen.OnRestart += (sender, args) =>
             {
+                _bgSoundInstance.Play();
                 _hero.Position = new Vector2(30, 200);
                 _milliSecondsSinceRestart = 0;
                 _cameraManager.Cinematic = true;

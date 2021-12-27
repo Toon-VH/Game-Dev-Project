@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Media;
 using MonoTest.Animations;
 using MonoTest.GameObjects;
 using MonoTest.Input;
-using SharpDX.MediaFoundation;
 
 namespace MonoTest.Managers
 {

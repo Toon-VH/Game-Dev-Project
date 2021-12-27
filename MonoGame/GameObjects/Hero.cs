@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using MonoTest.Animations;
 
@@ -18,8 +19,9 @@ namespace MonoTest.GameObjects
         private readonly Animation _attack;
         private readonly int _scale;
         private bool _action;
+        private SoundEffect _hitSound;
 
-        public Hero(Texture2D texture)
+        public Hero(Texture2D texture, SoundEffect hitSound)
         {
             InitialHealth = 20;
             Health = InitialHealth;
@@ -29,6 +31,7 @@ namespace MonoTest.GameObjects
             Velocity = new Vector2(0, 0);
             _scale = 2;
             _texture = texture;
+            _hitSound = hitSound;
             _action = false;
 
             _walkRight = new Animation();
@@ -102,6 +105,7 @@ namespace MonoTest.GameObjects
             {
                 Health -= amount;
                 InvulnerableTime = invulnerableTime;
+                _hitSound.Play();
             }
 
             Color = new Color(255, 120, 120);

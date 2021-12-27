@@ -37,6 +37,12 @@
 /processorParam:TextureFormat=Color
 /build:background.png
 
+#begin bg-song.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:bg-song.wav
+
 #begin Button (1).png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -56,6 +62,18 @@
 /processorParam:TextureFormat=Compressed
 /build:Font.spritefont
 
+#begin gameover.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:gameover.wav
+
+#begin gameover2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:gameover2.wav
+
 #begin GameOverText.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -67,6 +85,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:GameOverText.png
+
+#begin Giant Gorilla Sprite Sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Giant Gorilla Sprite Sheet.png
 
 #begin healthBar.png
 /importer:TextureImporter
@@ -80,11 +110,23 @@
 /processorParam:TextureFormat=Color
 /build:healthBar.png
 
+#begin hitHurt.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:hitHurt.wav
+
 #begin jump.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:jump.wav
+
+#begin Lion-roar.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Lion-roar.wav
 
 #begin middleground.png
 /importer:TextureImporter

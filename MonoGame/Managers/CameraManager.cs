@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoTest.GameObjects;
@@ -14,7 +15,8 @@ namespace MonoTest.Managers
         public int MinVelocity { get; set; } = 10;
         public int FadePoint { get; set; } = 50;
         public bool Cinematic { get; set; } = false;
-        public int CinematicVelocity = 1800;
+        public int CinematicVelocity = 3000;
+        public event EventHandler OnExitCinematic;
         private readonly GraphicsDeviceManager _graphicsDeviceManager;
         private readonly DisplayManager _displayManager;
 
@@ -58,6 +60,7 @@ namespace MonoTest.Managers
                     {
                         newLocation.X = targetLocation.X;
                         Cinematic = false;
+                        OnExitCinematic?.Invoke(this, EventArgs.Empty);
                     }
                 }
 
@@ -68,12 +71,14 @@ namespace MonoTest.Managers
                     {
                         newLocation.X = targetLocation.X;
                         Cinematic = false;
+                        OnExitCinematic?.Invoke(this, EventArgs.Empty);
                     }
                 }
 
                 if (signedDistance == 0)
                 {
                     Cinematic = false;
+                    OnExitCinematic?.Invoke(this, EventArgs.Empty);
                 }
             }
 

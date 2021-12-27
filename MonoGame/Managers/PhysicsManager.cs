@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using MonoTest.GameObjects;
-using MonoTest.Map.Plants;
+using MonoTest.GameObjects.Plants;
 using MonoTest.Map.Tiles;
 
 namespace MonoTest.Managers
@@ -120,6 +119,7 @@ namespace MonoTest.Managers
                     }
                     case Plant plant:
                     {
+                        if (moveable is Gorilla) continue;
                         var sourceRectangle = plant.Animation.CurrentFrame.SourceRectangle;
                         var hitboxX = plant.Animation.CurrentHitbox.X + plant.Position.X - sourceRectangle.Width / 2;
                         var hitboxY = plant.Animation.CurrentHitbox.Y + plant.Position.Y - sourceRectangle.Height / 2;

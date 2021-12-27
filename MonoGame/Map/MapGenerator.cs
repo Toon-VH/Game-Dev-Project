@@ -1,7 +1,11 @@
 ﻿using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using MonoTest.GameObjects;
+using MonoTest.GameObjects.Plants;
 using MonoTest.Managers;
-using MonoTest.Map.Plants;
+using MonoTest.Map.ObjectConfig;
 using MonoTest.Map.Tiles;
 
 namespace MonoTest.Map
@@ -10,12 +14,13 @@ namespace MonoTest.Map
     {
         private readonly int _sizeBlock;
         private readonly int[,] _tiles;
-        private readonly PlantConfig[] _plants;
+        private readonly GameObjectConfig[] _gameObjectConfigs;
+        
 
-        public MapGenerator(int[,] tiles, PlantConfig[] plants, int sizeBlock)
+        public MapGenerator(int[,] tiles, GameObjectConfig[] gameObjectConfigs, int sizeBlock)
         {
             _sizeBlock = sizeBlock;
-            _plants = plants;
+            _gameObjectConfigs = gameObjectConfigs;
             _tiles = tiles;
         }
 
@@ -31,18 +36,26 @@ namespace MonoTest.Map
             }
         }
 
-        public void InitializePlants(Texture2D texture, GameObjectManager gameObjectManager)
+        public void InitializePlants(Texture2D plantTexture, Texture2D gorillaTexture, GameObjectManager gameObjectManager, SoundEffect gorillaRoar)
         {
-            if (_plants.Any())
+            if (_gameObjectConfigs.Any())
             {
-                foreach (var plant in _plants)
+                foreach (var goc in _gameObjectConfigs)
                 {
-                    gameObjectManager.AddGameObject(new Plant((int)(plant.Position.X * _sizeBlock) - _sizeBlock/2,
-                        (int)plant.Position.Y * _sizeBlock, texture, plant.PlantType,
-                        plant.AttackSpeed));
+                    switch (goc)
+                    {
+                        case PlantConfig plant: gameObjectManager.AddGameObject(new Plant((int)plant.Position.X * _sizeBlock - _sizeBlock/2, (int)plant.Position.Y * _sizeBlock, plantTexture, plant.PlantType, plant.AttackSpeed));
+                            break;
+                        case GorillaConfig gorilla:
+                            gameObjectManager.AddGameObject(new Gorilla(gorillaTexture, gorillaRoar)
+                            {
+                                Position = gorilla.Position * _sizeBlock
+                            });
+                            break;
+                            
+                    }
                 }  
             }
-            
         }
     }
 }
