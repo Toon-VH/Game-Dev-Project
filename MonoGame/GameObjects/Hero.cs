@@ -12,8 +12,7 @@ namespace MonoTest.GameObjects
         public int InitialHealth { get; set; }
         public int Health { get; set; }
         private readonly Texture2D _texture;
-        private readonly Animation _walkRight;
-        private readonly Animation _walkLeft;
+        private readonly Animation _walk;
         private readonly Animation _idle;
         private readonly Animation _rol;
         private readonly Animation _attack;
@@ -34,15 +33,13 @@ namespace MonoTest.GameObjects
             _hitSound = hitSound;
             _action = false;
 
-            _walkRight = new Animation();
-            _walkLeft = new Animation();
+            _walk = new Animation();
             _idle = new Animation();
             _rol = new Animation();
             _attack = new Animation();
 
             _idle.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 0, 0);
-            _walkRight.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 0, 1);
-            _walkLeft.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 0, 1);
+            _walk.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 0, 1);
             _rol.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 1, 2);
             _attack.GetFramesFromTextureProperties(texture.Width, texture.Height, 7, 8, 2, 3);
 
@@ -60,27 +57,40 @@ namespace MonoTest.GameObjects
             DebugService.DrawRectangle(spriteBatch, rectangle, 2, IsIntersecting);
 #endif
 
-
-            switch (AbsoluteDirection)
+            if (_action)
             {
-                case AbsoluteDirection.Left:
-                    DrawAnimation(spriteBatch, _walkLeft, true);
-                    break;
-                case AbsoluteDirection.Right:
-                    DrawAnimation(spriteBatch, _walkRight);
-                    break;
-                case AbsoluteDirection.Up:
-                case AbsoluteDirection.Down:
-                case AbsoluteDirection.Idle:
-                    DrawAnimation(spriteBatch, _idle);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                switch (AbsoluteDirection)
+                {
+                    case AbsoluteDirection.Left:
+                        DrawAnimation(spriteBatch, CurrentAnimation, true);
+                        break;
+                    case AbsoluteDirection.Right:
+                        DrawAnimation(spriteBatch, CurrentAnimation);
+                        break;
+                }
+            }
+            else
+            {
+                switch (AbsoluteDirection)
+                {
+                    case AbsoluteDirection.Left:
+                        DrawAnimation(spriteBatch, _walk, true);
+                        break;
+                    case AbsoluteDirection.Right:
+                        DrawAnimation(spriteBatch, _walk);
+                        break;
+                    case AbsoluteDirection.Idle:
+                        DrawAnimation(spriteBatch, _idle);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
 
         public void Action(Actions action)
         {
+            _action = true;
             switch (action)
             {
                 case Actions.Attack:
@@ -92,11 +102,6 @@ namespace MonoTest.GameObjects
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }
-            
-            // if (CurrentAnimation.AnimationDoneFlag)
-            // {
-            //     
-            // }
         }
 
         public override void GetDamage(int amount, float invulnerableTime)
@@ -119,6 +124,7 @@ namespace MonoTest.GameObjects
             }
             else InvulnerableTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            if (CurrentAnimation.AnimationDoneFlag) _action = false;
             CurrentAnimation.Update(gameTime);
         }
 
@@ -131,11 +137,9 @@ namespace MonoTest.GameObjects
             CurrentAnimation = animation;
 
 #if DEBUG
-
             var rectangle = new RectangleF((int)Position.X, (int)Position.Y, sourceRectangle.Width * _scale,
                 sourceRectangle.Height * _scale);
             DebugService.DrawRectangle(spriteBatch, rectangle, 1, false);
-
 #endif
         }
     }

@@ -45,8 +45,9 @@ namespace MonoTest
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
-            // _mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
-            _mapGenerator = new MapGenerator(Maps.Map2, Maps.Plants2, 24);
+             // _mapGenerator = new MapGenerator(Maps.Map2, Maps.Objects2, 24);
+            //_mapGenerator = new MapGenerator(Maps.Map2, Maps.Objects2, 24);
+            _mapGenerator = new MapGenerator(Maps.Juantanamo, Maps.Juantanamobjects, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";

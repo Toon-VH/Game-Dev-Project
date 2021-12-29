@@ -13,16 +13,17 @@ namespace MonoTest.Map.Tiles
         public Color Color { get; set; }
         public Texture2D Texture { get; set; }
         public Vector2 Position { get; set; }
-        public float Size { get; set; }
+        public int Size { get; set; }
 
         public Rectangle SourceRectangle { get; set; }
         //public CollideWithEvent CollideWithEvent { get; set; }
 
         public Tile(int x, int y, Texture2D texture, int size) //GraphicsDevice graphics)
         {
-            BoundingBox = new Rectangle(x * size, y * size, size, size);
+            Size = size;
+            BoundingBox = new Rectangle(x * Size, y * Size, Size, Size);
             IsPassable = false;
-            Color = Color.White;
+            Color = new Color(255,255,255);
             Texture = texture;
         }
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoTest.Components;
 using MonoTest.GameObjects;
 using MonoTest.Managers;
+using MonoTest.Map.Tiles;
 
 namespace MonoTest.Screens
 {
@@ -49,7 +51,7 @@ namespace MonoTest.Screens
             var texture = _contentManager.Load<Texture2D>("healthBar");
             var healthBar = new HealthBar(texture,
                 new Vector2(
-                    _displayManager.GetMiddlePointScreen - ((texture.Width / 5) * (_hero.InitialHealth / 4))/2 ,
+                    _displayManager.GetMiddlePointScreen - ((texture.Width / 5) * (_hero.InitialHealth / 4)) / 2,
                     GraphicsDeviceManager.DefaultBackBufferHeight - 30),
                 _hero);
 
@@ -59,10 +61,22 @@ namespace MonoTest.Screens
             };
         }
 
+        [SuppressMessage("ReSharper.DPA", "DPA0001: Memory allocation issues")]
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: CreateMatrix());
-            _gameObjectManager.GameObjects.ForEach(gameObject => gameObject?.Draw(spriteBatch, _graphicsDevice));
+            _gameObjectManager.GameObjects.ForEach(gameObject =>
+            {
+                gameObject?.Draw(spriteBatch, _graphicsDevice);
+#if DEBUG
+                if (gameObject is Tile tile)
+                {
+                    spriteBatch.DrawString(_contentManager.Load<SpriteFont>("Font"),
+                        $"X{tile.BoundingBox.X / tile.Size}\nY{tile.BoundingBox.Y / tile.Size}",
+                        new Vector2(tile.BoundingBox.X + tile.Size/2, tile.BoundingBox.Y+ tile.Size/2), Color.Cyan,0f,Vector2.Zero, 0.3f,SpriteEffects.None,0);
+                }
+#endif
+            });
             _cameraManager.Draw(spriteBatch, _graphicsDevice);
             spriteBatch.End();
             spriteBatch.Begin(transformMatrix: _displayManager.CalculateMatrix());
@@ -70,6 +84,7 @@ namespace MonoTest.Screens
             spriteBatch.End();
         }
 
+        [SuppressMessage("ReSharper.DPA", "DPA0001: Memory allocation issues")]
         public void Update(GameTime gameTime)
         {
             _components.ForEach(c => c.Update(gameTime, _displayManager.CalculateMatrix()));
@@ -81,12 +96,10 @@ namespace MonoTest.Screens
             if (_hero.Health <= 0 || _hero.Position.Y > 1000)
             {
                 _hero.Health = 0;
-                OnDead?.Invoke(this,EventArgs.Empty);
+                OnDead?.Invoke(this, EventArgs.Empty);
             }
-            
         }
-
-
+        
         private Matrix CreateMatrix()
         {
             return _displayManager.CalculateMatrix() * Matrix.CreateTranslation(
