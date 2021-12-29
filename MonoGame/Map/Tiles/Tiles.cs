@@ -812,6 +812,15 @@ namespace MonoTest.Map.Tiles
         }
     }
     #endregion
+
+    class RockCornerLeftTop : Tile
+    {
+        public RockCornerLeftTop(int x, int y, Texture2D texture, int size) : base(x, y, texture, size)
+        { 
+            IsPassable = true;
+            SourceRectangle = new Rectangle(199, 116, 16, 16);
+        }
+    }
     
     #endregion
 

@@ -26,7 +26,7 @@ namespace MonoTest.GameObjects
             Health = InitialHealth;
             Position = new Vector2(30, 200);
 
-            Speed = 160f;
+            Speed = 320f;
             Velocity = new Vector2(0, 0);
             _scale = 2;
             _texture = texture;

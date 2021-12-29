@@ -3,7 +3,7 @@
     public enum BlockType
     {
         Empty = 0,
-        Dirt = 78,
+        Dirt = 73,
         GrassBlock = 56,
         GrassBlock2 = 55,
         GrassLeftCorner = 54,
