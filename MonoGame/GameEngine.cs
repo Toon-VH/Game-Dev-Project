@@ -82,7 +82,7 @@ namespace MonoTest
             _gorilla = Content.Load<Texture2D>("Giant Gorilla Sprite Sheet");
             _backGroundTexture = Content.Load<Texture2D>("background");
             _middleGroundTexture = Content.Load<Texture2D>("middleground");
-            _tiles = Content.Load<Texture2D>("tileset");
+            _tiles = Content.Load<Texture2D>("newtileset");
             _texturePlants = Content.Load<Texture2D>("Plants");
             _jumpSound = Content.Load<SoundEffect>("jump");
             _hitSound = Content.Load<SoundEffect>("hitHurt");

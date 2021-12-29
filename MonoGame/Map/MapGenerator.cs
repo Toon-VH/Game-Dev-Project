@@ -30,7 +30,7 @@ namespace MonoTest.Map
             {
                 for (var x = 0; x < _tiles.GetLength(1); x++)
                 {
-                    gameObjectManager.AddGameObject(BlockFactory.CreateBlock((BlockType)_tiles[y, x], x, y, texture,
+                    gameObjectManager.AddGameObject(BlockFactory.CreateBlock(_tiles[y, x], x, y, texture,
                         _blockSize));
                 }
             }
