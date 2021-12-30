@@ -38,21 +38,19 @@ namespace MonoTest
         private GameScreen _gameScreen;
         private StartScreen _startScreen;
         private EndScreen _endScreen;
-        private int _milliSecondsSinceRestart;
 
         public GameEngine()
         {
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
-             // _mapGenerator = new MapGenerator(Maps.Map2, Maps.Objects2, 24);
-            //_mapGenerator = new MapGenerator(Maps.Map2, Maps.Objects2, 24);
-            _mapGenerator = new MapGenerator(Maps.ToonMap, Maps.ToonObjects, 24);
+              // _mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
+               _mapGenerator = new MapGenerator(Maps.ToonMap, Maps.ToonObjects, 24);
+            //_mapGenerator = new MapGenerator(Maps.ToonMap, Maps.ToonObjects, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            _milliSecondsSinceRestart = 0;
         }
 
         protected override void Initialize()
@@ -92,12 +90,6 @@ namespace MonoTest
 
         protected override void Update(GameTime gameTime)
         {
-            _milliSecondsSinceRestart += gameTime.ElapsedGameTime.Milliseconds;
-            // if(_milliSecondsSinceRestart > 3000)
-            // {
-            //     _cameraManager.MaxVelocity = 6000;
-            //     _cameraManager.MinVelocity = 700;
-            // }
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
@@ -155,7 +147,6 @@ namespace MonoTest
             {
                 _bgSoundInstance.Play();
                 _hero.Position = new Vector2(30, 200);
-                _milliSecondsSinceRestart = 0;
                 _cameraManager.Cinematic = true;
                 _screenManager.SetScreen(InitializeGameScreen());
             };

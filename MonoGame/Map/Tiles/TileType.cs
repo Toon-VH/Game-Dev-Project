@@ -1,7 +1,9 @@
-﻿namespace MonoTest.Map.Tiles;
-
-public enum TileType
+﻿namespace MonoTest.Map.Tiles
 {
-    Default = 0,
-    Grass
+
+    public enum TileType
+    {
+        Default = 0,
+        Grass
+    }
 }

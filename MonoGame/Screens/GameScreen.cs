@@ -81,6 +81,7 @@ namespace MonoTest.Screens
             spriteBatch.End();
             spriteBatch.Begin(transformMatrix: _displayManager.CalculateMatrix());
             _components.ForEach(c => c.Draw(spriteBatch));
+            
             spriteBatch.End();
         }
 

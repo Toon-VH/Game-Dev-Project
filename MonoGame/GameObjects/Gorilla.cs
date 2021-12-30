@@ -48,19 +48,17 @@ namespace MonoTest.GameObjects
 
         public override void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
-            switch (AbsoluteDirection)
+            switch (CurrentAction.Action)
             {
-                case AbsoluteDirection.Left:
-                    DrawAnimation(spriteBatch, _isAngry ? _angryWalk : _walk, true);
+                case MoveableActionType.Running:
+                    if (CurrentAction.Direction == MoveableActionDirection.Left)DrawAnimation(spriteBatch, _isAngry ? _angryWalk : _walk, true);
+                    if (CurrentAction.Direction == MoveableActionDirection.Right)DrawAnimation(spriteBatch, _isAngry ? _angryWalk : _walk);
                     break;
-                case AbsoluteDirection.Right:
-                    DrawAnimation(spriteBatch, _isAngry ? _angryWalk : _walk);
-                    break;
-                case AbsoluteDirection.Up:
-                case AbsoluteDirection.Down:
-                case AbsoluteDirection.Idle:
+                case MoveableActionType.Idle:
                     DrawAnimation(spriteBatch, _poundingChest ? _chestPound : _idle);
                     break;
+                case MoveableActionType.Attacking:
+                case MoveableActionType.Rolling:
                 default:
                     throw new ArgumentOutOfRangeException();
             }

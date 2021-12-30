@@ -15,16 +15,11 @@ namespace MonoTest.GameObjects
         public bool IsIntersecting { get; set; }
         protected Color Color { get; set; }
         protected float InvulnerableTime { get; set; }
+        public MoveableAction CurrentAction { get; set; }
 
-
-        protected AbsoluteDirection AbsoluteDirection
+        public Moveable()
         {
-            get
-            { 
-                if (Velocity.X > 0) return AbsoluteDirection.Right;
-                if (Velocity.X < 0) return AbsoluteDirection.Left;
-                return AbsoluteDirection.Idle;
-            }
+            CurrentAction = new MoveableAction(MoveableActionType.Idle, MoveableActionDirection.Static);
         }
 
         public abstract void Update(GameTime gameTime);

@@ -8,5 +8,6 @@ namespace MonoTest.Input
         public bool Attack { get; set; }
         public bool Jump { get; set; }
         public bool Rol { get; set; }
+        public bool Walking { get; set; }
     }
 }

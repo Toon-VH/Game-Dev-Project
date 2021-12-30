@@ -17,6 +17,7 @@ namespace MonoTest.Input
             var jump = false;
             var rol = false;
             var attack = false;
+            var walking = false;
             
             foreach (var key in keys)
             {
@@ -28,6 +29,7 @@ namespace MonoTest.Input
 
                     case Keys.D:
                         direction.X++;
+                        walking = true;
                         break;
 
                     case Keys.S:
@@ -36,6 +38,7 @@ namespace MonoTest.Input
 
                     case Keys.A:
                         direction.X--;
+                        walking = true;
                         break;
                     
                     case Keys.Space:
@@ -58,7 +61,8 @@ namespace MonoTest.Input
                 MovementDirection = direction,
                 Attack = attack,
                 Jump = jump,
-                Rol = rol
+                Rol = rol,
+                Walking = walking,
             };
         }
     }

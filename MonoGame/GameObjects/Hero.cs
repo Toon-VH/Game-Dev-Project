@@ -17,7 +17,6 @@ namespace MonoTest.GameObjects
         private readonly Animation _rol;
         private readonly Animation _attack;
         private readonly int _scale;
-        private bool _action;
         private SoundEffect _hitSound;
 
         public Hero(Texture2D texture, SoundEffect hitSound)
@@ -26,12 +25,11 @@ namespace MonoTest.GameObjects
             Health = InitialHealth;
             Position = new Vector2(30, 200);
 
-            Speed = 320f;
+            Speed = 160f;
             Velocity = new Vector2(0, 0);
             _scale = 2;
             _texture = texture;
             _hitSound = hitSound;
-            _action = false;
 
             _walk = new Animation();
             _idle = new Animation();
@@ -56,53 +54,45 @@ namespace MonoTest.GameObjects
                 BoundingBox.Width, BoundingBox.Height);
             DebugService.DrawRectangle(spriteBatch, rectangle, 2, IsIntersecting);
 #endif
-
-            if (_action)
+            
+            switch (CurrentAction.Action)
             {
-                switch (AbsoluteDirection)
-                {
-                    case AbsoluteDirection.Left:
-                        DrawAnimation(spriteBatch, CurrentAnimation, true);
-                        break;
-                    case AbsoluteDirection.Right:
-                        DrawAnimation(spriteBatch, CurrentAnimation);
-                        break;
-                }
-            }
-            else
-            {
-                switch (AbsoluteDirection)
-                {
-                    case AbsoluteDirection.Left:
-                        DrawAnimation(spriteBatch, _walk, true);
-                        break;
-                    case AbsoluteDirection.Right:
-                        DrawAnimation(spriteBatch, _walk);
-                        break;
-                    case AbsoluteDirection.Idle:
-                        DrawAnimation(spriteBatch, _idle);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
-
-        public void Action(Actions action)
-        {
-            _action = true;
-            switch (action)
-            {
-                case Actions.Attack:
-                    CurrentAnimation = _attack;
+                case MoveableActionType.Running:
+                    if (CurrentAction.Direction == MoveableActionDirection.Left)DrawAnimation(spriteBatch, _walk, true);
+                    if (CurrentAction.Direction == MoveableActionDirection.Right)DrawAnimation(spriteBatch, _walk);
                     break;
-                case Actions.Rol:
-                    CurrentAnimation = _rol;
+                case MoveableActionType.Idle:
+                    DrawAnimation(spriteBatch, _idle);
+                    break;
+                case MoveableActionType.Attacking:
+                    if (CurrentAction.Direction == MoveableActionDirection.Left)DrawAnimation(spriteBatch, _attack, true);
+                    if (CurrentAction.Direction == MoveableActionDirection.Right)DrawAnimation(spriteBatch, _attack);
+                    break;
+                case MoveableActionType.Rolling:
+                    if (CurrentAction.Direction == MoveableActionDirection.Left)DrawAnimation(spriteBatch, _rol, true);
+                    if (CurrentAction.Direction == MoveableActionDirection.Right)DrawAnimation(spriteBatch, _rol);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(action), action, null);
+                    throw new ArgumentOutOfRangeException();
             }
         }
+
+
+        // public void Action(Actions action)
+        // {
+        //     _inAction = true;
+        //     switch (action)
+        //     {
+        //         case Actions.Attack:
+        //             CurrentAnimation = _attack;
+        //             break;
+        //         case Actions.Rol:
+        //             CurrentAnimation = _rol;
+        //             break;
+        //         default:
+        //             throw new ArgumentOutOfRangeException(nameof(action), action, null);
+        //     }
+        // }
 
         public override void GetDamage(int amount, float invulnerableTime)
         {
@@ -124,7 +114,10 @@ namespace MonoTest.GameObjects
             }
             else InvulnerableTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (CurrentAnimation.AnimationDoneFlag) _action = false;
+            if (CurrentAnimation.AnimationDoneFlag)
+            {
+                CurrentAction.Action = MoveableActionType.Idle;
+            }
             CurrentAnimation.Update(gameTime);
         }
 
