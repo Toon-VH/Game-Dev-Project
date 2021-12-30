@@ -7,8 +7,8 @@ namespace MonoTest.Map.Tiles
 {
     internal static class BlockFactory
     {
-        private const int TileSetWidth = 17;
-        private const int TileSetHeight = 10;
+        private const int TileSetWidth = 27;
+        private const int TileSetHeight = 31;
         private const int TileSetOffset = -1;
         private const int BlockSize = 16;
         private const int Margin = 2;
@@ -46,17 +46,32 @@ namespace MonoTest.Map.Tiles
             { 5, new TileConfig { Type = TileType.Default, IsPassable = false } },
             { 6, new TileConfig { Type = TileType.Default, IsPassable = false } },
             { 7, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 11, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 12, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 27, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 28, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 35, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 36, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 38, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 39, new TileConfig { Type = TileType.Default, IsPassable = false } },
+
             { 53, new TileConfig { Type = TileType.Default, IsPassable = false } },
             { 54, new TileConfig { Type = TileType.Default, IsPassable = false } },
             { 55, new TileConfig { Type = TileType.Default, IsPassable = false } },
             { 56, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 68, new TileConfig { Type = TileType.Default, IsPassable = false } },
+
             { 70, new TileConfig { Type = TileType.Default, IsPassable = false } },
             { 73, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 83, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 84, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 85, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 86, new TileConfig { Type = TileType.Default, IsPassable = false } },
+
             { 87, new TileConfig { Type = TileType.Default, IsPassable = false } },
             { 90, new TileConfig { Type = TileType.Default, IsPassable = false } },
             { 107, new TileConfig { Type = TileType.Default, IsPassable = false } },
-            { 121, new TileConfig { Type = TileType.Default, IsPassable = false } },
-            { 122, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 110, new TileConfig { Type = TileType.Default, IsPassable = false } },
             { 136, new TileConfig { Type = TileType.Default, IsPassable = false } },
             { 137, new TileConfig { Type = TileType.Default, IsPassable = false } },
             { 138, new TileConfig { Type = TileType.Default, IsPassable = false } },
@@ -65,6 +80,21 @@ namespace MonoTest.Map.Tiles
             { 154, new TileConfig { Type = TileType.Default, IsPassable = false } },
             { 155, new TileConfig { Type = TileType.Default, IsPassable = false } },
             { 156, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 164, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 192, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 207, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 208, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 209, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 210, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 211, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 216, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 217, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 218, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 219, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 243, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 244, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 245, new TileConfig { Type = TileType.Default, IsPassable = false } },
+            { 246, new TileConfig { Type = TileType.Default, IsPassable = false } },
         };
     }
 }
