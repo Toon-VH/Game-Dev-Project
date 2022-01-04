@@ -40,7 +40,7 @@ namespace MonoTest.Managers
             CheckCollisions(Direction.Horizontal, moveable, newPosition, map);
         }
 
-        private static bool Intersects(RectangleF player, Rectangle block, Direction direction, out Vector2 depth)
+        private static bool Intersects(RectangleF player, RectangleF block, Direction direction, out Vector2 depth)
         {
             if (player.Intersects(block))
             {
@@ -55,7 +55,7 @@ namespace MonoTest.Managers
             return false;
         }
 
-        private static float GetHorizontalIntersectionDepth(RectangleF rectA, Rectangle rectB)
+        private static float GetHorizontalIntersectionDepth(RectangleF rectA, RectangleF rectB)
         {
             var halfWidthA = rectA.Width / 2.0f;
             var halfWidthB = rectB.Width / 2.0f;
@@ -72,7 +72,7 @@ namespace MonoTest.Managers
             return distanceX > 0 ? minDistanceX - distanceX : -minDistanceX - distanceX;
         }
 
-        private static float GetVerticalIntersectionDepth(RectangleF rectA, Rectangle rectB)
+        private static float GetVerticalIntersectionDepth(RectangleF rectA, RectangleF rectB)
         {
             var halfHeightA = rectA.Height / 2.0f;
             var halfHeightB = rectB.Height / 2.0f;

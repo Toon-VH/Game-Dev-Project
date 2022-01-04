@@ -8,34 +8,37 @@ namespace MonoTest.Map.Tiles
 {
     internal class Tile : IGameObject
     {
-        public Rectangle BoundingBox { get; set; }
+        public RectangleF BoundingBox { get; set; }
         public bool IsPassable { get; set; }
         public Color Color { get; set; }
         public Texture2D Texture { get; set; }
-        public int Size { get; set; }
+        public float Size { get; set; }
         public TileType Type { get; set; }
+        private Vector2 _position;
 
         public Rectangle SourceRectangle { get; set; }
         //public CollideWithEvent CollideWithEvent { get; set; }
 
-        public Tile(Rectangle sourceRectangle, int x, int y, Texture2D texture, int size) //GraphicsDevice graphics)
+        public Tile(Rectangle sourceRectangle, float x, float y, Texture2D texture, int size) //GraphicsDevice graphics)
         {
             Type = TileType.Default;
             Size = size;
-            BoundingBox = new Rectangle(x * Size, y * Size, Size, Size);
+            _position = new Vector2(x * size, y * size);
+            BoundingBox = new RectangleF(x * Size, y * Size, Size, Size);
             IsPassable = false;
-            Color = new Color(255,255,255);
+            Color = new Color(255, 255, 255);
             Texture = texture;
             SourceRectangle = sourceRectangle;
         }
+
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
-            spriteBatch.Draw(Texture, BoundingBox, SourceRectangle, Color);
+            //spriteBatch.Draw(Texture, BoundingBox, SourceRectangle, Color);
+            spriteBatch.Draw(Texture, _position, SourceRectangle, Color, 0f, Vector2.Zero, Size/16, SpriteEffects.None, 0f);
         }
-        
+
         public void Update(GameTime gameTime)
         {
         }
     }
 }
-
