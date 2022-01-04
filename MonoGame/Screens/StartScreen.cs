@@ -22,7 +22,7 @@ namespace MonoTest.Screens
 
         public StartScreen(ContentManager contentManager, DisplayManager displayManager)
         {
-            _title = contentManager.Load<Texture2D>("Name");
+            _title = contentManager.Load<Texture2D>("Components/Name");
             _contentManager = contentManager;
             _displayManager = displayManager;
             LoadUI();
@@ -30,8 +30,8 @@ namespace MonoTest.Screens
 
         private void LoadUI()
         {
-            var texture = _contentManager.Load<Texture2D>("Button (1)");
-            var startButton = new Button(texture, _contentManager.Load<SpriteFont>("Font"))
+            var texture = _contentManager.Load<Texture2D>("Components/Button (1)");
+            var startButton = new Button(texture, _contentManager.Load<SpriteFont>("Fonts/Font"))
             {
                 Position = new Vector2(_displayManager.GetMiddlePointScreen - texture.Width/2, 200),
                 Text = "Start",
@@ -39,7 +39,7 @@ namespace MonoTest.Screens
             };
             startButton.Click += StartButton_Click;
 
-            var quitButton = new Button(texture, _contentManager.Load<SpriteFont>("Font"))
+            var quitButton = new Button(texture, _contentManager.Load<SpriteFont>("Fonts/Font"))
             {
                 Position = new Vector2(_displayManager.GetMiddlePointScreen - texture.Width/2, 250),
                 Text = "Quit",

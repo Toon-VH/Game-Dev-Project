@@ -48,7 +48,7 @@ namespace MonoTest.Screens
 
         private void LoadUI()
         {
-            var texture = _contentManager.Load<Texture2D>("healthBar");
+            var texture = _contentManager.Load<Texture2D>("Components/healthBar");
             var healthBar = new HealthBar(texture,
                 new Vector2(
                     _displayManager.GetMiddlePointScreen - ((texture.Width / 5) * (_hero.InitialHealth / 4)) / 2,
@@ -71,7 +71,7 @@ namespace MonoTest.Screens
 #if DEBUG
                 if (gameObject is Tile tile)
                 {
-                    spriteBatch.DrawString(_contentManager.Load<SpriteFont>("Font"),
+                    spriteBatch.DrawString(_contentManager.Load<SpriteFont>("Fonts/Font"),
                         $"X{tile.BoundingBox.X / tile.Size}\nY{tile.BoundingBox.Y / tile.Size}",
                         new Vector2(tile.BoundingBox.X + tile.Size/2, tile.BoundingBox.Y+ tile.Size/2), Color.Cyan,0f,Vector2.Zero, 0.3f,SpriteEffects.None,0);
                 }

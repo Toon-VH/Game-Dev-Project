@@ -44,6 +44,7 @@ namespace MonoTest.Managers
         {
             if (player.Intersects(block))
             {
+                
                 depth = direction == Direction.Vertical
                     ? new Vector2(0, GetVerticalIntersectionDepth(player, block))
                     : new Vector2(GetHorizontalIntersectionDepth(player, block), 0);
@@ -100,10 +101,12 @@ namespace MonoTest.Managers
                 if (mapObject == moveable) continue;
                 switch (mapObject)
                 {
-                    case Tile { IsPassable: true }: continue;
                     case Tile tile:
                     {
+                        //if (Vector2.Distance(new Vector2(tile.BoundingBox.X,tile.BoundingBox.Y), moveable.Position) > 50) continue;
                         if (!Intersects(moveableHitBox, tile.BoundingBox, direction, out var depth)) continue;
+                        if (tile.Type == TileType.DamageBlock) moveable.GetDamage(1,0.35f);
+                        if (tile.IsPassable) continue;
                         moveable.IsIntersecting = true;
                         if (depth.Y < 0) moveable.IsTouchingGround = true;
 

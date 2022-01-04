@@ -25,8 +25,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Content\jump.wav" />
-    <EmbeddedResource Include="Content\jump.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
 </Project>

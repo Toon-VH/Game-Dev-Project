@@ -76,23 +76,7 @@ namespace MonoTest.GameObjects
                     throw new ArgumentOutOfRangeException();
             }
         }
-
-
-        // public void Action(Actions action)
-        // {
-        //     _inAction = true;
-        //     switch (action)
-        //     {
-        //         case Actions.Attack:
-        //             CurrentAnimation = _attack;
-        //             break;
-        //         case Actions.Rol:
-        //             CurrentAnimation = _rol;
-        //             break;
-        //         default:
-        //             throw new ArgumentOutOfRangeException(nameof(action), action, null);
-        //     }
-        // }
+        
 
         public override void GetDamage(int amount, float invulnerableTime)
         {

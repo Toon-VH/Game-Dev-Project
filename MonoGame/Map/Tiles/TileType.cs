@@ -4,6 +4,6 @@
     public enum TileType
     {
         Default = 0,
-        Grass
+        DamageBlock = 1,
     }
 }

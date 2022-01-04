@@ -23,7 +23,7 @@ namespace MonoTest.Map.Tiles
             Type = TileType.Default;
             Size = size;
             BoundingBox = new Rectangle(x * Size, y * Size, Size, Size);
-            IsPassable = true;
+            IsPassable = false;
             Color = new Color(255,255,255);
             Texture = texture;
             SourceRectangle = sourceRectangle;

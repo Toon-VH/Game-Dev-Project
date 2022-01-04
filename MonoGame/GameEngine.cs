@@ -44,9 +44,9 @@ namespace MonoTest
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
-              // _mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
-               _mapGenerator = new MapGenerator(Maps.ToonMap, Maps.ToonObjects, 24);
-            //_mapGenerator = new MapGenerator(Maps.ToonMap, Maps.ToonObjects, 24);
+            _mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
+            //_mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, 24);
+            //_mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";
@@ -63,7 +63,7 @@ namespace MonoTest
             _gameObjectManager.AddGameObject(_hero);
             _inputManager = new InputManager(new KeyboardReader(), _hero, _jumpSound);
             _background = new Background(_backGroundTexture, _middleGroundTexture);
-            _gorillaRoarSound = Content.Load<SoundEffect>("Lion-roar");
+            _gorillaRoarSound = Content.Load<SoundEffect>("Sounds/Lion-roar");
             _mapGenerator.InitializePlants(_texturePlants, _gorilla, _gameObjectManager, _gorillaRoarSound);
             _cameraManager = new CameraManager(_hero, _graphics, _displayManager);
             _screenManager = new ScreenManager();
@@ -76,16 +76,16 @@ namespace MonoTest
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _heroTexture = Content.Load<Texture2D>("Archaeologist Sprite Sheet");
-            _gorilla = Content.Load<Texture2D>("Giant Gorilla Sprite Sheet");
-            _backGroundTexture = Content.Load<Texture2D>("background");
-            _middleGroundTexture = Content.Load<Texture2D>("middleground");
-            _tiles = Content.Load<Texture2D>("newtileset");
-            _texturePlants = Content.Load<Texture2D>("Plants");
-            _jumpSound = Content.Load<SoundEffect>("jump");
-            _hitSound = Content.Load<SoundEffect>("hitHurt");
-            _gameOverSound = Content.Load<SoundEffect>("gameover2");
-            _bgSoundInstance = Content.Load<SoundEffect>("bg-song").CreateInstance();
+            _heroTexture = Content.Load<Texture2D>("Sprites/Archaeologist Sprite Sheet");
+            _gorilla = Content.Load<Texture2D>("Enemy's/Giant Gorilla Sprite Sheet");
+            _backGroundTexture = Content.Load<Texture2D>("Backgrounds/background");
+            _middleGroundTexture = Content.Load<Texture2D>("Backgrounds/middleground");
+            _tiles = Content.Load<Texture2D>("Tiles/Tiles");
+            _texturePlants = Content.Load<Texture2D>("Enemy's/Plants");
+            _jumpSound = Content.Load<SoundEffect>("Sounds/jump");
+            _hitSound = Content.Load<SoundEffect>("Sounds/hitHurt");
+            _gameOverSound = Content.Load<SoundEffect>("Sounds/gameover2");
+            _bgSoundInstance = Content.Load<SoundEffect>("Sounds/bg-song").CreateInstance();
         }
 
         protected override void Update(GameTime gameTime)

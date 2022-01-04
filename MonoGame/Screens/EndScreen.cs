@@ -25,9 +25,9 @@ namespace MonoTest.Screens
 
         public EndScreen(ContentManager contentManager, DisplayManager displayManager, Hero hero)
         {
-            _title = contentManager.Load<Texture2D>("Name");
-            _gameOverText = contentManager.Load<Texture2D>("GameOverText");
-            _victoryText = contentManager.Load<Texture2D>("VictoryText");
+            _title = contentManager.Load<Texture2D>("Components/Name");
+            _gameOverText = contentManager.Load<Texture2D>("Components/GameOverText");
+            _victoryText = contentManager.Load<Texture2D>("Components/VictoryText");
             _contentManager = contentManager;
             _displayManager = displayManager;
             _hero = hero;
@@ -36,8 +36,8 @@ namespace MonoTest.Screens
         }
         private void LoadUI()
         {
-            var texture = _contentManager.Load<Texture2D>("Button (1)");
-            var restartButton = new Button(texture, _contentManager.Load<SpriteFont>("Font"))
+            var texture = _contentManager.Load<Texture2D>("Components/Button (1)");
+            var restartButton = new Button(texture, _contentManager.Load<SpriteFont>("Fonts/Font"))
             {
                 Position = new Vector2(_displayManager.GetMiddlePointScreen - texture.Width/2, 210),
                 Text = "Restart",
@@ -45,7 +45,7 @@ namespace MonoTest.Screens
             };
             restartButton.Click += RestartButton_Click;
 
-            var quitButton = new Button(texture, _contentManager.Load<SpriteFont>("Font"))
+            var quitButton = new Button(texture, _contentManager.Load<SpriteFont>("Fonts/Font"))
             {
                 Position = new Vector2(_displayManager.GetMiddlePointScreen - texture.Width/2 , 270),
                 Text = "Quit",
