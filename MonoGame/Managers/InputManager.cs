@@ -90,10 +90,12 @@ namespace MonoTest.Managers
                 _ => _prevDirection
             };
 
-            if (!input.Jump || !_moveable.IsTouchingGround) return;
-            _moveable.Velocity = new Vector2(_moveable.Velocity.X, -250);
-            _moveable.IsTouchingGround = false;
-            _jumpSong.Play();
+            if (input.Jump && _moveable.IsTouchingGround)
+            {
+                _moveable.Velocity = new Vector2(_moveable.Velocity.X, -250);
+                _moveable.IsTouchingGround = false;
+                _jumpSong.Play();
+            }
         }
     }
 }

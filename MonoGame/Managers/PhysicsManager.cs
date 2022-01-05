@@ -28,6 +28,7 @@ namespace MonoTest.Managers
             prevVelocity = moveable.Velocity;
             prevPosition = moveable.Position;
             moveable.IsIntersecting = false;
+            moveable.IsTouchingGround = false;
 
             moveable.Velocity = new Vector2(moveable.Velocity.X, moveable.Velocity.Y + Gravity * deltaTime);
 
