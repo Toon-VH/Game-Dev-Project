@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoTest.GameObjects;
 using MonoTest.GameObjects.Plants;
 using MonoTest.Map.Tiles;
-using SharpDX.Direct2D1.Effects;
 using Tile = MonoTest.Map.Tiles.Tile;
 
 namespace MonoTest.Managers
@@ -129,20 +127,21 @@ namespace MonoTest.Managers
                         if (moveable is Gorilla) continue;
                         foreach (var plantHitbox in plant.Animation.CurrentFrame.HitBoxes)
                         {
-                            var hitboxX = plantHitbox.X + plant.Position.X;
-                            var hitboxY = plantHitbox.Y + plant.Position.Y;
+                            var plantHitboxX = plantHitbox.X + plant.Position.X;
+                            var plantHitboxY = plantHitbox.Y + plant.Position.Y;
 
-                            var updatedPlantHitbox = new RectangleF(hitboxX, hitboxY, plantHitbox.Width, plantHitbox.Height);
+                            var updatedPlantHitbox = new RectangleF(plantHitboxX, plantHitboxY, plantHitbox.Width,
+                                plantHitbox.Height);
                             plant.IsIntersecting = false;
 
                             if (moveable.CurrentAnimation.CurrentFrame.HitBoxes == null) continue;
                             foreach (var moveableHitbox in moveable.CurrentAnimation.CurrentFrame.HitBoxes)
                             {
-
                                 var moveableHitboxX = moveableHitbox.X * moveable.Scale + moveable.Position.X;
                                 var moveableHitboxY = moveableHitbox.Y * moveable.Scale + moveable.Position.Y;
 
-                                var updatedMoveableHitbox = new RectangleF(moveableHitboxX, moveableHitboxY, moveableHitbox.Width * moveable.Scale, moveableHitbox.Height * moveable.Scale);
+                                var updatedMoveableHitbox = new RectangleF(moveableHitboxX, moveableHitboxY,
+                                    moveableHitbox.Width * moveable.Scale, moveableHitbox.Height * moveable.Scale);
 
                                 if (!plant.IsAttacking) continue;
                                 if (!updatedMoveableHitbox.Intersects(updatedPlantHitbox)) continue;
@@ -155,6 +154,35 @@ namespace MonoTest.Managers
 
                         break;
                     }
+                    case Gorilla gorilla:
+                        if (moveable is Gorilla) continue;
+                        if (gorilla.Health <= 0) continue;
+                            foreach (var gorillaHitbox in gorilla.CurrentAnimation.CurrentFrame.HitBoxes)
+                        {
+                            var gorillaHitboxX = gorillaHitbox.Position.X * moveable.Scale +  gorilla.Position.X;
+                            var gorillaHitboxY = gorillaHitbox.Position.Y * moveable.Scale +  gorilla.Position.Y;
+
+                            var updatedGorillaHitbox = new RectangleF(gorillaHitboxX, gorillaHitboxY, gorillaHitbox.Width * moveable.Scale, gorillaHitbox.Height * moveable.Scale);
+                            
+                            gorilla.IsIntersecting = false;
+                            if (moveable.CurrentAnimation.CurrentFrame.AttackBoxes == null) continue;
+                            foreach (var moveableAttackBox in moveable.CurrentAnimation.CurrentFrame.AttackBoxes)
+                            {
+                                var moveableAttackBoxX = moveableAttackBox.X * moveable.Scale + moveable.Position.X;
+                                var moveableAttackBoxY = moveableAttackBox.Y * moveable.Scale + moveable.Position.Y;
+
+                                var updatedMoveableAttackBox = new RectangleF(moveableAttackBoxX, moveableAttackBoxY, moveableAttackBox.Width * moveable.Scale, moveableAttackBox.Height * moveable.Scale);
+
+                                if (updatedMoveableAttackBox.Intersects(updatedGorillaHitbox))
+                                {
+                                    if (moveable.IsInvulnerable) continue;
+                                    gorilla.IsIntersecting = true;
+                                    gorilla.GetDamage(moveable.Damage, 0.4f);
+                                }
+                            }
+                        }
+
+                        break;
                 }
             }
 

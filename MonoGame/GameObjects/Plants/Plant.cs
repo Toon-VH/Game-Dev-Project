@@ -12,7 +12,7 @@ namespace MonoTest.GameObjects.Plants
         public Vector2 Position { get; set; }
         public bool IsIntersecting { get; set; }
         public bool IsAttacking { get; set; }
-        public int Damage { get; set; } = 10;
+        
         public float Scale { get; set; }
         private readonly Texture2D _texture;
         private readonly double _timeBetweenAttacks;
@@ -20,6 +20,7 @@ namespace MonoTest.GameObjects.Plants
 
         public Plant(float x, float y, Texture2D texture, int typePlant, double timeBetweenAttacks)
         {
+            Damage = 3;
             Scale = 1f;
             _texture = texture;
             Position = new Vector2(x - ((_texture.Width*Scale / 14) / 2), y - ((_texture.Height*Scale / 5) / 2));

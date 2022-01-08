@@ -6,12 +6,11 @@ namespace MonoTest.GameObjects
 {
     public class Hero : Moveable
     {
-        public int InitialHealth { get; set; }
-        public int Health { get; set; }
         private readonly SoundEffect _hitSound;
 
         public Hero(Texture2D texture, SoundEffect hitSound)
         {
+            Damage = 4;
             InitialHealth = 20;
             Health = InitialHealth;
             Position = new Vector2(30, 200);
@@ -79,11 +78,9 @@ namespace MonoTest.GameObjects
             {
                 for (var i = 0; i < CurrentAnimation.CurrentFrame.AttackBoxes.Count; i++)
                 {
-                    var hitboxX = CurrentAnimation.CurrentFrame.AttackBoxes[i].X * Scale + Position.X;
-                    var hitboxY = CurrentAnimation.CurrentFrame.AttackBoxes[i].Y * Scale + Position.Y;
-                    var debugR2 = new RectangleF(hitboxX, hitboxY,
-                        CurrentAnimation.CurrentFrame.AttackBoxes[i].Width * Scale,
-                        CurrentAnimation.CurrentFrame.AttackBoxes[i].Height * Scale);
+                    var attackBoxX = CurrentAnimation.CurrentFrame.AttackBoxes[i].X * Scale + Position.X;
+                    var attackBoxY = CurrentAnimation.CurrentFrame.AttackBoxes[i].Y * Scale + Position.Y;
+                    var debugR2 = new RectangleF(attackBoxX, attackBoxY, CurrentAnimation.CurrentFrame.AttackBoxes[i].Width * Scale, CurrentAnimation.CurrentFrame.AttackBoxes[i].Height * Scale);
                     DebugService.DrawRectangle(spriteBatch, debugR2, 1, Color.Yellow, false);
                 }
             }

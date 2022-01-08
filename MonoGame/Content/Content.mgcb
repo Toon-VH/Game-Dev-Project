@@ -109,7 +109,7 @@
 /processorParam:TextureFormat=Color
 /build:Components/VictoryText.png
 
-#begin Enemy's/Giant Gorilla Sprite Sheet.png
+#begin Enemies/Giant Gorilla Sprite Sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -119,9 +119,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Enemy's/Giant Gorilla Sprite Sheet.png
+/build:Enemies/Giant Gorilla Sprite Sheet.png
 
-#begin Enemy's/Plants.png
+#begin Enemies/Plants.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -131,9 +131,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Enemy's/Plants.png
+/build:Enemies/Plants.png
 
-#begin Enemy's/Spider Sprite Sheet.png
+#begin Enemies/Spider Sprite Sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -143,7 +143,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Enemy's/Spider Sprite Sheet.png
+/build:Enemies/Spider Sprite Sheet.png
 
 #begin Fonts/Font.spritefont
 /importer:FontDescriptionImporter

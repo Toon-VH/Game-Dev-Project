@@ -33,9 +33,13 @@ namespace MonoTest.Map
 
         public static readonly GameObjectConfig[] Objects1 =
         {
-            new PlantConfig(new Vector2(13,16), 2.3f,0),
+            //new PlantConfig(new Vector2(13,16), 2.3f,0),
             //new PlantConfig(new Vector2(15,16), 2.3f,0),
-            // new GorillaConfig(new Vector2(15,5),0)
+             new GorillaConfig(new Vector2(15,5),0),
+             new GorillaConfig(new Vector2(15,5),0),
+             new GorillaConfig(new Vector2(15,5),0),
+             new GorillaConfig(new Vector2(15,5),0),
+             new GorillaConfig(new Vector2(15,5),0)
         };
         
         public static int[,] Map2 =

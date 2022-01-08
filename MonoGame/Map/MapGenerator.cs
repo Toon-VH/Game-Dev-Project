@@ -32,13 +32,14 @@ namespace MonoTest.Map
             {
                 for (var x = 0; x < _tiles.GetLength(1); x++)
                 {
-                    gameObjectManager.AddGameObject(BlockFactory.CreateBlock(_tiles[y, x], x, y, texture,
-                        _blockSize));
+                    var tile = BlockFactory.CreateBlock(_tiles[y, x], x, y, texture, _blockSize);
+                    if (tile != null)
+                        gameObjectManager.AddGameObject(tile);
                 }
             }
         }
 
-        public void InitializePlants(Texture2D plantTexture, Texture2D gorillaTexture,
+        public void InitializeGameObjects(Texture2D plantTexture, Texture2D gorillaTexture,
             GameObjectManager gameObjectManager, SoundEffect gorillaRoar)
         {
             if (_gameObjectConfigs.Any())

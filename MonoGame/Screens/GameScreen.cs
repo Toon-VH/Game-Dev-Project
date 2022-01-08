@@ -91,7 +91,14 @@ namespace MonoTest.Screens
             _components.ForEach(c => c.Update(gameTime, _displayManager.CalculateMatrix()));
             _cameraManager.Update(_graphicsDevice, gameTime);
             _inputManager.ProcessInput();
-            _gameObjectManager.GameObjects.ForEach(g => g?.Update(gameTime));
+            _gameObjectManager.GameObjects.ForEach(g =>
+            {
+                if (g.RemoveFlag)
+                {
+                    _gameObjectManager.RemoveGameObject(g);
+                }
+                g?.Update(gameTime);
+            });
             _gameObjectManager.Moveables.ForEach(m =>
                 _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds, _gameObjectManager.GameObjects));
             

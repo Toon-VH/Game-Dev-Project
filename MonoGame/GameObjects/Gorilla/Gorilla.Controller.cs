@@ -1,17 +1,20 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace MonoTest.GameObjects
+namespace MonoTest.GameObjects  
 {
     public partial class Gorilla
     {
         private readonly Random _random = new Random();
         private int _currentSec = 0;
         private int _currentStateDuration = 3;
+        
+
 
         private void Brains(GameTime gameTime)
         {
-            if (gameTime.TotalGameTime.Seconds == _currentSec) return;
+            if (Health <= 0) return;
+                if (gameTime.TotalGameTime.Seconds == _currentSec) return;
             _poundingChest = false;
             if (gameTime.TotalGameTime.Seconds % _currentStateDuration == 0)
             {

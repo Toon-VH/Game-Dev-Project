@@ -9,9 +9,12 @@ namespace MonoTest.GameObjects
     public abstract class GameObject
     {
         protected Texture2D _texture;
-
+        
+        public int Damage { get; set; }
         public Animation CurrentAnimation { get; private set; }
+        public bool RemoveFlag { get;  set; }
         public abstract void Update(GameTime gameTime);
+        
 
         public abstract void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics);
         

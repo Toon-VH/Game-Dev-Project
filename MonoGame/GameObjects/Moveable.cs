@@ -15,6 +15,8 @@ namespace MonoTest.GameObjects
         public bool IsInvulnerable { get; set; }
         public float Scale { get; protected set; }
         public float Speed { get; protected set; }
+        public int InitialHealth { get; set; }
+        public int Health { get; set; }
 
         private readonly IDictionary<(MoveableActionType actionType, MoveableActionDirection direction), (string animationKey, bool invert)> _actionAnimationMap;
 
@@ -23,6 +25,7 @@ namespace MonoTest.GameObjects
 
         protected Moveable()
         {
+            Color = Color.White;
             CurrentAction = new MoveableAction(MoveableActionType.Idle, MoveableActionDirection.Static);
             _actionAnimationMap =
                 new Dictionary<(MoveableActionType actionType, MoveableActionDirection direction), (string animationKey,

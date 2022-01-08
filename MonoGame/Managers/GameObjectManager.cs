@@ -9,7 +9,7 @@ namespace MonoTest.Managers
     {
         public ImmutableList<GameObject> GameObjects => _gameObjects.ToImmutableList();
         public ImmutableList<Moveable> Moveables => _moveables.ToImmutableList();
-        
+
         private readonly List<GameObject> _gameObjects;
         private readonly List<Moveable> _moveables;
 
@@ -23,6 +23,12 @@ namespace MonoTest.Managers
         {
             _gameObjects.Add(gameObject);
             if (gameObject is Moveable moveable) _moveables.Add(moveable);
+        }
+
+        public void RemoveGameObject(GameObject gameObject)
+        {
+            _gameObjects.Remove(gameObject);
+            if (gameObject is Moveable moveable) _moveables.Remove(moveable);
         }
     }
 }

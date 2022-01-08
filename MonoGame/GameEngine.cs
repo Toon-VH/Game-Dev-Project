@@ -64,7 +64,7 @@ namespace MonoTest
             _inputManager = new InputManager(new KeyboardReader(), _hero, _jumpSound);
             _background = new Background(_backGroundTexture, _middleGroundTexture);
             _gorillaRoarSound = Content.Load<SoundEffect>("Sounds/Lion-roar");
-            _mapGenerator.InitializePlants(_texturePlants, _gorilla, _gameObjectManager, _gorillaRoarSound);
+            _mapGenerator.InitializeGameObjects(_texturePlants, _gorilla, _gameObjectManager, _gorillaRoarSound);
             _cameraManager = new CameraManager(_hero, _graphics, _displayManager);
             _screenManager = new ScreenManager();
             _gameScreen = InitializeGameScreen();
@@ -77,11 +77,11 @@ namespace MonoTest
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _heroTexture = Content.Load<Texture2D>("Sprites/Archaeologist Sprite Sheet");
-            _gorilla = Content.Load<Texture2D>("Enemy's/Giant Gorilla Sprite Sheet");
+            _gorilla = Content.Load<Texture2D>("Enemies/Giant Gorilla Sprite Sheet");
             _backGroundTexture = Content.Load<Texture2D>("Backgrounds/background");
             _middleGroundTexture = Content.Load<Texture2D>("Backgrounds/middleground");
             _tiles = Content.Load<Texture2D>("Tiles/Tiles");
-            _texturePlants = Content.Load<Texture2D>("Enemy's/Plants");
+            _texturePlants = Content.Load<Texture2D>("Enemies/Plants");
             _jumpSound = Content.Load<SoundEffect>("Sounds/jump");
             _hitSound = Content.Load<SoundEffect>("Sounds/hitHurt");
             _gameOverSound = Content.Load<SoundEffect>("Sounds/gameover2");
@@ -100,6 +100,7 @@ namespace MonoTest
             _screenManager.Update(gameTime);
             base.Update(gameTime);
         }
+        
 
         protected override void Draw(GameTime gameTime)
         {
