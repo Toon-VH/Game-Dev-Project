@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using System.Diagnostics;
+using System.Linq;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using MonoTest.GameObjects;
@@ -26,6 +26,8 @@ namespace MonoTest.Map
 
         public void InitializeBlocks(Texture2D texture, GameObjectManager gameObjectManager)
         {
+            Debug.WriteLine(_tiles.GetLength(0));
+            Debug.WriteLine(_tiles.GetLength(1));
             for (var y = 0; y < _tiles.GetLength(0); y++)
             {
                 for (var x = 0; x < _tiles.GetLength(1); x++)

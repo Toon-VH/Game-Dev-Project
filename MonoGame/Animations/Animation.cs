@@ -1,64 +1,79 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using MonoTest.Extensions;
 
 namespace MonoTest.Animations
 {
     public class Animation
     {
-        public AnimationFrame CurrentFrame { get; set; }
-        public RectangleF CurrentHitbox { get; set; }
-        public bool AnimationDoneFlag { get; set; }
-        public readonly List<AnimationFrame> Frames;
-        private Double _secondCounter = 0;
-        private List<RectangleF> _hitboxes;
+        public AnimationFrame CurrentFrame { get; private set; }
+        public bool AnimationDoneFlag { get; private set; }
+        private readonly List<AnimationFrame> _frames;
+        private readonly List<AnimationFrame> _flippedFrames;
 
+        public List<AnimationFrame> Frames => Flipped ? _flippedFrames : _frames;
 
-        public int Counter;
+        public int FrameCounter;
+        public bool Flipped { get; private set; }
+        private readonly int _frameWidth;
 
-        public Animation()
+        private double _elapsedSeconds;
+
+        public Animation(int frameWidth)
         {
-            Frames = new List<AnimationFrame>();
-            _hitboxes = new List<RectangleF>();
-        }
-
-        public void AddFrame(AnimationFrame frame)
-        {
-            Frames.Add(frame);
-            CurrentFrame = Frames[0];
-        }
-
-        public void AddHitboxList(List<RectangleF> hitboxes)
-        {
-            _hitboxes = hitboxes;
-            CurrentHitbox = _hitboxes[0];
+            _frames = new List<AnimationFrame>();
+            _flippedFrames = new List<AnimationFrame>();
+            _frameWidth = frameWidth;
         }
 
         public void Update(GameTime gameTime)
         {
             AnimationDoneFlag = false;
-            CurrentFrame = Frames[Counter];
+            CurrentFrame = Frames[FrameCounter];
 
-            if (_hitboxes.Any())
+            _elapsedSeconds += gameTime.ElapsedGameTime.TotalSeconds;
+            const int fps = 12;
+            if (_elapsedSeconds >= 1.0 / fps)
             {
-                CurrentHitbox = _hitboxes[Counter];
+                FrameCounter++;
+                _elapsedSeconds = 0;
             }
 
-            _secondCounter += gameTime.ElapsedGameTime.TotalSeconds;
-            var fps = 12;
-            if (_secondCounter >= 1d / fps)
-            {
-                Counter++;
-                _secondCounter = 0;
-            }
-
-            if (Counter >= Frames.Count)
+            if (FrameCounter >= Frames.Count)
             {
                 AnimationDoneFlag = true;
-                Counter = 0;
+                FrameCounter = 0;
             }
+        }
+
+        protected void AddHitboxes(List<List<RectangleF>> hitboxes)
+        {
+            for (var i = 0; i < Frames.Count; i++)
+            {
+                _frames[i].HitBoxes = hitboxes[i];
+                _flippedFrames[i].HitBoxes = hitboxes[i].Mirror(_frameWidth);
+            }
+        }
+
+        protected void AddHitboxes(int frameIndex, List<RectangleF> hitboxes)
+        {
+            _frames[frameIndex].HitBoxes = hitboxes;
+            _flippedFrames[frameIndex].HitBoxes = hitboxes.Mirror(_frameWidth);
+        }
+
+        public void AddAttackBoxes(List<List<RectangleF>> attackBoxes)
+        {
+            for (var i = 0; i < Frames.Count; i++)
+            {
+                _frames[i].AttackBoxes = attackBoxes[i];
+                _flippedFrames[i].AttackBoxes = attackBoxes[i].Mirror(_frameWidth);
+            }
+        }
+
+        public void AddAttackBoxes(int frameIndex, List<RectangleF> attackBoxes)
+        {
+            _frames[frameIndex].AttackBoxes = attackBoxes;
+            _flippedFrames[frameIndex].AttackBoxes = attackBoxes.Mirror(_frameWidth);
         }
 
         public void GetFramesFromTextureProperties(int width, int height, int numberOfHeightSprites,
@@ -69,8 +84,25 @@ namespace MonoTest.Animations
 
             for (var x = 0; x <= width - (widthOfFrame * (emptyFrames + 1)); x += widthOfFrame)
             {
-                AddFrame(new AnimationFrame(new Rectangle(x, startLine * heightOfFrame, widthOfFrame, heightOfFrame)));
+                _frames.Add(
+                    new AnimationFrame(new Rectangle(x, startLine * heightOfFrame, widthOfFrame, heightOfFrame)));
+                _flippedFrames.Add(new AnimationFrame(new Rectangle(x, startLine * heightOfFrame, widthOfFrame,
+                    heightOfFrame)));
             }
+
+            CurrentFrame = Frames[0];
+        }
+
+        public void SetFlip(bool flip)
+        {
+            if (flip != Flipped)
+            {
+                CurrentFrame = Frames[0];
+                FrameCounter = 0;
+                _elapsedSeconds = 0;
+            }
+
+            Flipped = flip;
         }
     }
 }

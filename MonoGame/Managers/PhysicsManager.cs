@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoTest.GameObjects;
 using MonoTest.GameObjects.Plants;
 using MonoTest.Map.Tiles;
+using SharpDX.Direct2D1.Effects;
+using Tile = MonoTest.Map.Tiles.Tile;
 
 namespace MonoTest.Managers
 {
     public class PhysicsManager
     {
-        private const float Gravity = 570f;
+        private const float Gravity = 600;
         private static Vector2 prevVelocity;
         private static Vector2 prevPosition;
 
-        public void Move(Moveable moveable, float deltaTime, IEnumerable<IGameObject> map)
+        public void Move(Moveable moveable, float deltaTime, IEnumerable<GameObject> map)
         {
             // if (prevVelocity != moveable.Velocity)
             // {
@@ -45,7 +48,6 @@ namespace MonoTest.Managers
         {
             if (player.Intersects(block))
             {
-                
                 depth = direction == Direction.Vertical
                     ? new Vector2(0, GetVerticalIntersectionDepth(player, block))
                     : new Vector2(GetHorizontalIntersectionDepth(player, block), 0);
@@ -91,11 +93,12 @@ namespace MonoTest.Managers
         }
 
         private static void CheckCollisions(Direction direction, Moveable moveable, Vector2 newPosition,
-            IEnumerable<IGameObject> map)
+            IEnumerable<GameObject> map)
         {
-            var moveableHitBox = moveable.BoundingBox;
-            moveableHitBox.X += newPosition.X;
-            moveableHitBox.Y += newPosition.Y;
+            var moveableBoundingBox = new RectangleF(moveable.BoundingBox.X * moveable.Scale + newPosition.X,
+                moveable.BoundingBox.Y * moveable.Scale + newPosition.Y, moveable.BoundingBox.Width * moveable.Scale,
+                moveable.BoundingBox.Height * moveable.Scale);
+
 
             foreach (var mapObject in map)
             {
@@ -105,15 +108,15 @@ namespace MonoTest.Managers
                     case Tile tile:
                     {
                         //if (Vector2.Distance(new Vector2(tile.BoundingBox.X,tile.BoundingBox.Y), moveable.Position) > 50) continue;
-                        if (!Intersects(moveableHitBox, tile.BoundingBox, direction, out var depth)) continue;
-                        if (tile.Type == TileType.DamageBlock) moveable.GetDamage(1,0.35f);
+                        if (!Intersects(moveableBoundingBox, tile.BoundingBox, direction, out var depth)) continue;
+                        if (tile.Type == TileType.DamageBlock) moveable.GetDamage(1, 0.35f);
                         if (tile.IsPassable) continue;
                         moveable.IsIntersecting = true;
                         if (depth.Y < 0) moveable.IsTouchingGround = true;
 
                         newPosition += depth;
-                        moveableHitBox.X += depth.X;
-                        moveableHitBox.Y += depth.Y;
+                        moveableBoundingBox.X += depth.X;
+                        moveableBoundingBox.Y += depth.Y;
                         //Debug.WriteLine($"Depth: (${depth.X}, ${depth.Y})");
 
                         moveable.Velocity = direction == Direction.Horizontal
@@ -124,23 +127,31 @@ namespace MonoTest.Managers
                     case Plant plant:
                     {
                         if (moveable is Gorilla) continue;
-                        var sourceRectangle = plant.Animation.CurrentFrame.SourceRectangle;
-                        var hitboxX = plant.Animation.CurrentHitbox.X + plant.Position.X - sourceRectangle.Width / 2;
-                        var hitboxY = plant.Animation.CurrentHitbox.Y + plant.Position.Y - sourceRectangle.Height / 2;
-
-                        var rect = new RectangleF((int)hitboxX, (int)hitboxY, plant.Animation.CurrentHitbox.Width,
-                            plant.Animation.CurrentHitbox.Height);
-                        plant.IsIntersecting = false;
-                        
-                        if (moveableHitBox.Intersects(rect))
+                        foreach (var plantHitbox in plant.Animation.CurrentFrame.HitBoxes)
                         {
-                            if (plant.Attack)
+                            var hitboxX = plantHitbox.X + plant.Position.X;
+                            var hitboxY = plantHitbox.Y + plant.Position.Y;
+
+                            var updatedPlantHitbox = new RectangleF(hitboxX, hitboxY, plantHitbox.Width, plantHitbox.Height);
+                            plant.IsIntersecting = false;
+
+                            if (moveable.CurrentAnimation.CurrentFrame.HitBoxes == null) continue;
+                            foreach (var moveableHitbox in moveable.CurrentAnimation.CurrentFrame.HitBoxes)
                             {
+
+                                var moveableHitboxX = moveableHitbox.X * moveable.Scale + moveable.Position.X;
+                                var moveableHitboxY = moveableHitbox.Y * moveable.Scale + moveable.Position.Y;
+
+                                var updatedMoveableHitbox = new RectangleF(moveableHitboxX, moveableHitboxY, moveableHitbox.Width * moveable.Scale, moveableHitbox.Height * moveable.Scale);
+
+                                if (!plant.IsAttacking) continue;
+                                if (!updatedMoveableHitbox.Intersects(updatedPlantHitbox)) continue;
                                 plant.IsIntersecting = true;
-                                moveable.GetDamage(plant.Damage,2);
-                                moveable.Velocity = new Vector2(moveable.Velocity.X, -200); 
+                                moveable.GetDamage(plant.Damage, 2);
+                                moveable.Velocity = new Vector2(moveable.Velocity.X, -200);
                             }
                         }
+
                         break;
                     }
                 }

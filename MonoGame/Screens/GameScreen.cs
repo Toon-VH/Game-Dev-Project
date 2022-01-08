@@ -68,14 +68,14 @@ namespace MonoTest.Screens
             _gameObjectManager.GameObjects.ForEach(gameObject =>
             {
                 gameObject?.Draw(spriteBatch, _graphicsDevice);
-#if DEBUG
-                if (gameObject is Tile tile)
-                {
-                    spriteBatch.DrawString(_contentManager.Load<SpriteFont>("Fonts/Font"),
-                        $"X{tile.BoundingBox.X / tile.Size}\nY{tile.BoundingBox.Y / tile.Size}",
-                        new Vector2(tile.BoundingBox.X + tile.Size/2, tile.BoundingBox.Y+ tile.Size/2), Color.Cyan,0f,Vector2.Zero, 0.3f,SpriteEffects.None,0);
-                }
-#endif
+// #if DEBUG
+//                 if (gameObject is Tile tile)
+//                 {
+//                     spriteBatch.DrawString(_contentManager.Load<SpriteFont>("Fonts/Font"),
+//                         $"X{tile.BoundingBox.X / tile.Size}\nY{tile.BoundingBox.Y / tile.Size}",
+//                         new Vector2(tile.BoundingBox.X + tile.Size/2, tile.BoundingBox.Y+ tile.Size/2), Color.Cyan,0f,Vector2.Zero, 0.3f,SpriteEffects.None,0);
+//                 }
+// #endif
             });
             _cameraManager.Draw(spriteBatch, _graphicsDevice);
             spriteBatch.End();
