@@ -146,6 +146,7 @@ namespace MonoTest.Managers
 
                                 if (!plant.IsAttacking) continue;
                                 if (!updatedMoveableHitbox.Intersects(updatedPlantHitbox)) continue;
+                                if (moveable.IsInvulnerable) continue;
                                 plant.IsIntersecting = true;
                                 moveable.GetDamage(plant.Damage, 2);
                                 moveable.Velocity = new Vector2(moveable.Velocity.X, -200);

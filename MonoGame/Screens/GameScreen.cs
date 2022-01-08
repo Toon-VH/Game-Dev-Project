@@ -94,10 +94,13 @@ namespace MonoTest.Screens
             _gameObjectManager.GameObjects.ForEach(g => g?.Update(gameTime));
             _gameObjectManager.Moveables.ForEach(m =>
                 _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds, _gameObjectManager.GameObjects));
-            if (_hero.Health <= 0 || _hero.Position.Y > 1000)
+            
+            if (_hero.Health <= 0 )
             {
-                _hero.Health = 0;
-                OnDead?.Invoke(this, EventArgs.Empty);
+                if (_hero.CurrentAnimation.AnimationDoneFlag && _hero.CurrentAction.Action == MoveableActionType.Dying)
+                {
+                    OnDead?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
         

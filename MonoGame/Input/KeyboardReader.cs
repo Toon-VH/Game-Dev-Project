@@ -17,6 +17,7 @@ namespace MonoTest.Input
             var jump = false;
             var rol = false;
             var attack = false;
+            var attackLow = false;
             var walking = false;
             
             foreach (var key in keys)
@@ -50,6 +51,9 @@ namespace MonoTest.Input
                     case Keys.K:
                         attack = true;
                         break;
+                    case Keys.L:
+                        attackLow = true;
+                        break;
                     default:
                         break;
                 }
@@ -60,6 +64,7 @@ namespace MonoTest.Input
             {
                 MovementDirection = direction,
                 Attack = attack,
+                AttackLow = attackLow,
                 Jump = jump,
                 Rol = rol,
                 Walking = walking,

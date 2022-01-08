@@ -26,6 +26,8 @@ namespace MonoTest.GameObjects
             AddAnimation("idle", new HeroIdleAnimation(_texture));
             AddAnimation("roll", new HeroRollAnimation(_texture));
             AddAnimation("attack", new HeroAttackAnimation(_texture));
+            AddAnimation("attackLow", new HeroAttackLowAnimation(_texture));
+            AddAnimation("dead", new HeroDeadAnimation(_texture));
 
             MapAnimationToAction("walk", false, MoveableActionType.Running, MoveableActionDirection.Right);
             MapAnimationToAction("walk", true, MoveableActionType.Running, MoveableActionDirection.Left);
@@ -36,7 +38,12 @@ namespace MonoTest.GameObjects
             MapAnimationToAction("roll", true, MoveableActionType.Rolling, MoveableActionDirection.Left);
             MapAnimationToAction("attack", false, MoveableActionType.Attacking, MoveableActionDirection.Right);
             MapAnimationToAction("attack", true, MoveableActionType.Attacking, MoveableActionDirection.Left);
-
+            MapAnimationToAction("attackLow", false, MoveableActionType.AttackingLow, MoveableActionDirection.Right);
+            MapAnimationToAction("attackLow", true, MoveableActionType.AttackingLow, MoveableActionDirection.Left);
+            MapAnimationToAction("dead", true, MoveableActionType.Dying, MoveableActionDirection.Left);
+            MapAnimationToAction("dead", false, MoveableActionType.Dying, MoveableActionDirection.Right);
+            MapAnimationToAction("dead", false, MoveableActionType.Dying, MoveableActionDirection.Static);
+            
             BoundingBox = new RectangleF(28, 6, 10, 22);
             SetCurrentAnimation("idle");
         }
@@ -86,11 +93,21 @@ namespace MonoTest.GameObjects
 
         public override void GetDamage(int amount, float invulnerableTime)
         {
+            
             if (InvulnerableTime <= 0)
             {
+                IsInvulnerable = true;
                 Health -= amount;
                 InvulnerableTime = invulnerableTime;
                 _hitSound.Play();
+            }
+            IsInvulnerable = false;
+
+            if (Health <= 0 || Position.Y > 1000)
+            {
+                Health = 0;
+                CurrentAction.Action = MoveableActionType.Dying;
+                
             }
 
             Color = new Color(255, 120, 120);

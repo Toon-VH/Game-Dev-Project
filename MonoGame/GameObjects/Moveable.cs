@@ -12,10 +12,11 @@ namespace MonoTest.GameObjects
         public RectangleF BoundingBox { get; set; }
         public bool IsTouchingGround { get; set; }
         public bool IsIntersecting { get; set; }
+        public bool IsInvulnerable { get; set; }
         public float Scale { get; protected set; }
         public float Speed { get; protected set; }
 
-        private IDictionary<(MoveableActionType actionType, MoveableActionDirection direction), (string animationKey, bool invert)> _actionAnimationMap;
+        private readonly IDictionary<(MoveableActionType actionType, MoveableActionDirection direction), (string animationKey, bool invert)> _actionAnimationMap;
 
         protected float InvulnerableTime { get; set; }
         protected Color Color { get; set; }

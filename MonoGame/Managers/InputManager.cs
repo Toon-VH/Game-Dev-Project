@@ -12,7 +12,7 @@ namespace MonoTest.Managers
         private readonly IInputReader _inputReader;
         private readonly Moveable _moveable;
         private readonly SoundEffect _jumpSong;
-        private MoveableActionDirection _prevDirection; 
+        private MoveableActionDirection _prevDirection;
 
         public InputManager(IInputReader inputReader, Moveable moveable, SoundEffect jumpSong)
         {
@@ -25,7 +25,8 @@ namespace MonoTest.Managers
         public void ProcessInput()
         {
             if (_moveable is null) return;
-            if(_moveable.CurrentAction.Action is MoveableActionType.Attacking or MoveableActionType.Rolling) return;
+            if (_moveable.CurrentAction.Action is MoveableActionType.Attacking or MoveableActionType.AttackingLow
+                or MoveableActionType.Rolling or MoveableActionType.Dying) return;
 
             var input = _inputReader?.ReadInput();
             if (input == null) return;
@@ -56,20 +57,27 @@ namespace MonoTest.Managers
                     break;
             }
 #if DEBUG
-            Debug.WriteLine($"Velocity {_moveable.Velocity}");   
-            Debug.WriteLine($"Direction {direction}");   
+            //Debug.WriteLine($"Velocity {_moveable.Velocity}");   
+            //Debug.WriteLine($"Direction {direction}");   
 #endif
 
             if (input.Walking && input.MovementDirection.X != 0)
             {
                 _moveable.CurrentAction = new MoveableAction(MoveableActionType.Running, direction);
             }
-            
+
             if (input.Attack && _moveable.IsTouchingGround)
             {
                 var effectiveDirection = direction != MoveableActionDirection.Static ? direction : _prevDirection;
                 _moveable.CurrentAction = new MoveableAction(MoveableActionType.Attacking, effectiveDirection);
-                if(_moveable.IsTouchingGround) _moveable.Velocity = Vector2.Zero;
+                if (_moveable.IsTouchingGround) _moveable.Velocity = Vector2.Zero;
+            }
+
+            if (input.AttackLow && _moveable.IsTouchingGround)
+            {
+                var effectiveDirection = direction != MoveableActionDirection.Static ? direction : _prevDirection;
+                _moveable.CurrentAction = new MoveableAction(MoveableActionType.AttackingLow, effectiveDirection);
+                if (_moveable.IsTouchingGround) _moveable.Velocity = Vector2.Zero;
             }
 
             if (input.Rol && _moveable.IsTouchingGround && direction != MoveableActionDirection.Static)
@@ -77,8 +85,8 @@ namespace MonoTest.Managers
                 _moveable.Velocity = new Vector2(_moveable.Velocity.X * 1.3f, _moveable.Velocity.Y);
                 _moveable.CurrentAction = new MoveableAction(MoveableActionType.Rolling, direction);
             }
-            
-            if (!input.Attack && !input.Rol && !input.Walking)
+
+            if (!input.Attack && !input.AttackLow && !input.Rol && !input.Walking)
             {
                 _moveable.CurrentAction = new MoveableAction(MoveableActionType.Idle, direction);
             }

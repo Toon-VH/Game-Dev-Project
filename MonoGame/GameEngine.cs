@@ -44,8 +44,8 @@ namespace MonoTest
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
-            //_mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
-            _mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, 24);
+            _mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
+            //_mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, 24);
             //_mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
@@ -93,6 +93,7 @@ namespace MonoTest
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
+                IsMouseVisible = true;
                 _screenManager.SetScreen(_startScreen);
             }
 
@@ -120,6 +121,7 @@ namespace MonoTest
                 _graphics.GraphicsDevice, _hero, Content);
             gameScreen.OnDead += (sender, args) =>
             {
+                IsMouseVisible = true;
                 _bgSoundInstance.Stop();
                 _gameOverSound.Play();
                 _screenManager.SetScreen(_endScreen);
@@ -133,6 +135,7 @@ namespace MonoTest
             startScreen.OnExit += (sender, args) => Exit();
             startScreen.OnStart += (sender, args) =>
             {
+                IsMouseVisible = false;
                 _bgSoundInstance.Play();
                 _screenManager.SetScreen(_gameScreen);
             };

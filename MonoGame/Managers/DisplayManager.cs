@@ -1,5 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Drawing;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using static Microsoft.Xna.Framework.Graphics.GraphicsAdapter;
 
 namespace MonoTest.Managers
 {
@@ -10,13 +12,14 @@ namespace MonoTest.Managers
 
         public void InitializeDisplay(GraphicsDeviceManager graphics, int virtualWidth, int virtualHeight)
         {
-            var actualWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            var actualHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            var actualWidth = DefaultAdapter.CurrentDisplayMode.Width;
+            var actualHeight = DefaultAdapter.CurrentDisplayMode.Height;
             _scaleX = (float)actualWidth / virtualWidth;
             _scaleY = (float)actualHeight / virtualHeight;
             graphics.PreferredBackBufferWidth = actualWidth;
             graphics.PreferredBackBufferHeight = actualHeight;
             graphics.IsFullScreen = true;
+            graphics.HardwareModeSwitch = false;
             graphics.ApplyChanges();
         }
 
@@ -28,7 +31,6 @@ namespace MonoTest.Managers
             return Matrix.CreateScale(_scaleX, _scaleY, 1.0f);
         }
 
-        public int GetMiddlePointScreen =>
-            (int)(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2 / GetScaleX());
+        public int GetMiddlePointScreen => (int)(DefaultAdapter.CurrentDisplayMode.Width / 2 / GetScaleX());
     }
 }

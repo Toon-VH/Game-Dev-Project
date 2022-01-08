@@ -12,7 +12,7 @@ namespace MonoTest.GameObjects.Plants
         public Vector2 Position { get; set; }
         public bool IsIntersecting { get; set; }
         public bool IsAttacking { get; set; }
-        public int Damage { get; set; } = 3;
+        public int Damage { get; set; } = 10;
         public float Scale { get; set; }
         private readonly Texture2D _texture;
         private readonly double _timeBetweenAttacks;
@@ -45,7 +45,7 @@ namespace MonoTest.GameObjects.Plants
             }
 
 
-            Debug.WriteLine($"Counter: {Animation.FrameCounter}, Count: {Animation.Frames.Count}, {_time}");
+            //Debug.WriteLine($"Counter: {Animation.FrameCounter}, Count: {Animation.Frames.Count}, {_time}");
             var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             _time += elapsed;
         }

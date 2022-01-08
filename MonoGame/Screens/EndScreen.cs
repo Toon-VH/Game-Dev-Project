@@ -73,17 +73,17 @@ namespace MonoTest.Screens
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(transformMatrix: _displayManager.CalculateMatrix());
-            spriteBatch.Draw(_title, new Vector2(_displayManager.GetMiddlePointScreen - _title.Width/4, 40), null, Color.White, 0f,
+            spriteBatch.Draw(_title, new Vector2(_displayManager.GetMiddlePointScreen - _title.Width*0.5f/2, 40), null, Color.White, 0f,
                 Vector2.Zero, 0.5f,SpriteEffects.None, 0f);
             if (_hero.Health <= 0)
             {
-                spriteBatch.Draw(_gameOverText, new Vector2(_displayManager.GetMiddlePointScreen - _gameOverText.Width/4, 120), null, Color.White, 0f,
-                    Vector2.Zero, 0.5f,SpriteEffects.None, 0f);
+                spriteBatch.Draw(_gameOverText, new Vector2(_displayManager.GetMiddlePointScreen - (_gameOverText.Width*0.3f)/2, 150), null, Color.White, 0f,
+                    Vector2.Zero, 0.3f,SpriteEffects.None, 0f);
             }
             else 
             {
-                spriteBatch.Draw(_victoryText, new Vector2(_displayManager.GetMiddlePointScreen - _victoryText.Width/4, 120), null, Color.White, 0f,
-                    Vector2.Zero, 0.5f,SpriteEffects.None, 0f);
+                spriteBatch.Draw(_victoryText, new Vector2(_displayManager.GetMiddlePointScreen - (_victoryText.Width*0.3f)/2, 150), null, Color.White, 0f,
+                    Vector2.Zero, 0.3f,SpriteEffects.None, 0f);
 
             }
             foreach (var button in _buttons)
