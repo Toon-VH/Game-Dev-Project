@@ -52,7 +52,7 @@ namespace MonoTest.Controls
             
 
             var positionMouse = new Vector2(_currentMouseState.X, _currentMouseState.Y);
-            Debug.WriteLine($"{positionMouse.X}{positionMouse.Y}");
+            //Debug.WriteLine($"{positionMouse.X}{positionMouse.Y}");
             var (x, y) = Vector2.Transform(positionMouse, Matrix.Invert(matrix));
             _rectangleMouse = new RectangleF((int)x, (int)y, 1, 1);
                 

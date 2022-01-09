@@ -68,11 +68,6 @@ namespace MonoTest.Screens
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: CreateMatrix());
-            _components.ForEach(c =>
-            {
-                c.Draw(spriteBatch);
-            });
-            
             _gameObjectManager.GameObjects.ForEach(gameObject =>
             {
                 gameObject?.Draw(spriteBatch, _graphicsDevice);
@@ -85,7 +80,10 @@ namespace MonoTest.Screens
 //                 }
 // #endif
             });
-            
+            _components.ForEach(c =>
+            {
+                c.Draw(spriteBatch);
+            });
             _cameraManager.Draw(spriteBatch, _graphicsDevice);
             spriteBatch.End();
             spriteBatch.Begin(transformMatrix: _displayManager.CalculateMatrix());

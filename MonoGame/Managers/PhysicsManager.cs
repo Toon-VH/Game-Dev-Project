@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using MonoTest.GameObjects;
 using MonoTest.GameObjects.Plants;
@@ -21,13 +22,17 @@ namespace MonoTest.Managers
             //     Debug.WriteLine($"Velocity =  {moveable.Velocity}");
             // }
             //
-            // if (prevPosition != moveable.Position)
-            // {
-            //     Debug.WriteLine($"Position =  {moveable.Position}");
-            // }
+            if (moveable is Hero)
+            {
+                if (prevPosition != moveable.Position)
+                {
+                    Debug.WriteLine($"Position =  {moveable.Position}");
+                }
 
-            prevVelocity = moveable.Velocity;
-            prevPosition = moveable.Position;
+                prevVelocity = moveable.Velocity;
+                prevPosition = moveable.Position;
+            }
+
             moveable.IsIntersecting = false;
             moveable.IsTouchingGround = false;
 
@@ -158,7 +163,7 @@ namespace MonoTest.Managers
                         if (moveable is Gorilla or Spider) continue;
                         if (otherMoveable.Health <= 0) continue;
 
-                        
+
                         if (otherMoveable.CurrentAnimation.CurrentFrame.HitBoxes == null) continue;
                         foreach (var otherMoveAbleHitbox in otherMoveable.CurrentAnimation.CurrentFrame.HitBoxes)
                         {
@@ -178,6 +183,7 @@ namespace MonoTest.Managers
                                 }
                             }
                         }
+
                         if (moveable.CurrentAnimation.CurrentFrame.HitBoxes == null) continue;
                         foreach (var moveableHitbox in moveable.CurrentAnimation.CurrentFrame.HitBoxes)
                         {
@@ -185,7 +191,8 @@ namespace MonoTest.Managers
 
                             otherMoveable.IsIntersecting = false;
                             if (otherMoveable.CurrentAnimation.CurrentFrame.AttackBoxes == null) continue;
-                            foreach (var otherMoveableAttackBox in otherMoveable.CurrentAnimation.CurrentFrame.AttackBoxes)
+                            foreach (var otherMoveableAttackBox in otherMoveable.CurrentAnimation.CurrentFrame
+                                         .AttackBoxes)
                             {
                                 var updatedOtherMoveableAttackBox = UpdateBox(otherMoveableAttackBox, otherMoveable);
 
@@ -212,11 +219,11 @@ namespace MonoTest.Managers
             var updatedX = rectangle.X * moveable.Scale + moveable.Position.X;
             var updatedY = rectangle.Y * moveable.Scale + moveable.Position.Y;
 
-            return new RectangleF(updatedX, updatedY, rectangle.Width * moveable.Scale, rectangle.Height * moveable.Scale);
+            return new RectangleF(updatedX, updatedY, rectangle.Width * moveable.Scale,
+                rectangle.Height * moveable.Scale);
         }
     }
-    
-    
+
 
     public enum Direction
     {

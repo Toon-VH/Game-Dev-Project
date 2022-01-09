@@ -100,19 +100,19 @@ namespace MonoTest.GameObjects
                 _hitSound.Play();
             }
             IsInvulnerable = false;
-
-            if (Health <= 0 || Position.Y > 1000)
-            {
-                Health = 0;
-                CurrentAction.Action = MoveableActionType.Dying;
-                
-            }
+            
 
             Color = new Color(255, 120, 120);
         }
 
         public override void Update(GameTime gameTime)
         {
+            if (Health <= 0 || Position.Y > 500)
+            {
+                Health = 0;
+                CurrentAction.Action = MoveableActionType.Dying;
+            }
+            
             if (InvulnerableTime <= 0)
             {
                 Color = Color.White;

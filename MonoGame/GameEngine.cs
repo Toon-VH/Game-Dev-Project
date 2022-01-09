@@ -47,9 +47,9 @@ namespace MonoTest
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
-            _mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
+            //_mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
             //_mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, 24);
-            //_mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, 24);
+            _mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";
@@ -115,7 +115,6 @@ namespace MonoTest
                 transformMatrix: _displayManager.CalculateMatrix());
             _background.Draw(_spriteBatch);
             _spriteBatch.End();
-
             _screenManager.Draw(_spriteBatch);
             base.Draw(gameTime);
         }
