@@ -28,11 +28,14 @@ namespace MonoTest
         private Texture2D _middleGroundTexture;
         private Texture2D _tiles;
         private Texture2D _texturePlants;
-        private Texture2D _gorilla;
+        private Texture2D _gorillaTexture;
+        private Texture2D _spiderTexture;
         private SoundEffect _jumpSound;
         private SoundEffect _hitSound;
         private SoundEffect _gorillaRoarSound;
         private SoundEffect _gameOverSound;
+        private SoundEffect _gorillaHitSound;
+        private SoundEffect _spiderHitSound;
         private SoundEffectInstance _bgSoundInstance;
         private readonly MapGenerator _mapGenerator;
         private GameScreen _gameScreen;
@@ -64,7 +67,9 @@ namespace MonoTest
             _inputManager = new InputManager(new KeyboardReader(), _hero, _jumpSound);
             _background = new Background(_backGroundTexture, _middleGroundTexture);
             _gorillaRoarSound = Content.Load<SoundEffect>("Sounds/Lion-roar");
-            _mapGenerator.InitializeGameObjects(_texturePlants, _gorilla, _gameObjectManager, _gorillaRoarSound);
+            _gorillaHitSound = Content.Load<SoundEffect>("Sounds/hitGorilla");
+            _mapGenerator.InitializeGameObjects(_texturePlants, _gorillaTexture, _spiderTexture, _gameObjectManager,
+                _gorillaRoarSound, _gorillaHitSound, _gorillaHitSound);
             _cameraManager = new CameraManager(_hero, _graphics, _displayManager);
             _screenManager = new ScreenManager();
             _gameScreen = InitializeGameScreen();
@@ -77,7 +82,8 @@ namespace MonoTest
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _heroTexture = Content.Load<Texture2D>("Sprites/Archaeologist Sprite Sheet");
-            _gorilla = Content.Load<Texture2D>("Enemies/Giant Gorilla Sprite Sheet");
+            _gorillaTexture = Content.Load<Texture2D>("Enemies/Giant Gorilla Sprite Sheet");
+            _spiderTexture = Content.Load<Texture2D>("Enemies/Spider Sprite Sheet");
             _backGroundTexture = Content.Load<Texture2D>("Backgrounds/background");
             _middleGroundTexture = Content.Load<Texture2D>("Backgrounds/middleground");
             _tiles = Content.Load<Texture2D>("Tiles/Tiles");
@@ -100,7 +106,7 @@ namespace MonoTest
             _screenManager.Update(gameTime);
             base.Update(gameTime);
         }
-        
+
 
         protected override void Draw(GameTime gameTime)
         {
@@ -121,6 +127,13 @@ namespace MonoTest
                 _inputManager,
                 _graphics.GraphicsDevice, _hero, Content);
             gameScreen.OnDead += (sender, args) =>
+            {
+                IsMouseVisible = true;
+                _bgSoundInstance.Stop();
+                _gameOverSound.Play();
+                _screenManager.SetScreen(_endScreen);
+            };
+            gameScreen.OnFinish += (sender, args) =>
             {
                 IsMouseVisible = true;
                 _bgSoundInstance.Stop();

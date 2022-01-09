@@ -170,6 +170,12 @@
 /processorParam:Quality=Best
 /build:Sounds/gameover2.wav
 
+#begin Sounds/hitGorilla.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/hitGorilla.wav
+
 #begin Sounds/hitHurt.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

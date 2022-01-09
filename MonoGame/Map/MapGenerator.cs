@@ -39,8 +39,9 @@ namespace MonoTest.Map
             }
         }
 
-        public void InitializeGameObjects(Texture2D plantTexture, Texture2D gorillaTexture,
-            GameObjectManager gameObjectManager, SoundEffect gorillaRoar)
+        public void InitializeGameObjects(Texture2D plantTexture, Texture2D gorillaTexture, Texture2D spiderTexture,
+            GameObjectManager gameObjectManager, SoundEffect gorillaRoar, SoundEffect gorillaHitSound,
+            SoundEffect SpiderHitSound)
         {
             if (_gameObjectConfigs.Any())
             {
@@ -54,9 +55,15 @@ namespace MonoTest.Map
                                 (int)plant.Position.Y * _blockSize, plantTexture, plant.PlantType, plant.AttackSpeed));
                             break;
                         case GorillaConfig gorilla:
-                            gameObjectManager.AddGameObject(new Gorilla(gorillaTexture, gorillaRoar)
+                            gameObjectManager.AddGameObject(new Gorilla(gorillaTexture, gorillaRoar, gorillaHitSound)
                             {
                                 Position = gorilla.Position * _blockSize
+                            });
+                            break;
+                        case SpiderConfig spider:
+                            gameObjectManager.AddGameObject(new Spider(spiderTexture, SpiderHitSound)
+                            {
+                                Position = spider.Position * _blockSize
                             });
                             break;
                     }

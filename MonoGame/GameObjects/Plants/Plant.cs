@@ -14,7 +14,6 @@ namespace MonoTest.GameObjects.Plants
         public bool IsAttacking { get; set; }
         
         public float Scale { get; set; }
-        private readonly Texture2D _texture;
         private readonly double _timeBetweenAttacks;
         private double _time;
 
@@ -23,7 +22,7 @@ namespace MonoTest.GameObjects.Plants
             Damage = 3;
             Scale = 1f;
             _texture = texture;
-            Position = new Vector2(x - ((_texture.Width*Scale / 14) / 2), y - ((_texture.Height*Scale / 5) / 2));
+            Position = new Vector2(x - ((_texture.Width * Scale / 14) / 2), y - ((_texture.Height * Scale / 5) / 2));
             _timeBetweenAttacks = timeBetweenAttacks;
             Animation = CreateAnimation(typePlant);
             _time = 0;

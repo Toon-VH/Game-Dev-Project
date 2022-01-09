@@ -7,20 +7,23 @@ namespace MonoTest.Components
     public class HealthBar : Component
     {
         private readonly Texture2D _texture;
-        private readonly Vector2 _position;
-        private readonly Hero _hero;
+        public  Moveable _moveAble { get; set; }
 
+        private  Vector2 _position;
         private Rectangle _fullHP;
         private Rectangle _almostFullHP;
         private Rectangle _halfHP;
         private Rectangle _almostEmptyHP;
         private Rectangle _emptyHP;
+        private readonly float _scale;
 
-        public HealthBar(Texture2D texture, Vector2 position, Hero hero)
+
+        public HealthBar(Texture2D texture, Vector2 position, Moveable moveable, float scale)
         {
             _texture = texture;
             _position = position;
-            _hero = hero;
+            _moveAble = moveable;
+            _scale = scale;
             InitializeRectangles();
         }
 
@@ -36,46 +39,49 @@ namespace MonoTest.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            var counter = 0;
-            var health = _hero.Health;
+            if (_moveAble.Health <= 0 && _moveAble is not Hero) return;
 
-            for (var i = _hero.InitialHealth - 1; i >= 0; i--)
+            var counter = 0;
+            var health = _moveAble.Health;
+
+            
+            for (var i = _moveAble.InitialHealth - 1; i >= 0; i--)
             {
                 if (health - 4 >= 0 && health != 0)
                 {
-                    spriteBatch.Draw(_texture, new Vector2(_position.X + (counter * _fullHP.Width), _position.Y),
+                    spriteBatch.Draw(_texture, new Vector2(_position.X + (counter * _fullHP.Width * _scale), _position.Y),
                         _fullHP,
-                        Color.White, 0f, Vector2.Zero, 1f,
+                        Color.White, 0f, Vector2.Zero, _scale,
                         SpriteEffects.None, 0f);
                     health -= 4;
                 }
                 else switch (health)
                 {
                     case 3:
-                        spriteBatch.Draw(_texture, new Vector2(_position.X + (counter * _fullHP.Width), _position.Y),
+                        spriteBatch.Draw(_texture, new Vector2(_position.X + (counter * _fullHP.Width * _scale), _position.Y),
                             _almostFullHP,
-                            Color.White, 0f, Vector2.Zero, 1f,
+                            Color.White, 0f, Vector2.Zero, _scale,
                             SpriteEffects.None, 0f);
                         health -= 3;
                         break;
                     case 2:
-                        spriteBatch.Draw(_texture, new Vector2(_position.X + (counter * _fullHP.Width), _position.Y),
+                        spriteBatch.Draw(_texture, new Vector2(_position.X + (counter * _fullHP.Width * _scale), _position.Y),
                             _halfHP,
-                            Color.White, 0f, Vector2.Zero, 1f,
+                            Color.White, 0f, Vector2.Zero, _scale,
                             SpriteEffects.None, 0f);
                         health -= 2;
                         break;
                     case 1:
-                        spriteBatch.Draw(_texture, new Vector2(_position.X + (counter * _fullHP.Width), _position.Y),
+                        spriteBatch.Draw(_texture, new Vector2(_position.X + (counter * _fullHP.Width * _scale), _position.Y),
                             _almostEmptyHP,
-                            Color.White, 0f, Vector2.Zero, 1f,
+                            Color.White, 0f, Vector2.Zero, _scale,
                             SpriteEffects.None, 0f);
                         health -= 1;
                         break;
-                    case 0 when counter < _hero.InitialHealth / 4:
-                        spriteBatch.Draw(_texture, new Vector2(_position.X + (counter * _fullHP.Width), _position.Y),
+                    case 0 when counter < _moveAble.InitialHealth / 4:
+                        spriteBatch.Draw(_texture, new Vector2(_position.X + (counter * _fullHP.Width * _scale), _position.Y),
                             _emptyHP,
-                            Color.White, 0f, Vector2.Zero, 1f,
+                            Color.White, 0f, Vector2.Zero, _scale,
                             SpriteEffects.None, 0f);
                         break;
                 }
@@ -86,6 +92,8 @@ namespace MonoTest.Components
 
         public override void Update(GameTime gameTime, Matrix matrix)
         {
+            if (_moveAble is Hero) return;
+            _position = new Vector2(_moveAble.Position.X + _moveAble.BoundingBox.X *_moveAble.Scale + _moveAble.BoundingBox.Width * _moveAble.Scale/2 - _moveAble.InitialHealth/4 *_fullHP.Width * _scale/2 , _moveAble.Position.Y + _moveAble.BoundingBox.Y *_moveAble.Scale - 10);
         }
     }
-}
+} 

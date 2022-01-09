@@ -18,6 +18,7 @@ namespace MonoTest.GameObjects
             _poundingChest = false;
             if (gameTime.TotalGameTime.Seconds % _currentStateDuration == 0)
             {
+                
                 var random = _random.Next(0, 500);
                 switch (random)
                 {
@@ -26,16 +27,17 @@ namespace MonoTest.GameObjects
                         _currentStateDuration = 4;
                         CurrentAction = new MoveableAction(MoveableActionType.Idle, MoveableActionDirection.Static);
                         break;
-                    case < 60:
+                    case < 65:
                         Velocity = Vector2.Zero;
                         _roar.Play();
                         _poundingChest = true;
-                        CurrentAction = new MoveableAction(MoveableActionType.Idle, MoveableActionDirection.Static);
-                        _currentStateDuration = 4;
+                        CurrentAction = new MoveableAction(MoveableActionType.ChestPounding, MoveableActionDirection.Static);
+                        _currentStateDuration = 2;
                         break;
                     case < 500:
                         Velocity = _random.Next(0, 2) == 0 ? new Vector2(-60, 0) : new Vector2(60, 0);
-                        CurrentAction = new MoveableAction(MoveableActionType.Running, Velocity.X > 0 ? MoveableActionDirection.Right : MoveableActionDirection.Left);
+                        var  moveableActionType= _isAngry ? MoveableActionType.AngryWalking : MoveableActionType.Running;
+                        CurrentAction = new MoveableAction(moveableActionType, Velocity.X > 0 ? MoveableActionDirection.Right : MoveableActionDirection.Left);
                         _currentStateDuration = 1;
                         break;
                     default:

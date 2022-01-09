@@ -7,7 +7,8 @@ namespace MonoTest.GameObjects
     public class Hero : Moveable
     {
         private readonly SoundEffect _hitSound;
-
+        public bool IsFinished { get; set; }
+        
         public Hero(Texture2D texture, SoundEffect hitSound)
         {
             Damage = 4;

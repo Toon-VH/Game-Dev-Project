@@ -124,7 +124,7 @@ namespace MonoTest.Managers
                     }
                     case Plant plant:
                     {
-                        if (moveable is Gorilla) continue;
+                        if (moveable is Gorilla or Spider) continue;
                         foreach (var plantHitbox in plant.Animation.CurrentFrame.HitBoxes)
                         {
                             var plantHitboxX = plantHitbox.X + plant.Position.X;
@@ -154,30 +154,46 @@ namespace MonoTest.Managers
 
                         break;
                     }
-                    case Gorilla gorilla:
-                        if (moveable is Gorilla) continue;
-                        if (gorilla.Health <= 0) continue;
-                            foreach (var gorillaHitbox in gorilla.CurrentAnimation.CurrentFrame.HitBoxes)
-                        {
-                            var gorillaHitboxX = gorillaHitbox.Position.X * moveable.Scale +  gorilla.Position.X;
-                            var gorillaHitboxY = gorillaHitbox.Position.Y * moveable.Scale +  gorilla.Position.Y;
+                    case Moveable otherMoveable:
+                        if (moveable is Gorilla or Spider) continue;
+                        if (otherMoveable.Health <= 0) continue;
 
-                            var updatedGorillaHitbox = new RectangleF(gorillaHitboxX, gorillaHitboxY, gorillaHitbox.Width * moveable.Scale, gorillaHitbox.Height * moveable.Scale);
-                            
-                            gorilla.IsIntersecting = false;
+                        
+                        if (otherMoveable.CurrentAnimation.CurrentFrame.HitBoxes == null) continue;
+                        foreach (var otherMoveAbleHitbox in otherMoveable.CurrentAnimation.CurrentFrame.HitBoxes)
+                        {
+                            var updatedOtherMoveableHitbox = UpdateBox(otherMoveAbleHitbox, otherMoveable);
+
+                            otherMoveable.IsIntersecting = false;
                             if (moveable.CurrentAnimation.CurrentFrame.AttackBoxes == null) continue;
                             foreach (var moveableAttackBox in moveable.CurrentAnimation.CurrentFrame.AttackBoxes)
                             {
-                                var moveableAttackBoxX = moveableAttackBox.X * moveable.Scale + moveable.Position.X;
-                                var moveableAttackBoxY = moveableAttackBox.Y * moveable.Scale + moveable.Position.Y;
+                                var updatedMoveableAttackBox = UpdateBox(moveableAttackBox, moveable);
 
-                                var updatedMoveableAttackBox = new RectangleF(moveableAttackBoxX, moveableAttackBoxY, moveableAttackBox.Width * moveable.Scale, moveableAttackBox.Height * moveable.Scale);
+                                if (updatedMoveableAttackBox.Intersects(updatedOtherMoveableHitbox))
+                                {
+                                    if (otherMoveable.IsInvulnerable) continue;
+                                    otherMoveable.IsIntersecting = true;
+                                    otherMoveable.GetDamage(moveable.Damage, 0.8f);
+                                }
+                            }
+                        }
+                        if (moveable.CurrentAnimation.CurrentFrame.HitBoxes == null) continue;
+                        foreach (var moveableHitbox in moveable.CurrentAnimation.CurrentFrame.HitBoxes)
+                        {
+                            var updatedMoveableHitbox = UpdateBox(moveableHitbox, moveable);
 
-                                if (updatedMoveableAttackBox.Intersects(updatedGorillaHitbox))
+                            otherMoveable.IsIntersecting = false;
+                            if (otherMoveable.CurrentAnimation.CurrentFrame.AttackBoxes == null) continue;
+                            foreach (var otherMoveableAttackBox in otherMoveable.CurrentAnimation.CurrentFrame.AttackBoxes)
+                            {
+                                var updatedOtherMoveableAttackBox = UpdateBox(otherMoveableAttackBox, otherMoveable);
+
+                                if (updatedOtherMoveableAttackBox.Intersects(updatedMoveableHitbox))
                                 {
                                     if (moveable.IsInvulnerable) continue;
-                                    gorilla.IsIntersecting = true;
-                                    gorilla.GetDamage(moveable.Damage, 0.4f);
+                                    otherMoveable.IsIntersecting = true;
+                                    moveable.GetDamage(otherMoveable.Damage, 1.5f);
                                 }
                             }
                         }
@@ -190,7 +206,17 @@ namespace MonoTest.Managers
                 ? new Vector2(newPosition.X, moveable.Position.Y)
                 : new Vector2(moveable.Position.X, newPosition.Y);
         }
+
+        private static RectangleF UpdateBox(RectangleF rectangle, Moveable moveable)
+        {
+            var updatedX = rectangle.X * moveable.Scale + moveable.Position.X;
+            var updatedY = rectangle.Y * moveable.Scale + moveable.Position.Y;
+
+            return new RectangleF(updatedX, updatedY, rectangle.Width * moveable.Scale, rectangle.Height * moveable.Scale);
+        }
     }
+    
+    
 
     public enum Direction
     {

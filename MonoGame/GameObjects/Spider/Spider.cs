@@ -4,48 +4,40 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoTest.GameObjects
 {
-    public partial class Gorilla : Moveable
+    public partial class Spider : Moveable
     {
-        private readonly SoundEffect _roar;
-        private readonly SoundEffect _hitGorilla;
-        private bool _isAngry = false;
-        private bool _poundingChest = false;
         
-
-
-        public Gorilla(Texture2D texture, SoundEffect roar, SoundEffect hitSound)
+        private readonly SoundEffect _spinhit;
+        
+        
+        public Spider(Texture2D texture, SoundEffect spinHit)
         {
-            Damage = 6;
-            InitialHealth = 32;
+            Damage = 3;
+            InitialHealth = 12;
             Health = InitialHealth;
             _texture = texture;
-            _roar = roar;
-            _hitGorilla = hitSound;
+            _spinhit = spinHit;
             Scale = 2;
-            Speed = 200f;
+            Speed = 250f;
 
             
-            AddAnimation("walk", new GorillaWalkAnimation(_texture, 64));
-            AddAnimation("idle", new GorillaIdleAnimation(_texture, 64));
-            AddAnimation("angryWalk", new GorillaAngryWalkAnimation(_texture, 64));
-            AddAnimation("chestPound", new GorillaChestPound(_texture, 64));
-            AddAnimation("dying", new GorillaDeadAnimation(_texture, 64));
+            AddAnimation("walk", new SpiderWalkAnimation(_texture, 64));
+            AddAnimation("idle", new SpiderIdleAnimation(_texture, 64));
+            AddAnimation("dying", new SpiderDeadAnimation(_texture, 64));
 
             MapAnimationToAction("walk", false, MoveableActionType.Running, MoveableActionDirection.Right);
             MapAnimationToAction("walk", true, MoveableActionType.Running, MoveableActionDirection.Left);
+            
             MapAnimationToAction("idle", false, MoveableActionType.Idle, MoveableActionDirection.Right);
             MapAnimationToAction("idle", true, MoveableActionType.Idle, MoveableActionDirection.Left);
             MapAnimationToAction("idle", false, MoveableActionType.Idle, MoveableActionDirection.Static);
+            
             MapAnimationToAction("dying", false, MoveableActionType.Dying, MoveableActionDirection.Right);
             MapAnimationToAction("dying", true, MoveableActionType.Dying, MoveableActionDirection.Left);
             MapAnimationToAction("dying", false, MoveableActionType.Dying, MoveableActionDirection.Static);
-            MapAnimationToAction("angryWalk", false, MoveableActionType.AngryWalking, MoveableActionDirection.Right);
-            MapAnimationToAction("angryWalk", true, MoveableActionType.AngryWalking, MoveableActionDirection.Left);
-            MapAnimationToAction("chestPound", false, MoveableActionType.ChestPounding, MoveableActionDirection.Right);
-            MapAnimationToAction("chestPound", true, MoveableActionType.ChestPounding, MoveableActionDirection.Left);
-            MapAnimationToAction("chestPound", true, MoveableActionType.ChestPounding, MoveableActionDirection.Static);
+            
 
-            BoundingBox = new RectangleF(11, 27, 36, 36);
+            BoundingBox = new RectangleF(10, 22, 12, 10);
             CurrentAction = new MoveableAction(MoveableActionType.Idle, MoveableActionDirection.Static);
             SetCurrentAnimation("idle");
         }
@@ -57,7 +49,6 @@ namespace MonoTest.GameObjects
             if (InvulnerableTime <= 0)
             {
                 Color = Color.White;
-                _isAngry = false;
             }
             else InvulnerableTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -107,11 +98,10 @@ namespace MonoTest.GameObjects
         {
             if (InvulnerableTime <= 0)
             {
-                _isAngry = true;
                 IsInvulnerable = true;
                 Health -= amount;
                 InvulnerableTime = invulnerableTime;
-                _hitGorilla.Play();
+                _spinhit.Play();
             }
             IsInvulnerable = false;
 

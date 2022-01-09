@@ -22,7 +22,9 @@ namespace MonoTest.Screens
         private readonly ContentManager _contentManager;
         private readonly Hero _hero;
         private List<Component> _components;
+        private HealthBar _healtBarHero;
         public event EventHandler OnDead;
+        public event EventHandler OnFinish;
 
 
         public GameScreen(
@@ -49,22 +51,28 @@ namespace MonoTest.Screens
         private void LoadUI()
         {
             var texture = _contentManager.Load<Texture2D>("Components/healthBar");
-            var healthBar = new HealthBar(texture,
-                new Vector2(
-                    _displayManager.GetMiddlePointScreen - ((texture.Width / 5) * (_hero.InitialHealth / 4)) / 2,
-                    GraphicsDeviceManager.DefaultBackBufferHeight - 30),
-                _hero);
-
-            _components = new List<Component>()
+             _healtBarHero = new HealthBar(texture, new Vector2(_displayManager.GetMiddlePointScreen - ((texture.Width / 5) * (_hero.InitialHealth / 4)) / 2, GraphicsDeviceManager.DefaultBackBufferHeight - 30), _hero, 1f);
+             _components = new List<Component>();
+             _gameObjectManager.GameObjects.ForEach(gameObject =>
             {
-                healthBar
-            };
+                if (gameObject is Moveable moveable)
+                {
+                    if (moveable is Hero) return;
+                    _components.Add(new HealthBar(texture,
+                        new Vector2(moveable.Position.X, moveable.Position.Y ), moveable, 0.5f));
+                }
+            });
         }
 
         [SuppressMessage("ReSharper.DPA", "DPA0001: Memory allocation issues")]
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: CreateMatrix());
+            _components.ForEach(c =>
+            {
+                c.Draw(spriteBatch);
+            });
+            
             _gameObjectManager.GameObjects.ForEach(gameObject =>
             {
                 gameObject?.Draw(spriteBatch, _graphicsDevice);
@@ -77,12 +85,13 @@ namespace MonoTest.Screens
 //                 }
 // #endif
             });
+            
             _cameraManager.Draw(spriteBatch, _graphicsDevice);
             spriteBatch.End();
             spriteBatch.Begin(transformMatrix: _displayManager.CalculateMatrix());
-            _components.ForEach(c => c.Draw(spriteBatch));
-            
+            _healtBarHero.Draw(spriteBatch);
             spriteBatch.End();
+            
         }
 
         [SuppressMessage("ReSharper.DPA", "DPA0001: Memory allocation issues")]
@@ -97,18 +106,17 @@ namespace MonoTest.Screens
                 {
                     _gameObjectManager.RemoveGameObject(g);
                 }
+
                 g?.Update(gameTime);
             });
             _gameObjectManager.Moveables.ForEach(m =>
                 _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds, _gameObjectManager.GameObjects));
-            
-            if (_hero.Health <= 0 )
+
+            if (_hero.Health <= 0 && _hero.CurrentAnimation.AnimationDoneFlag && _hero.CurrentAction.Action == MoveableActionType.Dying)
             {
-                if (_hero.CurrentAnimation.AnimationDoneFlag && _hero.CurrentAction.Action == MoveableActionType.Dying)
-                {
-                    OnDead?.Invoke(this, EventArgs.Empty);
-                }
+                OnDead?.Invoke(this, EventArgs.Empty);
             }
+            if (_hero.IsFinished) OnFinish.Invoke(this, EventArgs.Empty);
         }
         
         private Matrix CreateMatrix()

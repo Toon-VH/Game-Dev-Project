@@ -5,5 +5,6 @@
     {
         Default = 0,
         DamageBlock = 1,
+        FinishBlock = 2,
     }
 }

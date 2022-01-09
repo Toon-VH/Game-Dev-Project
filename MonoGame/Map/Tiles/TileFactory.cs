@@ -64,6 +64,7 @@ namespace MonoTest.Map.Tiles
             { 46, new TileConfig() { Type = TileType.Default, IsPassable = true } },
             { 47, new TileConfig() { Type = TileType.Default, IsPassable = true } },
 
+            { 51, new TileConfig() { Type = TileType.FinishBlock, IsPassable = false } },
             { 58, new TileConfig() { Type = TileType.Default, IsPassable = true } },
             { 59, new TileConfig() { Type = TileType.Default, IsPassable = true } },
             { 61, new TileConfig() { Type = TileType.Default, IsPassable = true } },
@@ -111,6 +112,8 @@ namespace MonoTest.Map.Tiles
             { 131, new TileConfig() { Type = TileType.Default, IsPassable = true } },
             { 132, new TileConfig() { Type = TileType.Default, IsPassable = true } },
             { 133, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 134, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 135, new TileConfig() { Type = TileType.Default, IsPassable = true } },
 
             { 140, new TileConfig() { Type = TileType.Default, IsPassable = true } },
             { 141, new TileConfig() { Type = TileType.Default, IsPassable = true } },
@@ -127,15 +130,73 @@ namespace MonoTest.Map.Tiles
             { 161, new TileConfig() { Type = TileType.Default, IsPassable = true } },
             { 162, new TileConfig() { Type = TileType.Default, IsPassable = true } },
             { 163, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            
+            { 170, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 171, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 172, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 186, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            
+            { 203, new TileConfig() { Type = TileType.Default, IsPassable = true } },
 
             { 204, new TileConfig() { Type = TileType.DamageBlock, IsPassable = true } },
             { 205, new TileConfig() { Type = TileType.DamageBlock, IsPassable = true } },
+            { 209, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 210, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 211, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 220, new TileConfig() { Type = TileType.Default, IsPassable = true } },
 
             { 221, new TileConfig() { Type = TileType.DamageBlock, IsPassable = true } },
             { 222, new TileConfig() { Type = TileType.DamageBlock, IsPassable = true } },
+            { 226, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 227, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 228, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            
+            { 237, new TileConfig() { Type = TileType.Default, IsPassable = true } },
 
             { 238, new TileConfig() { Type = TileType.DamageBlock, IsPassable = true } },
             { 239, new TileConfig() { Type = TileType.DamageBlock, IsPassable = true } },
+            { 243, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 244, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 245, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            
+            { 312, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 313, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 314, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            
+            { 329, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 330, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 331, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            
+            { 346, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 347, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 348, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            
+            { 363, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 364, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 365, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            
+            { 380, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 381, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 382, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            
+            { 397, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 398, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 399, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            
+            { 414, new TileConfig() { Type = TileType.FinishBlock, IsPassable = false } },
+            { 415, new TileConfig() { Type = TileType.FinishBlock, IsPassable = false } },
+            { 416, new TileConfig() { Type = TileType.FinishBlock, IsPassable = false } },
+            
+            { 431, new TileConfig() { Type = TileType.FinishBlock, IsPassable = false } },
+            { 432, new TileConfig() { Type = TileType.FinishBlock, IsPassable = false } },
+            { 433, new TileConfig() { Type = TileType.FinishBlock, IsPassable = false } },
+            
+            { 448, new TileConfig() { Type = TileType.FinishBlock, IsPassable = false } },
+            { 449, new TileConfig() { Type = TileType.FinishBlock, IsPassable = false } },
+            { 450, new TileConfig() { Type = TileType.FinishBlock, IsPassable = false } },
+            
+            { 493, new TileConfig() { Type = TileType.Default, IsPassable = true } },
+            { 494, new TileConfig() { Type = TileType.Default, IsPassable = true } },
         };
     }
 }

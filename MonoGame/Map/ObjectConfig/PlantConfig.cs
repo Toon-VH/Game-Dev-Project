@@ -2,7 +2,7 @@
 
 namespace MonoTest.Map.ObjectConfig
 {
-    public class PlantConfig: ObjectConfig.GameObjectConfig
+    public class PlantConfig: GameObjectConfig
     {
         public int PlantType { get; }
 

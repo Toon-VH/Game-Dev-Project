@@ -36,6 +36,8 @@ namespace MonoTest.GameObjects
 
         public override void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
+            
+            
             var (animationKey, invert)= _actionAnimationMap[(CurrentAction.Action, CurrentAction.Direction)];
             var animation = Animations[animationKey];
             animation.SetFlip(invert);
