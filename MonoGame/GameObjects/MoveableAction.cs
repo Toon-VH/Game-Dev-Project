@@ -14,7 +14,7 @@
 
     public enum MoveableActionType
     {
-        Running, Idle, Attacking, AttackingLow, Rolling, Dying, AngryWalking, ChestPounding
+        Running, Idle, Attacking, AttackingLow, Rolling, Dying, AngryWalking, Taunting
     }
 
     public enum MoveableActionDirection

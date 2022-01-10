@@ -2,10 +2,14 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoTest.Collisions;
 using MonoTest.GameObjects;
+using MonoTest.GameObjects.Enemies;
+using MonoTest.GameObjects.Plants;
 using MonoTest.Input;
 using MonoTest.Managers;
 using MonoTest.Map;
+using MonoTest.Map.Tiles;
 using MonoTest.Screens;
 
 namespace MonoTest
@@ -50,6 +54,7 @@ namespace MonoTest
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
+            AddCollisions();
             _mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
             //_mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, 24);
             //_mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, 24);
@@ -57,6 +62,16 @@ namespace MonoTest
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+        }
+
+        private void AddCollisions()
+        {
+            _physicsManager.AddCollision(typeof(Hero), typeof(Tile), new BasicTileCollision());
+            _physicsManager.AddCollision(typeof(Spider), typeof(Tile), new BasicTileCollision());
+            _physicsManager.AddCollision(typeof(Gorilla), typeof(Tile), new BasicTileCollision());
+            _physicsManager.AddCollision(typeof(Hero), typeof(Plant), new HeroPlantCollision());
+            _physicsManager.AddCollision(typeof(Hero), typeof(Spider), new HeroEnemyCollision());
+            _physicsManager.AddCollision(typeof(Hero), typeof(Gorilla), new HeroEnemyCollision());
         }
 
         protected override void Initialize()

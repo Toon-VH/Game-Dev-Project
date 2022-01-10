@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using MonoTest.GameObjects;
+using MonoTest.GameObjects.Enemies;
 using MonoTest.GameObjects.Plants;
 using MonoTest.Managers;
 using MonoTest.Map.ObjectConfig;
@@ -55,13 +56,13 @@ namespace MonoTest.Map
                                 (int)plant.Position.Y * _blockSize, plantTexture, plant.PlantType, plant.AttackSpeed));
                             break;
                         case GorillaConfig gorilla:
-                            gameObjectManager.AddGameObject(new Gorilla(gorillaTexture, gorillaRoar, gorillaHitSound)
+                            gameObjectManager.AddGameObject(new Gorilla(gorillaTexture, gorillaRoar, gorillaHitSound, gorilla.Behavior)
                             {
                                 Position = gorilla.Position * _blockSize
                             });
                             break;
                         case SpiderConfig spider:
-                            gameObjectManager.AddGameObject(new Spider(spiderTexture, SpiderHitSound)
+                            gameObjectManager.AddGameObject(new Spider(spiderTexture, SpiderHitSound, spider.Behavior)
                             {
                                 Position = spider.Position * _blockSize
                             });

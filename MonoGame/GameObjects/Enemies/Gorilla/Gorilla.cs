@@ -1,19 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using MonoTest.AI;
 
-namespace MonoTest.GameObjects
+namespace MonoTest.GameObjects.Enemies
 {
-    public partial class Gorilla : Moveable
+    public partial class Gorilla : Enemy
     {
         private readonly SoundEffect _roar;
         private readonly SoundEffect _hitGorilla;
-        private bool _isAngry = false;
-        private bool _poundingChest = false;
         
 
 
-        public Gorilla(Texture2D texture, SoundEffect roar, SoundEffect hitSound)
+        public Gorilla(Texture2D texture, SoundEffect roar, SoundEffect hitSound, AIBehavior behavior) : base(behavior)
         {
             Damage = 6;
             InitialHealth = 32;
@@ -41,9 +40,9 @@ namespace MonoTest.GameObjects
             MapAnimationToAction("dying", false, MoveableActionType.Dying, MoveableActionDirection.Static);
             MapAnimationToAction("angryWalk", false, MoveableActionType.AngryWalking, MoveableActionDirection.Right);
             MapAnimationToAction("angryWalk", true, MoveableActionType.AngryWalking, MoveableActionDirection.Left);
-            MapAnimationToAction("chestPound", false, MoveableActionType.ChestPounding, MoveableActionDirection.Right);
-            MapAnimationToAction("chestPound", true, MoveableActionType.ChestPounding, MoveableActionDirection.Left);
-            MapAnimationToAction("chestPound", true, MoveableActionType.ChestPounding, MoveableActionDirection.Static);
+            MapAnimationToAction("chestPound", false, MoveableActionType.Taunting, MoveableActionDirection.Right);
+            MapAnimationToAction("chestPound", true, MoveableActionType.Taunting, MoveableActionDirection.Left);
+            MapAnimationToAction("chestPound", true, MoveableActionType.Taunting, MoveableActionDirection.Static);
 
             BoundingBox = new RectangleF(11, 27, 36, 36);
             CurrentAction = new MoveableAction(MoveableActionType.Idle, MoveableActionDirection.Static);
@@ -53,11 +52,11 @@ namespace MonoTest.GameObjects
         public override void Update(GameTime gameTime)
         {
             CurrentAnimation.Update(gameTime);
-            Brains(gameTime);
+            _behavior.Brains(gameTime, this);
             if (InvulnerableTime <= 0)
             {
                 Color = Color.White;
-                _isAngry = false;
+                IsAngry = false;
             }
             else InvulnerableTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -107,7 +106,7 @@ namespace MonoTest.GameObjects
         {
             if (InvulnerableTime <= 0)
             {
-                _isAngry = true;
+                IsAngry = true;
                 IsInvulnerable = true;
                 Health -= amount;
                 InvulnerableTime = invulnerableTime;
@@ -123,6 +122,10 @@ namespace MonoTest.GameObjects
 
             Color = new Color(255, 120, 120);
         }
-        
+
+        public override void PlayScream()
+        {
+            _roar.Play();
+        }
     }
 }

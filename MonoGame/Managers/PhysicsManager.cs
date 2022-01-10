@@ -1,38 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
+using MonoTest.Collisions;
 using MonoTest.GameObjects;
-using MonoTest.GameObjects.Plants;
-using MonoTest.Map.Tiles;
-using Tile = MonoTest.Map.Tiles.Tile;
 
 namespace MonoTest.Managers
 {
     public class PhysicsManager
     {
         private const float Gravity = 600;
-        private static Vector2 prevVelocity;
-        private static Vector2 prevPosition;
+
+        private IDictionary<(Type, Type), ICollision> _collisions = new Dictionary<(Type, Type), ICollision>();
+
+        public void AddCollision(Type gameObjectType, Type colliderType, ICollision collision)
+        {
+            _collisions.Add((gameObjectType, colliderType), collision);
+        }
 
         public void Move(Moveable moveable, float deltaTime, IEnumerable<GameObject> map)
         {
-            // if (prevVelocity != moveable.Velocity)
-            // {
-            //     Debug.WriteLine($"Velocity =  {moveable.Velocity}");
-            // }
-            //
-            if (moveable is Hero)
-            {
-                if (prevPosition != moveable.Position)
-                {
-                    Debug.WriteLine($"Position =  {moveable.Position}");
-                }
-
-                prevVelocity = moveable.Velocity;
-                prevPosition = moveable.Position;
-            }
-
             moveable.IsIntersecting = false;
             moveable.IsTouchingGround = false;
 
@@ -47,191 +33,26 @@ namespace MonoTest.Managers
             CheckCollisions(Direction.Horizontal, moveable, newPosition, map);
         }
 
-        private static bool Intersects(RectangleF player, RectangleF block, Direction direction, out Vector2 depth)
-        {
-            if (player.Intersects(block))
-            {
-                depth = direction == Direction.Vertical
-                    ? new Vector2(0, GetVerticalIntersectionDepth(player, block))
-                    : new Vector2(GetHorizontalIntersectionDepth(player, block), 0);
-                return depth.Y != 0 || depth.X != 0;
-            }
 
-            depth = Vector2.Zero;
-            return false;
-        }
-
-        private static float GetHorizontalIntersectionDepth(RectangleF rectA, RectangleF rectB)
-        {
-            var halfWidthA = rectA.Width / 2.0f;
-            var halfWidthB = rectB.Width / 2.0f;
-
-            var centerA = rectA.Left + halfWidthA;
-            var centerB = rectB.Left + halfWidthB;
-
-            var distanceX = centerA - centerB;
-            var minDistanceX = halfWidthA + halfWidthB;
-
-            if (Math.Abs(distanceX) >= minDistanceX)
-                return 0f;
-
-            return distanceX > 0 ? minDistanceX - distanceX : -minDistanceX - distanceX;
-        }
-
-        private static float GetVerticalIntersectionDepth(RectangleF rectA, RectangleF rectB)
-        {
-            var halfHeightA = rectA.Height / 2.0f;
-            var halfHeightB = rectB.Height / 2.0f;
-
-            var centerA = rectA.Top + halfHeightA;
-            var centerB = rectB.Top + halfHeightB;
-
-            var distanceY = centerA - centerB;
-            var minDistanceY = halfHeightA + halfHeightB;
-
-            if (Math.Abs(distanceY) >= minDistanceY)
-                return 0f;
-
-            return distanceY > 0 ? minDistanceY - distanceY : -minDistanceY - distanceY;
-        }
-
-        private static void CheckCollisions(Direction direction, Moveable moveable, Vector2 newPosition,
-            IEnumerable<GameObject> map)
+        private void CheckCollisions(Direction direction, Moveable moveable, Vector2 newPosition,
+            IEnumerable<GameObject> gameObjects)
         {
             var moveableBoundingBox = new RectangleF(moveable.BoundingBox.X * moveable.Scale + newPosition.X,
                 moveable.BoundingBox.Y * moveable.Scale + newPosition.Y, moveable.BoundingBox.Width * moveable.Scale,
                 moveable.BoundingBox.Height * moveable.Scale);
 
 
-            foreach (var mapObject in map)
+            foreach (var gameObject in gameObjects)
             {
-                if (mapObject == moveable) continue;
-                switch (mapObject)
-                {
-                    case Tile tile:
-                    {
-                        //if (Vector2.Distance(new Vector2(tile.BoundingBox.X,tile.BoundingBox.Y), moveable.Position) > 50) continue;
-                        if (!Intersects(moveableBoundingBox, tile.BoundingBox, direction, out var depth)) continue;
-                        switch (tile.Type)
-                        {
-                            case TileType.FinishBlock when moveable is Hero hero:
-                                hero.IsFinished = true;
-                                break;
-                            case TileType.DamageBlock when moveable is Hero hero:
-                                hero.GetDamage(1, 0.35f);
-                                break;
-                            case TileType.Default:
-                                break;
-                        }
-
-                        if (tile.IsPassable) continue;
-                        moveable.IsIntersecting = true;
-                        if (depth.Y < 0) moveable.IsTouchingGround = true;
-
-                        newPosition += depth;
-                        moveableBoundingBox.X += depth.X;
-                        moveableBoundingBox.Y += depth.Y;
-                        //Debug.WriteLine($"Depth: (${depth.X}, ${depth.Y})");
-
-                        moveable.Velocity = direction == Direction.Horizontal
-                            ? new Vector2(0, moveable.Velocity.Y)
-                            : new Vector2(moveable.Velocity.X, 0);
-                        break;
-                    }
-                    case Plant plant:
-                    {
-                        if (moveable is Gorilla or Spider) continue;
-                        foreach (var plantHitbox in plant.Animation.CurrentFrame.HitBoxes)
-                        {
-                            var plantHitboxX = plantHitbox.X + plant.Position.X;
-                            var plantHitboxY = plantHitbox.Y + plant.Position.Y;
-
-                            var updatedPlantHitbox = new RectangleF(plantHitboxX, plantHitboxY, plantHitbox.Width,
-                                plantHitbox.Height);
-                            plant.IsIntersecting = false;
-
-                            if (moveable.CurrentAnimation.CurrentFrame.HitBoxes == null) continue;
-                            foreach (var moveableHitbox in moveable.CurrentAnimation.CurrentFrame.HitBoxes)
-                            {
-                                var moveableHitboxX = moveableHitbox.X * moveable.Scale + moveable.Position.X;
-                                var moveableHitboxY = moveableHitbox.Y * moveable.Scale + moveable.Position.Y;
-
-                                var updatedMoveableHitbox = new RectangleF(moveableHitboxX, moveableHitboxY,
-                                    moveableHitbox.Width * moveable.Scale, moveableHitbox.Height * moveable.Scale);
-
-                                if (!plant.IsAttacking) continue;
-                                if (!updatedMoveableHitbox.Intersects(updatedPlantHitbox)) continue;
-                                if (moveable.IsInvulnerable) continue;
-                                plant.IsIntersecting = true;
-                                moveable.GetDamage(plant.Damage, 2);
-                                moveable.Velocity = new Vector2(moveable.Velocity.X, -200);
-                            }
-                        }
-
-                        break;
-                    }
-                    case Moveable otherMoveable:
-                        if (moveable is Gorilla or Spider) continue;
-                        if (otherMoveable.Health <= 0) continue;
-
-
-                        if (otherMoveable.CurrentAnimation.CurrentFrame.HitBoxes == null) continue;
-                        foreach (var otherMoveAbleHitbox in otherMoveable.CurrentAnimation.CurrentFrame.HitBoxes)
-                        {
-                            var updatedOtherMoveableHitbox = UpdateBox(otherMoveAbleHitbox, otherMoveable);
-
-                            otherMoveable.IsIntersecting = false;
-                            if (moveable.CurrentAnimation.CurrentFrame.AttackBoxes == null) continue;
-                            foreach (var moveableAttackBox in moveable.CurrentAnimation.CurrentFrame.AttackBoxes)
-                            {
-                                var updatedMoveableAttackBox = UpdateBox(moveableAttackBox, moveable);
-
-                                if (updatedMoveableAttackBox.Intersects(updatedOtherMoveableHitbox))
-                                {
-                                    if (otherMoveable.IsInvulnerable) continue;
-                                    otherMoveable.IsIntersecting = true;
-                                    otherMoveable.GetDamage(moveable.Damage, 0.8f);
-                                }
-                            }
-                        }
-
-                        if (moveable.CurrentAnimation.CurrentFrame.HitBoxes == null) continue;
-                        foreach (var moveableHitbox in moveable.CurrentAnimation.CurrentFrame.HitBoxes)
-                        {
-                            var updatedMoveableHitbox = UpdateBox(moveableHitbox, moveable);
-
-                            otherMoveable.IsIntersecting = false;
-                            if (otherMoveable.CurrentAnimation.CurrentFrame.AttackBoxes == null) continue;
-                            foreach (var otherMoveableAttackBox in otherMoveable.CurrentAnimation.CurrentFrame
-                                         .AttackBoxes)
-                            {
-                                var updatedOtherMoveableAttackBox = UpdateBox(otherMoveableAttackBox, otherMoveable);
-
-                                if (updatedOtherMoveableAttackBox.Intersects(updatedMoveableHitbox))
-                                {
-                                    if (moveable.IsInvulnerable) continue;
-                                    otherMoveable.IsIntersecting = true;
-                                    moveable.GetDamage(otherMoveable.Damage, 1.5f);
-                                }
-                            }
-                        }
-
-                        break;
-                }
+                if (gameObject == moveable) continue;
+                var collisionKey = (moveable.GetType(), gameObject.GetType());
+                if (!_collisions.ContainsKey(collisionKey)) continue;
+                _collisions[collisionKey].Collision(moveable, gameObject, ref newPosition, direction);
             }
 
             moveable.Position = direction == Direction.Horizontal
                 ? new Vector2(newPosition.X, moveable.Position.Y)
                 : new Vector2(moveable.Position.X, newPosition.Y);
-        }
-
-        private static RectangleF UpdateBox(RectangleF rectangle, Moveable moveable)
-        {
-            var updatedX = rectangle.X * moveable.Scale + moveable.Position.X;
-            var updatedY = rectangle.Y * moveable.Scale + moveable.Position.Y;
-
-            return new RectangleF(updatedX, updatedY, rectangle.Width * moveable.Scale,
-                rectangle.Height * moveable.Scale);
         }
     }
 

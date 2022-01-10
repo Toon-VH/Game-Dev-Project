@@ -1,16 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using MonoTest.AI;
 
-namespace MonoTest.GameObjects
+namespace MonoTest.GameObjects.Enemies
 {
-    public partial class Spider : Moveable
+    public partial class Spider : Enemy
     {
         
         private readonly SoundEffect _spinhit;
         
         
-        public Spider(Texture2D texture, SoundEffect spinHit)
+        public Spider(Texture2D texture, SoundEffect spinHit, AIBehavior behavior): base(behavior)
         {
             Damage = 3;
             InitialHealth = 12;
@@ -27,10 +28,15 @@ namespace MonoTest.GameObjects
 
             MapAnimationToAction("walk", false, MoveableActionType.Running, MoveableActionDirection.Right);
             MapAnimationToAction("walk", true, MoveableActionType.Running, MoveableActionDirection.Left);
-            
+            MapAnimationToAction("walk", false, MoveableActionType.AngryWalking, MoveableActionDirection.Right);
+            MapAnimationToAction("walk", true, MoveableActionType.AngryWalking, MoveableActionDirection.Left);
+
             MapAnimationToAction("idle", false, MoveableActionType.Idle, MoveableActionDirection.Right);
             MapAnimationToAction("idle", true, MoveableActionType.Idle, MoveableActionDirection.Left);
             MapAnimationToAction("idle", false, MoveableActionType.Idle, MoveableActionDirection.Static);
+            MapAnimationToAction("idle", false, MoveableActionType.Taunting, MoveableActionDirection.Right);
+            MapAnimationToAction("idle", true, MoveableActionType.Taunting, MoveableActionDirection.Left);
+            MapAnimationToAction("idle", true, MoveableActionType.Taunting, MoveableActionDirection.Static);
             
             MapAnimationToAction("dying", false, MoveableActionType.Dying, MoveableActionDirection.Right);
             MapAnimationToAction("dying", true, MoveableActionType.Dying, MoveableActionDirection.Left);
@@ -45,7 +51,7 @@ namespace MonoTest.GameObjects
         public override void Update(GameTime gameTime)
         {
             CurrentAnimation.Update(gameTime);
-            Brains(gameTime);
+            _behavior.Brains(gameTime, this);
             if (InvulnerableTime <= 0)
             {
                 Color = Color.White;
