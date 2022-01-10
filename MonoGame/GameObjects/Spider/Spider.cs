@@ -21,9 +21,9 @@ namespace MonoTest.GameObjects
             Speed = 250f;
 
             
-            AddAnimation("walk", new SpiderWalkAnimation(_texture, 64));
-            AddAnimation("idle", new SpiderIdleAnimation(_texture, 64));
-            AddAnimation("dying", new SpiderDeadAnimation(_texture, 64));
+            AddAnimation("walk", new SpiderWalkAnimation(_texture, 32));
+            AddAnimation("idle", new SpiderIdleAnimation(_texture, 32));
+            AddAnimation("dying", new SpiderDeadAnimation(_texture, 32));
 
             MapAnimationToAction("walk", false, MoveableActionType.Running, MoveableActionDirection.Right);
             MapAnimationToAction("walk", true, MoveableActionType.Running, MoveableActionDirection.Left);

@@ -18,7 +18,7 @@ namespace MonoTest.Screens
         private readonly Texture2D _gameOverText;
         private readonly Texture2D _victoryText;
         private readonly Hero _hero;
-        private List<Component> _buttons;
+        private List<IComponent> _buttons;
 
         public event EventHandler OnExit;
         public event EventHandler OnRestart;
@@ -40,6 +40,7 @@ namespace MonoTest.Screens
             var restartButton = new Button(texture, _contentManager.Load<SpriteFont>("Fonts/Font"))
             {
                 Position = new Vector2(_displayManager.GetMiddlePointScreen - texture.Width/2, 210),
+                
                 Text = "Restart",
                 PenColor = Color.CornflowerBlue
             };
@@ -53,7 +54,7 @@ namespace MonoTest.Screens
             };
             quitButton.Click += QuitButton_Click;
 
-            _buttons = new List<Component>()
+            _buttons = new List<IComponent>()
             {
                 restartButton,
                 quitButton

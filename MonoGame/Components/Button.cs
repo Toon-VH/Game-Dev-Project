@@ -2,12 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Diagnostics;
 using MonoTest.Components;
 
 namespace MonoTest.Controls
 {
-    public class Button : Component
+    public class Button : IComponent
     {
         private MouseState _currentMouseState;
         private MouseState _previousMouse;
@@ -28,7 +27,7 @@ namespace MonoTest.Controls
             _font = spriteFont;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             var rectangle = GetRectangle();
             var color = Color.White;
@@ -45,7 +44,7 @@ namespace MonoTest.Controls
             
         }
 
-        public override void Update(GameTime gameTime, Matrix matrix)
+        public void Update(GameTime gameTime, Matrix matrix)
         {
             _previousMouse = _currentMouseState;
             _currentMouseState = Mouse.GetState();

@@ -194,6 +194,12 @@
 /processorParam:Quality=Best
 /build:Sounds/Lion-roar.wav
 
+#begin Sounds/spinHit.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/spinHit.wav
+
 #begin Sprites/Archaeologist Sprite Sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor

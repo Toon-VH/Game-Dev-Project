@@ -21,7 +21,7 @@ namespace MonoTest.Screens
         private readonly GraphicsDevice _graphicsDevice;
         private readonly ContentManager _contentManager;
         private readonly Hero _hero;
-        private List<Component> _components;
+        private List<IComponent> _components;
         private HealthBar _healtBarHero;
         public event EventHandler OnDead;
         public event EventHandler OnFinish;
@@ -52,7 +52,7 @@ namespace MonoTest.Screens
         {
             var texture = _contentManager.Load<Texture2D>("Components/healthBar");
              _healtBarHero = new HealthBar(texture, new Vector2(_displayManager.GetMiddlePointScreen - ((texture.Width / 5) * (_hero.InitialHealth / 4)) / 2, GraphicsDeviceManager.DefaultBackBufferHeight - 30), _hero, 1f);
-             _components = new List<Component>();
+             _components = new List<IComponent>();
              _gameObjectManager.GameObjects.ForEach(gameObject =>
             {
                 if (gameObject is Moveable moveable)
@@ -114,7 +114,10 @@ namespace MonoTest.Screens
             {
                 OnDead?.Invoke(this, EventArgs.Empty);
             }
-            if (_hero.IsFinished) OnFinish.Invoke(this, EventArgs.Empty);
+            if (_hero.IsFinished)
+            {
+                OnFinish.Invoke(this, EventArgs.Empty);
+            }
         }
         
         private Matrix CreateMatrix()

@@ -4,7 +4,7 @@ using MonoTest.GameObjects;
 
 namespace MonoTest.Components
 {
-    public class HealthBar : Component
+    public class HealthBar : IComponent
     {
         private readonly Texture2D _texture;
         public  Moveable _moveAble { get; set; }
@@ -37,7 +37,7 @@ namespace MonoTest.Components
         }
 
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             if (_moveAble.Health <= 0 && _moveAble is not Hero) return;
 
@@ -90,7 +90,7 @@ namespace MonoTest.Components
             }
         }
 
-        public override void Update(GameTime gameTime, Matrix matrix)
+        public void Update(GameTime gameTime, Matrix matrix)
         {
             if (_moveAble is Hero) return;
             _position = new Vector2(_moveAble.Position.X + _moveAble.BoundingBox.X *_moveAble.Scale + _moveAble.BoundingBox.Width * _moveAble.Scale/2 - _moveAble.InitialHealth/4 *_fullHP.Width * _scale/2 , _moveAble.Position.Y + _moveAble.BoundingBox.Y *_moveAble.Scale - 10);

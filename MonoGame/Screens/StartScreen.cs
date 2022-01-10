@@ -18,7 +18,7 @@ namespace MonoTest.Screens
         private readonly Texture2D _title;
         private readonly Texture2D _keyMap;
 
-        private List<Component> _buttons;
+        private List<IComponent> _buttons;
 
         public event EventHandler OnExit;
         public event EventHandler OnStart;
@@ -52,7 +52,7 @@ namespace MonoTest.Screens
             };
             quitButton.Click += QuitButton_Click;
 
-            _buttons = new List<Component>()
+            _buttons = new List<IComponent>()
             {
                 startButton,
                 quitButton

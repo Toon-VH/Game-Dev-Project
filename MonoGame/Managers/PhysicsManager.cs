@@ -112,7 +112,18 @@ namespace MonoTest.Managers
                     {
                         //if (Vector2.Distance(new Vector2(tile.BoundingBox.X,tile.BoundingBox.Y), moveable.Position) > 50) continue;
                         if (!Intersects(moveableBoundingBox, tile.BoundingBox, direction, out var depth)) continue;
-                        if (tile.Type == TileType.DamageBlock) moveable.GetDamage(1, 0.35f);
+                        switch (tile.Type)
+                        {
+                            case TileType.FinishBlock when moveable is Hero hero:
+                                hero.IsFinished = true;
+                                break;
+                            case TileType.DamageBlock when moveable is Hero hero:
+                                hero.GetDamage(1, 0.35f);
+                                break;
+                            case TileType.Default:
+                                break;
+                        }
+
                         if (tile.IsPassable) continue;
                         moveable.IsIntersecting = true;
                         if (depth.Y < 0) moveable.IsTouchingGround = true;

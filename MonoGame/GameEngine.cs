@@ -37,19 +37,22 @@ namespace MonoTest
         private SoundEffect _gorillaHitSound;
         private SoundEffect _spiderHitSound;
         private SoundEffectInstance _bgSoundInstance;
-        private readonly MapGenerator _mapGenerator;
+        private MapGenerator _mapGenerator;
         private GameScreen _gameScreen;
         private StartScreen _startScreen;
         private EndScreen _endScreen;
+        private int _level;
+        private bool _nextLevel;
 
         public GameEngine()
         {
+            _level = 1;
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
-            //_mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
+            _mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
             //_mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, 24);
-            _mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, 24);
+            //_mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
             Content.RootDirectory = "Content";
@@ -68,8 +71,9 @@ namespace MonoTest
             _background = new Background(_backGroundTexture, _middleGroundTexture);
             _gorillaRoarSound = Content.Load<SoundEffect>("Sounds/Lion-roar");
             _gorillaHitSound = Content.Load<SoundEffect>("Sounds/hitGorilla");
+            _spiderHitSound = Content.Load<SoundEffect>("Sounds/spinHit");
             _mapGenerator.InitializeGameObjects(_texturePlants, _gorillaTexture, _spiderTexture, _gameObjectManager,
-                _gorillaRoarSound, _gorillaHitSound, _gorillaHitSound);
+                _gorillaRoarSound, _gorillaHitSound, _spiderHitSound);
             _cameraManager = new CameraManager(_hero, _graphics, _displayManager);
             _screenManager = new ScreenManager();
             _gameScreen = InitializeGameScreen();
@@ -96,15 +100,44 @@ namespace MonoTest
 
         protected override void Update(GameTime gameTime)
         {
+            if (_nextLevel) SwitchLevel();
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
+                _bgSoundInstance.Pause();
                 IsMouseVisible = true;
                 _screenManager.SetScreen(_startScreen);
             }
 
             _screenManager.Update(gameTime);
             base.Update(gameTime);
+        }
+
+        private void SwitchLevel()
+        {
+            switch (_level)
+            {
+                case 2:
+                    _mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, 24);
+                    _gameObjectManager = new GameObjectManager();
+                    _mapGenerator.InitializeBlocks(_tiles, _gameObjectManager);
+                    _gameObjectManager.AddGameObject(_hero);
+                    _mapGenerator.InitializeGameObjects(_texturePlants, _gorillaTexture, _spiderTexture,
+                        _gameObjectManager,
+                        _gorillaRoarSound, _gorillaHitSound, _spiderHitSound);
+                    // _bgSoundInstance.Play();
+                    // _hero = new Hero(_heroTexture, _hitSound);
+                    // _cameraManager = new CameraManager(_hero, _graphics, _displayManager);
+                    _gameScreen = InitializeGameScreen();
+                    _hero.Position = new Vector2(30, 200);
+                    break;
+                case 3:
+                    _screenManager.SetScreen(_endScreen);
+                    break;
+            }
+
+            _nextLevel = false;
         }
 
 
@@ -122,9 +155,7 @@ namespace MonoTest
         private GameScreen InitializeGameScreen()
         {
             _hero.Health = _hero.InitialHealth;
-            var gameScreen = new GameScreen(_displayManager, _gameObjectManager, _cameraManager, _physicsManager,
-                _inputManager,
-                _graphics.GraphicsDevice, _hero, Content);
+            var gameScreen = new GameScreen(_displayManager, _gameObjectManager, _cameraManager, _physicsManager, _inputManager, _graphics.GraphicsDevice, _hero, Content);
             gameScreen.OnDead += (sender, args) =>
             {
                 IsMouseVisible = true;
@@ -134,10 +165,10 @@ namespace MonoTest
             };
             gameScreen.OnFinish += (sender, args) =>
             {
-                IsMouseVisible = true;
-                _bgSoundInstance.Stop();
-                _gameOverSound.Play();
-                _screenManager.SetScreen(_endScreen);
+                _bgSoundInstance.Pause();
+                _level++;
+                _nextLevel = true;
+                _hero.IsFinished = false;
             };
             return gameScreen;
         }
@@ -150,6 +181,7 @@ namespace MonoTest
             {
                 IsMouseVisible = false;
                 _bgSoundInstance.Play();
+                _bgSoundInstance.IsLooped = true;
                 _screenManager.SetScreen(_gameScreen);
             };
             return startScreen;

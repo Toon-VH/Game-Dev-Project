@@ -11,7 +11,7 @@ namespace MonoTest.GameObjects
         
         public Hero(Texture2D texture, SoundEffect hitSound)
         {
-            Damage = 4;
+            Damage = 6;
             InitialHealth = 20;
             Health = InitialHealth;
             Position = new Vector2(30, 200);
