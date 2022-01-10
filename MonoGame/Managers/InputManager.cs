@@ -58,7 +58,7 @@ namespace MonoTest.Managers
             }
 #if DEBUG
             //Debug.WriteLine($"Velocity {_moveable.Velocity}");   
-            //Debug.WriteLine($"Direction {direction}");   
+            Debug.WriteLine($"Direction {direction}");   
 #endif
 
             if (input.Walking && input.MovementDirection.X != 0)

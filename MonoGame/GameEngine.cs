@@ -56,7 +56,7 @@ namespace MonoTest
             _physicsManager = new PhysicsManager();
             AddCollisions();
             //_mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
-            _mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, 24);
+             _mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, 24);
             //_mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
@@ -134,7 +134,7 @@ namespace MonoTest
             switch (_level)
             {
                 case 2:
-                    _mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, 24);
+                    _mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, 24);
                     _gameObjectManager = new GameObjectManager();
                     _mapGenerator.InitializeBlocks(_tiles, _gameObjectManager);
                     _gameObjectManager.AddGameObject(_hero);
@@ -147,8 +147,11 @@ namespace MonoTest
                     _playState = InitializePlayState();
                     _gameStateManager.SetState(_playState);
                     _hero.Position = new Vector2(30, 200);
+                    _bgSoundInstance.Play();
+                    _bgSoundInstance.IsLooped = true;
                     break;
                 case 3:
+                    _bgSoundInstance.Pause();
                     _gameStateManager.SetState(_endState);
                     break;
             }
