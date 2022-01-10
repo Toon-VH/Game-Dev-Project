@@ -1,17 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoTest.Controls;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using MonoTest.Components;
 using MonoTest.Managers;
-using SharpDX.Direct2D1.Effects;
 
-namespace MonoTest.Screens
+namespace MonoTest.GameState
 {
-    public class StartScreen : IScreen
+    public class StartState : IGameState
     {
         private readonly ContentManager _contentManager;
         private readonly DisplayManager _displayManager;
@@ -23,7 +20,7 @@ namespace MonoTest.Screens
         public event EventHandler OnExit;
         public event EventHandler OnStart;
 
-        public StartScreen(ContentManager contentManager, DisplayManager displayManager)
+        public StartState(ContentManager contentManager, DisplayManager displayManager)
         {
             _title = contentManager.Load<Texture2D>("Components/Name");
             _keyMap = contentManager.Load<Texture2D>("Components/KeyMap");

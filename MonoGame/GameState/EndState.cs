@@ -1,16 +1,15 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoTest.Controls;
-using MonoTest.GameObjects;
-using System;
-using System.Collections.Generic;
 using MonoTest.Components;
+using MonoTest.GameObjects;
 using MonoTest.Managers;
 
-namespace MonoTest.Screens
+namespace MonoTest.GameState
 {
-    class EndScreen : IScreen
+    class EndState : IGameState
     {
         private readonly ContentManager _contentManager;
         private readonly DisplayManager _displayManager;
@@ -23,7 +22,7 @@ namespace MonoTest.Screens
         public event EventHandler OnExit;
         public event EventHandler OnRestart;
 
-        public EndScreen(ContentManager contentManager, DisplayManager displayManager, Hero hero)
+        public EndState(ContentManager contentManager, DisplayManager displayManager, Hero hero)
         {
             _title = contentManager.Load<Texture2D>("Components/Name");
             _gameOverText = contentManager.Load<Texture2D>("Components/GameOverText");

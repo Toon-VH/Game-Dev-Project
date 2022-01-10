@@ -5,13 +5,13 @@ using MonoTest.AI;
 
 namespace MonoTest.GameObjects.Enemies
 {
-    public partial class Spider : Enemy
+    public class Spider : Enemy
     {
         
         private readonly SoundEffect _spinhit;
         
         
-        public Spider(Texture2D texture, SoundEffect spinHit, AIBehavior behavior): base(behavior)
+        public Spider(Texture2D texture, SoundEffect spinHit, IBehavior behavior): base(behavior)
         {
             Damage = 3;
             InitialHealth = 12;

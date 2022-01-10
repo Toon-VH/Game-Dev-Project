@@ -6,11 +6,11 @@ using MonoTest.Collisions;
 using MonoTest.GameObjects;
 using MonoTest.GameObjects.Enemies;
 using MonoTest.GameObjects.Plants;
+using MonoTest.GameState;
 using MonoTest.Input;
 using MonoTest.Managers;
 using MonoTest.Map;
 using MonoTest.Map.Tiles;
-using MonoTest.Screens;
 
 namespace MonoTest
 {
@@ -24,7 +24,7 @@ namespace MonoTest
         private PhysicsManager _physicsManager;
         private InputManager _inputManager;
         private CameraManager _cameraManager;
-        private ScreenManager _screenManager;
+        private GameStateManager _gameStateManager;
 
         private SpriteBatch _spriteBatch;
         private Texture2D _backGroundTexture;
@@ -42,9 +42,9 @@ namespace MonoTest
         private SoundEffect _spiderHitSound;
         private SoundEffectInstance _bgSoundInstance;
         private MapGenerator _mapGenerator;
-        private GameScreen _gameScreen;
-        private StartScreen _startScreen;
-        private EndScreen _endScreen;
+        private PlayState _playState;
+        private StartState _startState;
+        private EndState _endState;
         private int _level;
         private bool _nextLevel;
 
@@ -90,11 +90,11 @@ namespace MonoTest
             _mapGenerator.InitializeGameObjects(_texturePlants, _gorillaTexture, _spiderTexture, _gameObjectManager,
                 _gorillaRoarSound, _gorillaHitSound, _spiderHitSound);
             _cameraManager = new CameraManager(_hero, _graphics, _displayManager);
-            _screenManager = new ScreenManager();
-            _gameScreen = InitializeGameScreen();
-            _startScreen = InitializeStartScreen();
-            _endScreen = InitializeEndScreen();
-            _screenManager.SetScreen(_startScreen);
+            _gameStateManager = new GameStateManager();
+            _playState = InitializePlayState();
+            _startState = InitializeStartState();
+            _endState = InitializeEndState();
+            _gameStateManager.SetState(_startState);
         }
 
         protected override void LoadContent()
@@ -122,10 +122,10 @@ namespace MonoTest
             {
                 _bgSoundInstance.Pause();
                 IsMouseVisible = true;
-                _screenManager.SetScreen(_startScreen);
+                _gameStateManager.SetState(_startState);
             }
 
-            _screenManager.Update(gameTime);
+            _gameStateManager.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -144,11 +144,12 @@ namespace MonoTest
                     // _bgSoundInstance.Play();
                     // _hero = new Hero(_heroTexture, _hitSound);
                     // _cameraManager = new CameraManager(_hero, _graphics, _displayManager);
-                    _gameScreen = InitializeGameScreen();
+                    _playState = InitializePlayState();
+                    _gameStateManager.SetState(_playState);
                     _hero.Position = new Vector2(30, 200);
                     break;
                 case 3:
-                    _screenManager.SetScreen(_endScreen);
+                    _gameStateManager.SetState(_endState);
                     break;
             }
 
@@ -163,57 +164,57 @@ namespace MonoTest
                 transformMatrix: _displayManager.CalculateMatrix());
             _background.Draw(_spriteBatch);
             _spriteBatch.End();
-            _screenManager.Draw(_spriteBatch);
+            _gameStateManager.Draw(_spriteBatch);
             base.Draw(gameTime);
         }
 
-        private GameScreen InitializeGameScreen()
+        private PlayState InitializePlayState()
         {
             _hero.Health = _hero.InitialHealth;
-            var gameScreen = new GameScreen(_displayManager, _gameObjectManager, _cameraManager, _physicsManager, _inputManager, _graphics.GraphicsDevice, _hero, Content);
-            gameScreen.OnDead += (sender, args) =>
+            var gameState = new PlayState(_displayManager, _gameObjectManager, _cameraManager, _physicsManager, _inputManager, _graphics.GraphicsDevice, _hero, Content);
+            gameState.OnDead += (sender, args) =>
             {
                 IsMouseVisible = true;
                 _bgSoundInstance.Stop();
                 _gameOverSound.Play();
-                _screenManager.SetScreen(_endScreen);
+                _gameStateManager.SetState(_endState);
             };
-            gameScreen.OnFinish += (sender, args) =>
+            gameState.OnFinish += (sender, args) =>
             {
                 _bgSoundInstance.Pause();
                 _level++;
                 _nextLevel = true;
                 _hero.IsFinished = false;
             };
-            return gameScreen;
+            return gameState;
         }
 
-        private StartScreen InitializeStartScreen()
+        private StartState InitializeStartState()
         {
-            var startScreen = new StartScreen(Content, _displayManager);
-            startScreen.OnExit += (sender, args) => Exit();
-            startScreen.OnStart += (sender, args) =>
+            var startState = new StartState(Content, _displayManager);
+            startState.OnExit += (sender, args) => Exit();
+            startState.OnStart += (sender, args) =>
             {
                 IsMouseVisible = false;
                 _bgSoundInstance.Play();
                 _bgSoundInstance.IsLooped = true;
-                _screenManager.SetScreen(_gameScreen);
+                _gameStateManager.SetState(_playState);
             };
-            return startScreen;
+            return startState;
         }
 
-        private EndScreen InitializeEndScreen()
+        private EndState InitializeEndState()
         {
-            var endScreen = new EndScreen(Content, _displayManager, _hero);
-            endScreen.OnExit += (sender, args) => Exit();
-            endScreen.OnRestart += (sender, args) =>
+            var endState = new EndState(Content, _displayManager, _hero);
+            endState.OnExit += (sender, args) => Exit();
+            endState.OnRestart += (sender, args) =>
             {
                 _bgSoundInstance.Play();
                 _hero.Position = new Vector2(30, 200);
                 _cameraManager.Cinematic = true;
-                _screenManager.SetScreen(InitializeGameScreen());
+                _gameStateManager.SetState(InitializePlayState());
             };
-            return endScreen;
+            return endState;
         }
     }
 }

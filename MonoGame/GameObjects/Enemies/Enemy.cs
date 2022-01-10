@@ -4,7 +4,7 @@ namespace MonoTest.GameObjects.Enemies
 {
     public abstract class Enemy: Moveable
     {
-        protected AIBehavior _behavior;
+        protected IBehavior _behavior;
         public bool IsAngry { get; set; }
         public bool IsTaunting { get; set; }
         public virtual void PlayHitSound()
@@ -17,7 +17,7 @@ namespace MonoTest.GameObjects.Enemies
             
         }
 
-        public Enemy(AIBehavior behavior)
+        public Enemy(IBehavior behavior)
         {
             _behavior = behavior;
         }

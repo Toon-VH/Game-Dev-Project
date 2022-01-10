@@ -3,7 +3,7 @@ using MonoTest.GameObjects.Enemies;
 
 namespace MonoTest.AI
 {
-    public interface AIBehavior
+    public interface IBehavior
     {
         void Brains(GameTime gameTime, Enemy enemy);
     }

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoTest.Animations;
 
-namespace MonoTest.GameObjects
+namespace MonoTest.GameObjects.Enemies
 {
     public class GorillaChestPound : Animation
     {

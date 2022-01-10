@@ -5,14 +5,14 @@ using MonoTest.AI;
 
 namespace MonoTest.GameObjects.Enemies
 {
-    public partial class Gorilla : Enemy
+    public class Gorilla : Enemy
     {
         private readonly SoundEffect _roar;
         private readonly SoundEffect _hitGorilla;
         
 
 
-        public Gorilla(Texture2D texture, SoundEffect roar, SoundEffect hitSound, AIBehavior behavior) : base(behavior)
+        public Gorilla(Texture2D texture, SoundEffect roar, SoundEffect hitSound, IBehavior behavior) : base(behavior)
         {
             Damage = 6;
             InitialHealth = 32;

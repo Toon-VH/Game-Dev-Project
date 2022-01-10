@@ -1,10 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using MonoTest.Components;
 
-namespace MonoTest.Controls
+namespace MonoTest.Components
 {
     public class Button : IComponent
     {

@@ -38,8 +38,8 @@ namespace MonoTest.Map
             
              new GorillaConfig(new Vector2(15,5),0, new AggressiveBehavior()),
              new SpiderConfig(new Vector2(13,9),0, new AggressiveBehavior()),
-             new SpiderConfig(new Vector2(23,9),0, new BasicAI()),
-             new SpiderConfig(new Vector2(42,9),0, new BasicAI()),
+             new SpiderConfig(new Vector2(23,9),0, new Basic()),
+             new SpiderConfig(new Vector2(42,9),0, new Basic()),
              new PlantConfig(new Vector2(20,16),2, 0),
         };
         
@@ -75,10 +75,10 @@ namespace MonoTest.Map
              new PlantConfig(new Vector2(146,11), 0.0f,0),
              new PlantConfig(new Vector2(171,15), 1.0f,0),
              new PlantConfig(new Vector2(201,15), 1.3f,0),
-             new SpiderConfig(new Vector2(94,18),0, new BasicAI()),
-             new SpiderConfig(new Vector2(110,15),0, new BasicAI()),
-             new SpiderConfig(new Vector2(126,11),0, new BasicAI()),
-             new GorillaConfig(new Vector2(269,4),0, new BasicAI())
+             new SpiderConfig(new Vector2(94,18),0, new Basic()),
+             new SpiderConfig(new Vector2(110,15),0, new Basic()),
+             new SpiderConfig(new Vector2(126,11),0, new Basic()),
+             new GorillaConfig(new Vector2(269,4),0, new Basic())
              
 
         };
@@ -110,13 +110,13 @@ namespace MonoTest.Map
         public static readonly GameObjectConfig[] Map3Obj =
         {
             
-            new SpiderConfig(new Vector2(43,10),0, new BasicAI()),
-            new SpiderConfig(new Vector2(43,10),0, new BasicAI()),
-            new SpiderConfig(new Vector2(66,18),0, new BasicAI()),
-            new GorillaConfig(new Vector2(171,8),0, new BasicAI()),
-            new GorillaConfig(new Vector2(203,8),0, new BasicAI()),
-            new SpiderConfig(new Vector2(304,10),0, new BasicAI()),
-            new SpiderConfig(new Vector2(262,10),0, new BasicAI()),
+            new SpiderConfig(new Vector2(43,10),0, new Basic()),
+            new SpiderConfig(new Vector2(43,10),0, new Basic()),
+            new SpiderConfig(new Vector2(66,18),0, new Basic()),
+            new GorillaConfig(new Vector2(171,8),0, new Basic()),
+            new GorillaConfig(new Vector2(203,8),0, new Basic()),
+            new SpiderConfig(new Vector2(304,10),0, new Basic()),
+            new SpiderConfig(new Vector2(262,10),0, new Basic()),
         };
 
     }

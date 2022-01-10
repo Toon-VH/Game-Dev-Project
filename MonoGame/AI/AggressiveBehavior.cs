@@ -5,7 +5,7 @@ using MonoTest.GameObjects.Enemies;
 
 namespace MonoTest.AI
 {
-    public class AggressiveBehavior : AIBehavior
+    public class AggressiveBehavior : IBehavior
     {
         private readonly Random _random = new();
         private int _currentSec = 0;

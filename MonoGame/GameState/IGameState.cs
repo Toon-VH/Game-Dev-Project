@@ -1,12 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace MonoTest.Screens
+namespace MonoTest.GameState
 {
-    public interface IScreen
+    public interface IGameState
     {
         void Update(GameTime delta);
 
