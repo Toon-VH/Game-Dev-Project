@@ -38,8 +38,11 @@ namespace MonoTest.Components
             var x = (rectangle.X + (rectangle.Width / 2)) - (_font.MeasureString(Text).X / 2);
             var y = (rectangle.Y + (rectangle.Height / 2)) - (_font.MeasureString(Text).Y / 2);
             spriteBatch.DrawString(_font, Text, new Vector2(x, y), PenColor);
-            
+
+#if DEBUG
             DebugService.DrawRectangle(spriteBatch,_rectangleMouse,1,Color.Cyan, false);
+#endif
+                
             
         }
 

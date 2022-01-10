@@ -9,14 +9,9 @@ namespace MonoTest.Managers
     public class PhysicsManager
     {
         private const float Gravity = 600;
-
         private IDictionary<(Type, Type), ICollision> _collisions = new Dictionary<(Type, Type), ICollision>();
 
-        public void AddCollision(Type gameObjectType, Type colliderType, ICollision collision)
-        {
-            _collisions.Add((gameObjectType, colliderType), collision);
-        }
-
+        
         public void Move(Moveable moveable, float deltaTime, IEnumerable<GameObject> map)
         {
             moveable.IsIntersecting = false;
@@ -37,11 +32,7 @@ namespace MonoTest.Managers
         private void CheckCollisions(Direction direction, Moveable moveable, Vector2 newPosition,
             IEnumerable<GameObject> gameObjects)
         {
-            var moveableBoundingBox = new RectangleF(moveable.BoundingBox.X * moveable.Scale + newPosition.X,
-                moveable.BoundingBox.Y * moveable.Scale + newPosition.Y, moveable.BoundingBox.Width * moveable.Scale,
-                moveable.BoundingBox.Height * moveable.Scale);
-
-
+            
             foreach (var gameObject in gameObjects)
             {
                 if (gameObject == moveable) continue;
@@ -54,8 +45,12 @@ namespace MonoTest.Managers
                 ? new Vector2(newPosition.X, moveable.Position.Y)
                 : new Vector2(moveable.Position.X, newPosition.Y);
         }
+        
+        public void AddCollision(Type gameObjectType, Type colliderType, ICollision collision)
+        {
+            _collisions.Add((gameObjectType, colliderType), collision);
+        }
     }
-
 
     public enum Direction
     {

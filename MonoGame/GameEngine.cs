@@ -55,8 +55,8 @@ namespace MonoTest
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
             AddCollisions();
-            _mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
-            //_mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, 24);
+            //_mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
+            _mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, 24);
             //_mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
