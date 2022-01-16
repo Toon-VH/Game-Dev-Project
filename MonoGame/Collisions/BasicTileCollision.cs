@@ -6,17 +6,18 @@ using MonoTest.Map.Tiles;
 
 namespace MonoTest.Collisions
 {
-    internal class BasicTileCollision:ICollision
+    internal class BasicTileCollision : ICollision
     {
         public void Collision(GameObject gameObject, GameObject collider, ref Vector2 newPosition, Direction direction)
         {
             var moveable = (Moveable)gameObject;
             var tile = (Tile)collider;
             
+            
             var moveableBoundingBox = new RectangleF(moveable.BoundingBox.X * moveable.Scale + newPosition.X,
                 moveable.BoundingBox.Y * moveable.Scale + newPosition.Y, moveable.BoundingBox.Width * moveable.Scale,
                 moveable.BoundingBox.Height * moveable.Scale);
-            
+
             if (!Intersects(moveableBoundingBox, tile.BoundingBox, direction, out var depth)) return;
             switch (tile.Type)
             {
@@ -43,7 +44,7 @@ namespace MonoTest.Collisions
                 ? new Vector2(0, moveable.Velocity.Y)
                 : new Vector2(moveable.Velocity.X, 0);
         }
-        
+
         private static bool Intersects(RectangleF player, RectangleF block, Direction direction, out Vector2 depth)
         {
             if (player.Intersects(block))

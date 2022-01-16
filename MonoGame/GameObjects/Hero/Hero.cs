@@ -126,5 +126,7 @@ namespace MonoTest.GameObjects
 
             CurrentAnimation.Update(gameTime);
         }
+
+       
     }
 }

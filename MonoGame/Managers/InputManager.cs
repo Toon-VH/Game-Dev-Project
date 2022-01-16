@@ -56,10 +56,9 @@ namespace MonoTest.Managers
                     direction = MoveableActionDirection.Static;
                     break;
             }
-#if DEBUG
+
             //Debug.WriteLine($"Velocity {_moveable.Velocity}");   
-            Debug.WriteLine($"Direction {direction}");   
-#endif
+            //Debug.WriteLine($"Direction {direction}");   
 
             if (input.Walking && input.MovementDirection.X != 0)
             {

@@ -26,4 +26,8 @@
   <ItemGroup>
     <None Remove="Content\jump.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AI\GorillaAI's" />
+    <Folder Include="AI\SpiderAI's" />
+  </ItemGroup>
 </Project>

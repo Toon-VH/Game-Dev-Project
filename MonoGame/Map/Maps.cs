@@ -35,12 +35,16 @@ namespace MonoTest.Map
 
         public static readonly GameObjectConfig[] Objects1 =
         {
-            
-             new GorillaConfig(new Vector2(15,5),0, new AggressiveBehavior()),
+             // new GorillaConfig(new Vector2(15,5),0, new AggressiveBehavior()),
              new SpiderConfig(new Vector2(13,9),0, new AggressiveBehavior()),
              new SpiderConfig(new Vector2(23,9),0, new Basic()),
              new SpiderConfig(new Vector2(42,9),0, new Basic()),
-             new PlantConfig(new Vector2(20,16),2, 0),
+             new SpiderConfig(new Vector2(13,9),0, new AggressiveBehavior()),
+             new SpiderConfig(new Vector2(23,9),0, new Basic()),
+             new SpiderConfig(new Vector2(42,9),0, new Basic()),
+             new SpiderConfig(new Vector2(13,9),0, new AggressiveBehavior()),
+             new SpiderConfig(new Vector2(23,9),0, new Basic()),
+             new SpiderConfig(new Vector2(42,9),0, new Basic()),
         };
         
         public static int[,] Map2 =
@@ -117,7 +121,7 @@ namespace MonoTest.Map
             new GorillaConfig(new Vector2(171,8),0, new Basic()),
             new GorillaConfig(new Vector2(203,8),0, new Basic()),
             new SpiderConfig(new Vector2(304,10),0, new Basic()),
-            new SpiderConfig(new Vector2(262,10),0, new Basic()),
+            //new SpiderConfig(new Vector2(262,10),0, new Basic()),
         };
 
     }

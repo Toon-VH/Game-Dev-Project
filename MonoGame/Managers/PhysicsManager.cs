@@ -33,6 +33,7 @@ namespace MonoTest.Managers
             IEnumerable<GameObject> gameObjects)
         {
             
+            
             foreach (var gameObject in gameObjects)
             {
                 if (gameObject == moveable) continue;

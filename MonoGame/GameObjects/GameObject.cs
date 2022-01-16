@@ -10,6 +10,7 @@ namespace MonoTest.GameObjects
     {
         protected Texture2D _texture;
         
+        public Vector2 Position { get; set; }
         public int Damage { get; set; }
         public Animation CurrentAnimation { get; private set; }
         public bool RemoveFlag { get;  set; }

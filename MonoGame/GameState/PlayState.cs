@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,10 +20,13 @@ namespace MonoTest.GameState
         private readonly PhysicsManager _physicsManager;
         private readonly InputManager _inputManager;
         private readonly GraphicsDevice _graphicsDevice;
+        private readonly int _chunkSize;
+        private readonly int _blockSize;
+        private List<int> _loadedChunks;
         private readonly ContentManager _contentManager;
         private readonly Hero _hero;
         private List<IComponent> _components;
-        private HealthBar _healtBarHero;
+        private HealthBar _healthBarHero;
         public event EventHandler OnDead;
         public event EventHandler OnFinish;
 
@@ -35,7 +39,8 @@ namespace MonoTest.GameState
             InputManager inputManager,
             GraphicsDevice graphicsDevice,
             Hero hero,
-            ContentManager contentManager)
+            ContentManager contentManager,
+            int chunkSize, int blockSize)
         {
             _displayManager = displayManager;
             _gameObjectManager = gameObjectManager;
@@ -45,81 +50,135 @@ namespace MonoTest.GameState
             _graphicsDevice = graphicsDevice;
             _hero = hero;
             _contentManager = contentManager;
+            _chunkSize = chunkSize;
+            _blockSize = blockSize;
+            _loadedChunks = new List<int>();
             LoadUI();
         }
 
         private void LoadUI()
         {
             var texture = _contentManager.Load<Texture2D>("Components/healthBar");
-             _healtBarHero = new HealthBar(texture, new Vector2(_displayManager.GetMiddlePointScreen - ((texture.Width / 5) * (_hero.InitialHealth / 4)) / 2, GraphicsDeviceManager.DefaultBackBufferHeight - 30), _hero, 1f);
-             _components = new List<IComponent>();
-             _gameObjectManager.GameObjects.ForEach(gameObject =>
+            _healthBarHero = new HealthBar(texture,
+                new Vector2(
+                    _displayManager.GetMiddlePointScreen - ((texture.Width / 5) * (_hero.InitialHealth / 4)) / 2,
+                    GraphicsDeviceManager.DefaultBackBufferHeight - 30), _hero, 1f);
+            _components = new List<IComponent>();
+            _gameObjectManager.GameObjects.ForEach(gameObject =>
             {
                 if (gameObject is Moveable moveable)
                 {
                     if (moveable is Hero) return;
                     _components.Add(new HealthBar(texture,
-                        new Vector2(moveable.Position.X, moveable.Position.Y ), moveable, 0.5f));
+                        new Vector2(moveable.Position.X, moveable.Position.Y), moveable, 0.5f));
                 }
             });
         }
 
-        [SuppressMessage("ReSharper.DPA", "DPA0001: Memory allocation issues")]
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: CreateMatrix());
-            _gameObjectManager.GameObjects.ForEach(gameObject =>
+            _loadedChunks.ForEach(chunk =>
             {
-                gameObject?.Draw(spriteBatch, _graphicsDevice);
-#if DEBUG
-                if (gameObject is Tile tile)
+                if (_gameObjectManager.ChunkedGameObjects[chunk] is not null)
                 {
-                    spriteBatch.DrawString(_contentManager.Load<SpriteFont>("Fonts/Font"),
-                        $"X{tile.BoundingBox.X / tile.Size}\nY{tile.BoundingBox.Y / tile.Size}",
-                        new Vector2(tile.BoundingBox.X + tile.Size/2, tile.BoundingBox.Y+ tile.Size/2), Color.Cyan,0f,Vector2.Zero, 0.3f,SpriteEffects.None,0);
+                    _gameObjectManager.ChunkedGameObjects[chunk]
+                        .ForEach(gameObject => DrawGameObject(gameObject, spriteBatch));
                 }
-#endif
             });
-            _components.ForEach(c =>
-            {
-                c.Draw(spriteBatch);
-            });
+            _gameObjectManager.GameObjects.ForEach(gameObject => DrawGameObject(gameObject, spriteBatch));
+            _components.ForEach(c => { c.Draw(spriteBatch); });
             _cameraManager.Draw(spriteBatch, _graphicsDevice);
             spriteBatch.End();
             spriteBatch.Begin(transformMatrix: _displayManager.CalculateMatrix());
-            _healtBarHero.Draw(spriteBatch);
+            _healthBarHero.Draw(spriteBatch);
             spriteBatch.End();
-            
         }
 
-        [SuppressMessage("ReSharper.DPA", "DPA0001: Memory allocation issues")]
+
         public void Update(GameTime gameTime)
         {
+            ChunkLoader(_hero.Position.X);
             _components.ForEach(c => c.Update(gameTime, _displayManager.CalculateMatrix()));
             _cameraManager.Update(_graphicsDevice, gameTime);
             _inputManager.ProcessInput();
-            _gameObjectManager.GameObjects.ForEach(g =>
+            _gameObjectManager.GameObjects.ForEach(g => UpdateGameObject(g, gameTime));
+            _loadedChunks.ForEach(chunk =>
             {
-                if (g.RemoveFlag)
+                if (_gameObjectManager.ChunkedGameObjects[chunk] is not null)
                 {
-                    _gameObjectManager.RemoveGameObject(g);
+                    _gameObjectManager.ChunkedGameObjects[chunk]
+                        .ForEach(gameObject => UpdateGameObject(gameObject, gameTime));
                 }
-
-                g?.Update(gameTime);
             });
             _gameObjectManager.Moveables.ForEach(m =>
-                _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds, _gameObjectManager.GameObjects));
+                _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds, _gameObjectManager.GameObjects.Concat(GetLoadedGameObjects())));
+            _loadedChunks.ForEach(chunk =>
+            {
+                if (_gameObjectManager.ChunkedMoveables[chunk] is not null)
+                {
+                    _gameObjectManager.ChunkedMoveables[chunk]
+                        .ForEach(m => _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds,
+                            _gameObjectManager.GameObjects));
+                }
+            });
 
-            if (_hero.Health <= 0 && _hero.CurrentAnimation.AnimationDoneFlag && _hero.CurrentAction.Action == MoveableActionType.Dying)
+            if (_hero.Health <= 0 && _hero.CurrentAnimation.AnimationDoneFlag &&
+                _hero.CurrentAction.Action == MoveableActionType.Dying)
             {
                 OnDead?.Invoke(this, EventArgs.Empty);
             }
+
             if (_hero.IsFinished)
             {
                 OnFinish.Invoke(this, EventArgs.Empty);
             }
         }
+
+        private void DrawGameObject(GameObject gameObject, SpriteBatch spriteBatch)
+        {
+            gameObject?.Draw(spriteBatch, _graphicsDevice);
+#if DEBUG
+                if (gameObject is Tile tile)
+                {
+                    spriteBatch.DrawString(_contentManager.Load<SpriteFont>("Fonts/Font"),
+                        $"X{tile.BoundingBox.X / tile.Size}\nY{tile.BoundingBox.Y / tile.Size}",
+                        new Vector2(tile.BoundingBox.X + tile.Size / 2, tile.BoundingBox.Y), Color.Cyan, 0f,
+                        Vector2.Zero, 0.3f, SpriteEffects.None, 0);
+
+                    spriteBatch.DrawString(_contentManager.Load<SpriteFont>("Fonts/Font"),
+                        $"{tile.BoundingBox.Y / tile.Size * _gameObjectManager.Width + tile.BoundingBox.X / tile.Size}",
+                        new Vector2(tile.BoundingBox.X, tile.BoundingBox.Y), Color.Cyan, 0f, Vector2.Zero, 0.3f,
+                        SpriteEffects.None, 0);
+                }
+#endif
+        }
+
+        private void UpdateGameObject(GameObject gameObject, GameTime gameTime)
+        {
+            if (gameObject.RemoveFlag)
+            {
+                _gameObjectManager.RemoveGameObject(gameObject);
+            }
+
+            gameObject?.Update(gameTime);
+        }
+
+        private void ChunkLoader(float x)
+        {
+            var currentChunk = (int)(x / _blockSize / _chunkSize);
+            _loadedChunks = new List<int> { currentChunk };
+            if (currentChunk != 0)
+            {
+                _loadedChunks.Add(currentChunk - 1);
+            }
+
+            _loadedChunks.Add(currentChunk + 1);
+        }
+
+        private List<GameObject> GetLoadedGameObjects() => _loadedChunks.SelectMany(chunk => _gameObjectManager.ChunkedGameObjects[chunk]).ToList();
         
+
         private Matrix CreateMatrix()
         {
             return _displayManager.CalculateMatrix() * Matrix.CreateTranslation(

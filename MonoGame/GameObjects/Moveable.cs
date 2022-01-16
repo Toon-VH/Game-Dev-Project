@@ -7,7 +7,6 @@ namespace MonoTest.GameObjects
     public abstract class Moveable : GameObject
     {
         public MoveableAction CurrentAction { get; set; }
-        public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }
         public RectangleF BoundingBox { get; set; }
         public bool IsTouchingGround { get; set; }

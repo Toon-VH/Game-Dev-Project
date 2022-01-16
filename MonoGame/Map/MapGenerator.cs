@@ -14,28 +14,30 @@ namespace MonoTest.Map
     public class MapGenerator
     {
         private readonly int _blockSize;
+        private readonly int _chunkSize;
         private readonly int[,] _tiles;
         private readonly GameObjectConfig[] _gameObjectConfigs;
 
 
-        public MapGenerator(int[,] tiles, GameObjectConfig[] gameObjectConfigs, int blockSize)
+        public MapGenerator(int[,] tiles, GameObjectConfig[] gameObjectConfigs, int blockSize, int chunkSize)
         {
             _blockSize = blockSize;
+            _chunkSize = chunkSize;
             _gameObjectConfigs = gameObjectConfigs;
             _tiles = tiles;
         }
 
         public void InitializeBlocks(Texture2D texture, GameObjectManager gameObjectManager)
         {
-            //Debug.WriteLine(_tiles.GetLength(0));
-            //Debug.WriteLine(_tiles.GetLength(1));
+            Debug.WriteLine(_tiles.GetLength(0));
+            Debug.WriteLine(_tiles.GetLength(1));
+
             for (var y = 0; y < _tiles.GetLength(0); y++)
             {
                 for (var x = 0; x < _tiles.GetLength(1); x++)
                 {
                     var tile = BlockFactory.CreateBlock(_tiles[y, x], x, y, texture, _blockSize);
-                    if (tile != null)
-                        gameObjectManager.AddGameObject(tile);
+                    if (tile != null) gameObjectManager.AddGameObject(tile, x / _chunkSize);
                 }
             }
         }
@@ -52,20 +54,23 @@ namespace MonoTest.Map
                     {
                         case PlantConfig plant:
                             gameObjectManager.AddGameObject(new Plant(
-                                (int)(plant.Position.X + 1) * _blockSize - _blockSize / 2,
-                                (int)plant.Position.Y * _blockSize, plantTexture, plant.PlantType, plant.AttackSpeed));
+                                    (int)(plant.Position.X + 1) * _blockSize - _blockSize / 2,
+                                    (int)plant.Position.Y * _blockSize, plantTexture, plant.PlantType,
+                                    plant.AttackSpeed),
+                                (int)plant.Position.X / _chunkSize);
                             break;
                         case GorillaConfig gorilla:
-                            gameObjectManager.AddGameObject(new Gorilla(gorillaTexture, gorillaRoar, gorillaHitSound, gorilla.Behavior)
-                            {
-                                Position = gorilla.Position * _blockSize
-                            });
+                            gameObjectManager.AddGameObject(
+                                new Gorilla(gorillaTexture, gorillaRoar, gorillaHitSound, gorilla.Behavior)
+                                {
+                                    Position = gorilla.Position * _blockSize
+                                }, (int)gorilla.Position.X / _chunkSize);
                             break;
                         case SpiderConfig spider:
                             gameObjectManager.AddGameObject(new Spider(spiderTexture, SpiderHitSound, spider.Behavior)
                             {
                                 Position = spider.Position * _blockSize
-                            });
+                            }, (int)spider.Position.X / _chunkSize);
                             break;
                     }
                 }

@@ -14,7 +14,7 @@ namespace MonoTest.Map.Tiles
         public Texture2D Texture { get; set; }
         public float Size { get; set; }
         public TileType Type { get; set; }
-        private Vector2 _position;
+        public Vector2 Position { get; set; }
         public Rectangle SourceRectangle { get; set; }
         public float Scale { get; set; }
 
@@ -22,7 +22,7 @@ namespace MonoTest.Map.Tiles
         {
             Type = TileType.Default;
             Size = size;
-            _position = new Vector2(x * size, y * size);
+            Position = new Vector2(x * size, y * size);
             BoundingBox = new RectangleF(x * Size, y * Size, Size, Size);
             IsPassable = false;
             Color = new Color(255, 255, 255);
@@ -32,7 +32,7 @@ namespace MonoTest.Map.Tiles
 
         public override void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
-            spriteBatch.Draw(Texture, _position, SourceRectangle, Color, 0f, Vector2.Zero, Size / 16,
+            spriteBatch.Draw(Texture, Position, SourceRectangle, Color, 0f, Vector2.Zero, Size / 16,
                 SpriteEffects.None, 0f);
             
         }

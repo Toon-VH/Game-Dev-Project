@@ -25,6 +25,8 @@ namespace MonoTest
         private InputManager _inputManager;
         private CameraManager _cameraManager;
         private GameStateManager _gameStateManager;
+        private readonly int _chunkSize;
+        private readonly int _blockSize;
 
         private SpriteBatch _spriteBatch;
         private Texture2D _backGroundTexture;
@@ -50,13 +52,15 @@ namespace MonoTest
 
         public GameEngine()
         {
+            _chunkSize = 6;
+            _blockSize = 24;
             _level = 1;
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
             AddCollisions();
-            //_mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24);
-             _mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, 24);
+            _mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24,_chunkSize);
+            //_mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, _blockSize, _chunkSize);
             //_mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
@@ -134,7 +138,7 @@ namespace MonoTest
             switch (_level)
             {
                 case 2:
-                    _mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, 24);
+                    _mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, _blockSize, _chunkSize);
                     _gameObjectManager = new GameObjectManager();
                     _mapGenerator.InitializeBlocks(_tiles, _gameObjectManager);
                     _gameObjectManager.AddGameObject(_hero);
@@ -174,7 +178,8 @@ namespace MonoTest
         private PlayState InitializePlayState()
         {
             _hero.Health = _hero.InitialHealth;
-            var gameState = new PlayState(_displayManager, _gameObjectManager, _cameraManager, _physicsManager, _inputManager, _graphics.GraphicsDevice, _hero, Content);
+            var gameState = new PlayState(_displayManager, _gameObjectManager, _cameraManager, _physicsManager,
+                _inputManager, _graphics.GraphicsDevice, _hero, Content, _chunkSize, _blockSize);
             gameState.OnDead += (sender, args) =>
             {
                 IsMouseVisible = true;
