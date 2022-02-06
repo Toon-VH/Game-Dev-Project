@@ -119,7 +119,7 @@ namespace MonoTest.GameState
                 {
                     _gameObjectManager.ChunkedMoveables[chunk]
                         .ForEach(m => _physicsManager.Move(m, (float)gameTime.ElapsedGameTime.TotalSeconds,
-                            _gameObjectManager.GameObjects));
+                            _gameObjectManager.GameObjects.Concat(GetLoadedGameObjects())));
                 }
             });
 
@@ -176,7 +176,7 @@ namespace MonoTest.GameState
             _loadedChunks.Add(currentChunk + 1);
         }
 
-        private List<GameObject> GetLoadedGameObjects() => _loadedChunks.SelectMany(chunk => _gameObjectManager.ChunkedGameObjects[chunk]).ToList();
+        private List<GameObject> GetLoadedGameObjects() => _loadedChunks.SelectMany(chunk => _gameObjectManager.ChunkedGameObjects?[chunk] ?? new List<GameObject>()).ToList();
         
 
         private Matrix CreateMatrix()

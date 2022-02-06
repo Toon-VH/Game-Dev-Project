@@ -52,15 +52,15 @@ namespace MonoTest
 
         public GameEngine()
         {
-            _chunkSize = 6;
+            _chunkSize = 30;
             _blockSize = 24;
             _level = 1;
             _graphics = new GraphicsDeviceManager(this);
             _gameObjectManager = new GameObjectManager();
             _physicsManager = new PhysicsManager();
             AddCollisions();
-            _mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24,_chunkSize);
-            //_mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, _blockSize, _chunkSize);
+            // _mapGenerator = new MapGenerator(Maps.Map1, Maps.Objects1, 24,_chunkSize);
+            _mapGenerator = new MapGenerator(Maps.Map2, Maps.Map2Obj, _blockSize, _chunkSize);
             //_mapGenerator = new MapGenerator(Maps.Map3, Maps.Map3Obj, 24);
             _displayManager = new DisplayManager();
             Window.Title = "Best Game Ever";
